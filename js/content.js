@@ -54,12 +54,12 @@
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
             <div class="kicker">UNIVERSIDAD DEL AUTOTRANSPORTE&middot; Instructores Operativos</div>
             <h1 class="hero glow-cyan" style="margin-top:.9rem">Formando el Trayecto del Instructor</h1>
-            <p class="lede">Dos fases. Primero vas a <strong class="c-amber">reconstruir hacia atr&aacute;s</strong> un siniestro real hasta encontrar a quien lo autoriz&oacute;.
-            Despu&eacute;s vas a <strong class="c-cyan">ocupar su lugar</strong>: operar la unidad, auditarla pieza por pieza y dar clase frente a un operador de verdad.</p>
+            <p class="lede">Hoy no vas a operar una unidad. Primero vas a <strong class="c-amber"> reconstruir un accidente tiempo atr&aacute;s</strong> un siniestro real hasta encontrar donde estuvo el error. &acute;.
+            Despu&eacute;s vas a <strong class="c-cyan">ocupar su lugar</strong>: operar la unidad, dar clase frente a un operador de verdad.</p>
             <div class="grid-3" style="margin-top:1.5rem">
-              <div class="stat"><h4>Fase 1 &middot; I&nacute;nicio de Vida</h4><div class="v c-amber num">92 d&iacute;as</div></div>
-              <div class="stat"><h4>Fase 2 &middot; Simulador</h4><div class="v c-cyan num">$80,000</div></div>
-              <div class="stat"><h4>Desenlaces posibles</h4><div class="v num">6</div></div>
+              <div class="stat"><h4>primer momento &middot; I&nacute;nicio de viaje</h4><div class="v c-amber num">92 d&iacute;as</div></div>
+              <div class="stat"><h4>momento 2 &middot; En ruta</h4><div class="v c-cyan num">$80,000</div></div>
+              <div class="stat"><h4>momento 3 &middot; Consecuencias</h4><div class="v num">6</div></div>
             </div>
             <p class="lede" style="margin-top:1.3rem;font-size:.9rem;opacity:.7">&larr; &rarr; o barra espaciadora. <strong>I</strong> &iacute;ndice &middot; <strong>N</strong> notas &middot; <strong>V</strong> votaci&oacute;n &middot; <strong>R</strong> retroceso.</p>
           </div>
@@ -68,7 +68,7 @@
 
     /* ============ FASE 1 · INICIO ============ */
     {
-      title: 'Fase 1 · Inicio ', id: 'fase-1', chapter: 'Inicio', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
+      title: 'Fase 1 · Inicio de viaje', id: 'fase-1', chapter: 'Inicio', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
