@@ -73,9 +73,8 @@
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
           <div class="pt">Línea de Vida</div>
-          <p class="lede" style="margin-top:1.1rem">Antes de comenzar, vas a mirar. Un siniestro real, una llamada real y noventa y dos días
-          de historia que se van a rebobinar frente a ti hasta llegar al punto exacto donde esto se pudo evitar
-          <strong class="c-amber">y a la persona que estaba ahí</strong>.</p>
+          <p class="lede" style="margin-top:1.1rem">Aqui conoceras el problema trata de analizar que fue lo que paso.
+          <strong class="c-amber">Y el como se pudiera evitar</strong>.</p>
           <div class="steps">
             <span class="on c-amber">1 · Antes del viaje</span>
             <span>2 · En ruta</span>
@@ -135,8 +134,8 @@
             <div class="fam-c"><div class="n">Emiliano</div><div class="r">Hijo · 7 años</div></div>
             <div class="fam-c"><div class="n">Renata</div><div class="r">Hija · 4 años</div></div>
           </div>
-          <p class="fam-note">Este simulador va a medirte en pesos porque es el único lenguaje que la operación entiende.
-          Pero el número que acabas de ver no aparece en ningún tablero: <strong class="c-amber">no hay presupuesto que lo reponga</strong>.</p>
+          <p class="fam-note">Hay algo que el reporte ni un nunmero puede devolver y es la vida.
+          : <strong class="c-amber">no hay presupuesto que lo reponga</strong>.</p>
         </div>`,
       onEnter: () => { w.Scene3D.pulseLights(0xFFC400); },
       note: 'Lee los cuatro nombres en voz alta, uno por uno, con pausa. No agregues comentario. Deja diez segundos de silencio antes de avanzar.'
@@ -144,7 +143,7 @@
 
     {
       id: 'poll-causa', chapter: 'En ruta', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
-      vote: true, question: '¿Cuál fue la falla raíz del siniestro?',
+      vote: true, question: '¿Cuál habra sido la falla raíz del siniestro?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
           <div class="kicker c-orange">Análisis clínico inicial</div>
