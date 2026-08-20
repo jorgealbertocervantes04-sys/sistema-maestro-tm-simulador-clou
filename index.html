@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Formando el Trayecto del Instructor · Simulador Forense</title>
+<meta name="description" content="Simulador inmersivo de decisión para instructores de autotransporte federal de carga pesada.">
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2302040A'/><path d='M4 20h9V9H4zM15 20h6l4-5h-10z' fill='none' stroke='%23FB6500' stroke-width='2'/><circle cx='9' cy='23' r='2.4' fill='%23FB6500'/><circle cx='22' cy='23' r='2.4' fill='%23FB6500'/></svg>">
+</head>
+<body>
+
+<canvas id="bgcanvas" aria-hidden="true"></canvas>
+<div id="vignette" aria-hidden="true"></div>
+<div id="damage" aria-hidden="true"></div>
+
+<!-- ============ LOGO CORPORATIVO · flotando en 3D en las esquinas de toda escena ============ -->
+<div class="corner-logo tl3d" aria-hidden="true">
+  <img src="assets/logo.png" alt="" onerror="this.closest('.corner-logo').style.display='none'">
+</div>
+<div class="corner-logo br3d" aria-hidden="true">
+  <img src="assets/logo.png" alt="" onerror="this.closest('.corner-logo').style.display='none'">
+</div>
+
+<!-- ============ ARRANQUE / DESBLOQUEO DE AUDIO ============ -->
+<div id="boot">
+  <div class="boot-inner">
+    <svg class="logo" viewBox="0 0 120 40" aria-label="Formando el Trayecto del Instructor" fill="none">
+      <path d="M4 30h26V12H4z" stroke="currentColor" stroke-width="2.4"/>
+      <path d="M33 30h14l9-11H33z" stroke="currentColor" stroke-width="2.4"/>
+      <circle cx="14" cy="34" r="4" stroke="currentColor" stroke-width="2.4"/>
+      <circle cx="43" cy="34" r="4" stroke="currentColor" stroke-width="2.4"/>
+      <path d="M62 12h20M72 12v18M90 30V12l8 11 8-11v18" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"/>
+    </svg>
+    <p class="boot-kick">Sistema Maestro TM &middot; Mentores Operativos</p>
+    <h1>Formando el Trayecto<br>del Instructor</h1>
+    <p class="kicker">Simulador forense de decisi&oacute;n &middot; Autotransporte federal de carga</p>
+    <div class="boot-load"><span></span></div>
+    <button class="btn" id="btn-start"><span data-icon="play"></span> Iniciar sesión de entrenamiento</button>
+    <div id="boot-resume" class="hidden">
+      <p class="kicker" id="resume-info"></p>
+      <button class="btn ghost" id="btn-resume"><span data-icon="refresh"></span> Retomar donde se quedó</button>
+    </div>
+    <p class="boot-note">Al iniciar se activa el audio del simulador. Recomendado en pantalla completa (F11).</p>
+  </div>
+</div>
+
+<!-- ============ BARRA DE ESTADO ============ -->
+<header id="rail">
+  <div class="rail-left">
+    <span class="mark logo-slot">
+      <img src="assets/logo.png" alt="Logo" onerror="this.closest('.logo-slot').classList.add('missing')">
+      <svg class="mark-fallback" viewBox="0 0 60 40" aria-label="TM" fill="none">
+        <path d="M4 28h22V13H4z" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M29 28h12l7-9H29z" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="13" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="38" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
+      </svg>
+    </span>
+    <div class="rail-ch"><span class="kicker" data-chapter></span></div>
+  </div>
+
+  <div class="rail-mid">
+    <div class="phase-tag"><span></span><em class="pt-full">Fase 1 &middot; L&iacute;nea de Vida &middot; reconstrucci&oacute;n sin puntaje</em><em class="pt-short">Fase 1</em></div>
+    <div class="budget">
+      <div class="budget-ghost"></div>
+      <div class="budget-fill"></div>
+      <div class="budget-txt"><span class="kicker">Presupuesto de ruta</span><b class="num" data-budget>$80,000</b></div>
+    </div>
+  </div>
+
+  <div class="rail-right">
+    <div class="cond" title="Condición mecánica de la unidad">
+      <span class="dot pending" data-cond="tires" title="Llantas"></span>
+      <span class="dot pending" data-cond="brakes" title="Frenos"></span>
+      <span class="dot pending" data-cond="kingpin" title="Quinta rueda"></span>
+    </div>
+    <span class="chip num" data-risk>Riesgo 0%</span>
+    <span class="chip num c-cyan" data-xp>0 XP</span>
+    <button class="chip num" id="btn-index" data-count title="Índice de escenas (I)">1 / 1</button>
+    <button class="ibtn" id="btn-vote" title="Votación del grupo (V)"><span data-icon="qr"></span></button>
+    <button class="ibtn" id="btn-notes" title="Notas del facilitador (N)"><span data-icon="notes"></span></button>
+    <button class="ibtn" id="btn-mute" title="Silenciar"><span data-icon="sound"></span></button>
+  </div>
+  <div id="progress-line"></div>
+</header>
+
+<!-- ============ ESCENARIO ============ -->
+<main id="stage" aria-live="polite"></main>
+
+<nav id="nav">
+  <button class="ibtn big" id="nav-prev" title="Anterior (←)"><span data-icon="left"></span></button>
+  <button class="ibtn big" id="nav-next" title="Siguiente (→)"><span data-icon="right"></span></button>
+</nav>
+
+<div id="index-ov" class="ov" hidden>
+  <div class="ov-card panel pad">
+    <div class="ov-head">
+      <div><div class="kicker c-cyan">Índice de escenas</div><h3 class="title" style="font-size:1.5rem;margin:.3rem 0 0">Saltar a</h3></div>
+      <button class="ibtn" id="idx-close" title="Cerrar (Esc)"><span data-icon="x"></span></button>
+    </div>
+    <div id="idx-grid"></div>
+  </div>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+
+<!-- ============ ESCÁNER FORENSE 3D ============ -->
+<div id="forensic">
+  <canvas id="fcanvas"></canvas>
+  <div id="flabels"></div>
+  <div class="f-hud tl">
+    <div class="kicker">Auditoría forense de patio</div>
+    <h3>Escáner holográfico</h3>
+    <p>Gira con el mouse, acerca con la rueda. Localiza y resuelve las tres anomalías marcadas.</p>
+  </div>
+  <div class="f-hud tr">
+    <div class="kicker">Anomalías resueltas</div>
+    <div class="f-count num" id="f-count">0 / 3</div>
+    <div class="f-bar"><div id="f-progress"></div></div>
+  </div>
+  <div class="f-hud bl">
+    <div class="legend"><span class="dot pending"></span> Pendiente</div>
+    <div class="legend"><span class="dot ok"></span> Corregida en taller</div>
+    <div class="legend"><span class="dot fault"></span> Liberada con falla</div>
+  </div>
+  <div class="f-hud br">
+    <button class="btn ghost small" id="f-exit"><span data-icon="exit"></span> Salir del escáner</button>
+    <button class="btn small hidden" id="f-finish"><span data-icon="check"></span> Cerrar auditoría y despachar</button>
+  </div>
+  <div id="f-modal"></div>
+</div>
+
+<!-- ============ SIMULADOR DE INSPECCIÓN 3D · 18 PUNTOS ============ -->
+<div id="insp3d">
+  <canvas id="icanvas"></canvas>
+  <div id="ilabels"></div>
+  <div class="f-hud tl">
+    <div class="kicker">Simulador de inspección · unidad Full</div>
+    <h3>Emite tu veredicto en los 18 puntos</h3>
+    <p>Gira con el mouse, acerca con la rueda. Toca cada punto sobre la unidad, lee la evidencia y decide: conforme, observación o no conforme. Cada veredicto es irreversible.</p>
+    <div class="ins-filtros">
+      <button class="ins-f on" data-filtro="todos">Todos</button>
+      <button class="ins-f" data-filtro="pend">Pendientes</button>
+      <button class="ins-f" data-filtro="hecho">Resueltos</button>
+    </div>
+  </div>
+  <div class="f-hud tr">
+    <div class="kicker">Puntos con veredicto</div>
+    <div class="f-count num" id="i-count">0 / 18</div>
+    <div class="f-bar"><div id="i-progress"></div></div>
+    <div class="kicker" style="margin-top:.5rem">Costo acumulado</div>
+    <div class="num" id="i-cost" style="font-family:var(--f-title);font-size:1.05rem;color:var(--green)">$0</div>
+  </div>
+  <div class="ins-panel">
+    <div class="ins-ph">Los 18 puntos</div>
+    <div id="i-list"></div>
+  </div>
+  <div class="f-hud bl">
+    <div class="legend"><span class="dot pending"></span> Sin veredicto</div>
+    <div class="legend"><span class="dot ok"></span> Conforme</div>
+    <div class="legend"><span class="dot warn"></span> Observación</div>
+    <div class="legend"><span class="dot fault"></span> No conforme</div>
+  </div>
+  <div class="f-hud br">
+    <button class="btn ghost small" id="i-exit"><span data-icon="exit"></span> Salir sin cerrar</button>
+    <button class="btn small hidden" id="i-finish"><span data-icon="check"></span> Cerrar inspección y calificar</button>
+  </div>
+  <div id="i-modal"></div>
+</div>
+
+<!-- ============ MODO AULA ============ -->
+<aside id="classroom">
+  <div class="cl-head">
+    <div><div class="kicker">Modo aula · votación en vivo</div>
+      <h3>Sala <b class="num" id="room-code">—</b></h3></div>
+    <button class="ibtn" id="classroom-close" title="Cerrar"><span data-icon="x"></span></button>
+  </div>
+  <div class="qr-box" id="qr-box"></div>
+  <p class="kicker" style="text-align:center" id="qr-caption">Los participantes escanean el código y votan desde su celular.</p>
+  <div class="row" style="gap:.5rem;margin:.6rem 0">
+    <button class="btn ghost small on" id="btn-qr-votacion" style="flex:1">QR · Votación</button>
+    <button class="btn ghost small" id="btn-qr-taller" style="flex:1">QR · Taller individual</button>
+  </div>
+  <div class="row" style="gap:.5rem;margin:.7rem 0">
+    <button class="btn ghost small" id="btn-pulso" style="flex:1">Pulso rápido</button>
+    <button class="btn ghost small" id="btn-encuesta-final" style="flex:1">Abrir encuesta final</button>
+  </div>
+  <div class="row" style="gap:.5rem;margin:0 0 .5rem">
+    <button class="btn ghost small" id="btn-evidencia-grupal" style="flex:1">PDF grupal</button>
+    <button class="btn ghost small" id="btn-evidencia-todos" style="flex:1">Todos los individuales</button>
+  </div>
+  <div class="row" style="gap:.4rem;margin:0 0 .7rem">
+    <select class="ev-in" id="sel-participante" style="flex:1"><option value="">Elegir participante…</option></select>
+    <button class="btn ghost small" id="btn-evidencia-uno">Descargar</button>
+  </div>
+  <div class="row" style="gap:.5rem;margin:0 0 .9rem">
+    <button class="btn ghost small" id="btn-sheets" style="flex:1">Enviar a Google Sheets</button>
+    <button class="ibtn" id="btn-sheets-config" title="Configurar URL de Google Sheets"><span data-icon="link"></span></button>
+  </div>
+  <div id="vote-results"></div>
+</aside>
+
+<!-- ============ MODO FACILITADOR ============ -->
+<aside id="presenter">
+  <div class="p-head">
+    <div><div class="kicker">Modo facilitador</div><div class="p-timer num" id="p-timer">00:00</div></div>
+    <div class="row">
+      <button class="btn ghost small" id="p-pause">Pausar</button>
+      <button class="btn ghost small" id="p-reset-timer">Reiniciar</button>
+      <button class="ibtn" id="p-close"><span data-icon="x"></span></button>
+    </div>
+  </div>
+  <div class="kicker" id="p-meta"></div>
+  <p id="p-note"></p>
+  <div class="p-state" id="p-next"></div>
+</aside>
+
+<!-- ============ LIBRERÍAS (locales, funcionan sin internet) ============ -->
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="vendor/CopyShader.js"></script>
+<script src="vendor/LuminosityHighPassShader.js"></script>
+<script src="vendor/EffectComposer.js"></script>
+<script src="vendor/RenderPass.js"></script>
+<script src="vendor/ShaderPass.js"></script>
+<script src="vendor/MaskPass.js"></script>
+<script src="vendor/UnrealBloomPass.js"></script>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/qrcode.min.js"></script>
+
+<script src="js/icons.js"></script>
+<script src="js/state.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/truck.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/forensic.js"></script>
+<script src="js/inspeccion3d.js"></script>
+<script src="js/lifeline.js"></script>
+<script src="js/parts.js"></script>
+<script src="js/microclase.js"></script>
+  <script src="js/udat.js"></script>
+<script src="js/cierre.js"></script>
+<script src="js/criterios-data.js"></script>
+<script src="js/evaluacion.js"></script>
+<script src="js/content.js"></script>
+<script src="js/deck.js"></script>
+<script src="js/report.js"></script>
+<script src="js/evidencia.js"></script>
+<script src="js/classroom.js"></script>
+<script src="js/presenter.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

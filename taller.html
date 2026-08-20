@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taller individual · Formando el Trayecto del Instructor</title>
+<link rel="stylesheet" href="css/app.css">
+<style>
+  body.taller-page { min-height: 100vh; padding: 1.2rem 1rem 4rem; }
+  .tl-wrap { max-width: 720px; margin: 0 auto; }
+  .tl-head { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem; }
+  .tl-step { margin-bottom: 1.4rem; }
+  .tl-steptitle { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+  .tl-n { width: 26px; height: 26px; border-radius: 999px; background: var(--cyan); color: var(--void);
+    display: flex; align-items: center; justify-content: center; font-family: var(--f-title); font-weight: 700; font-size: .85rem; flex: 0 0 auto; }
+  .tl-submit { position: sticky; bottom: .8rem; margin-top: 1.5rem; }
+  #toasts { position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 500; display: flex; flex-direction: column; gap: .5rem; }
+</style>
+</head>
+<body class="taller-page">
+<div id="toasts" aria-live="polite"></div>
+<div class="tl-wrap">
+  <div class="tl-head">
+    <span class="mark logo-slot">
+      <img src="assets/logo.png" alt="Logo" onerror="this.closest('.logo-slot').classList.add('missing')">
+      <svg class="mark-fallback" viewBox="0 0 60 40" aria-label="TM" fill="none">
+        <path d="M4 28h22V13H4z" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M29 28h12l7-9H29z" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="13" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="38" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
+      </svg>
+    </span>
+    <div><div class="kicker">Taller individual</div><div class="kicker c-cyan" id="room">Sala —</div></div>
+  </div>
+  <a href="#" id="ir-a-votar" class="kicker" style="display:none;text-decoration:underline;margin:-.6rem 0 1rem">← Volver a la votación en vivo</a>
+
+  <div id="v-gate"></div>
+
+  <div id="v-work" hidden>
+    <div class="tl-step">
+      <div class="tl-steptitle"><span class="tl-n">1</span><h3 class="title" style="font-size:1.1rem">Construye tu instrumento de evaluación</h3></div>
+      <div id="paso-1"></div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-steptitle"><span class="tl-n">2</span><h3 class="title" style="font-size:1.1rem">Aplícalo a tres operadores</h3></div>
+      <div id="paso-2"></div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-steptitle"><span class="tl-n">3</span><h3 class="title" style="font-size:1.1rem">Diseña y da tu micro-clase</h3></div>
+      <div id="paso-3"></div>
+    </div>
+    <div class="panel pad tl-submit" id="tl-final">
+      <p class="lede" id="tl-final-msg">Completa los tres pasos de arriba para poder enviar tus resultados.</p>
+      <button class="btn wide" id="tl-send" disabled>Enviar mis resultados al facilitador</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/icons.js"></script>
+<script src="js/state.js"></script>
+<script src="js/criterios-data.js"></script>
+<script src="js/evaluacion.js"></script>
+<script src="js/microclase.js"></script>
+<script>
+(function () {
+  const I = window.svgIcon;
+  window.toast = function (msg, kind) {
+    const c = document.getElementById('toasts'); if (!c) return;
+    const el = document.createElement('div');
+    el.className = 'toast ' + (kind || 'mid');
+    el.innerHTML = (I ? I(kind === 'good' ? 'check' : kind === 'bad' ? 'alert' : 'clock') : '') + '<span>' + msg + '</span>';
+    c.appendChild(el);
+    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 420); }, 4200);
+  };
+
+  const API = 'https://qykubittvlwsavrhljek.supabase.co/functions/v1/tm-api';
+  const room = (new URLSearchParams(location.search).get('room') || '').toUpperCase();
+  document.getElementById('room').textContent = 'Sala ' + (room || '—');
+  const storeKey = 'tm_attendee_' + room;
+  let attendeeId = sessionStorage.getItem(storeKey);
+  let sent = false;
+
+  function gateCard(t, s) {
+    return '<div class="panel pad"><h2 class="title" style="font-size:1.3rem">' + t + '</h2><p class="lede">' + s + '</p></div>';
+  }
+
+  async function join(name) {
+    const r = await fetch(API + '/session/' + room + '/join', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    });
+    if (!r.ok) throw 0;
+    const j = await r.json();
+    attendeeId = j.attendeeId;
+    sessionStorage.setItem(storeKey, attendeeId);
+  }
+
+  function askName() {
+    const gate = document.getElementById('v-gate');
+    gate.innerHTML =
+      '<div class="panel pad">' +
+        '<div class="kicker c-cyan">Antes de empezar</div>' +
+        '<h2 class="title" style="font-size:1.3rem;margin:.4rem 0 1rem">¿Cómo te llamas?</h2>' +
+        '<div style="display:flex;flex-direction:column;gap:.7rem">' +
+          '<input class="ev-in" id="name-in" placeholder="Nombre completo" autocomplete="name">' +
+          '<button class="btn wide" id="name-go">Entrar al taller</button>' +
+        '</div>' +
+      '</div>';
+    document.getElementById('name-go').addEventListener('click', async () => {
+      const v = document.getElementById('name-in').value.trim();
+      if (!v) return;
+      gate.innerHTML = gateCard('Entrando…', 'Registrando tu lugar en el taller.');
+      try { await join(v); startWork(); }
+      catch (e) {
+        gate.innerHTML = gateCard('No se pudo registrar', 'Verifica tu conexión.') +
+          '<button class="btn wide" id="retry" style="margin-top:.8rem">Reintentar</button>';
+        document.getElementById('retry').addEventListener('click', askName);
+      }
+    });
+  }
+
+  function startWork() {
+    document.getElementById('v-gate').hidden = true;
+    const work = document.getElementById('v-work');
+    work.hidden = false;
+
+    window.Evaluacion.mountConstructor(document.getElementById('paso-1'));
+    window.Evaluacion.mountAplicar(document.getElementById('paso-2'));
+    window.Microclase.mount(document.getElementById('paso-3'));
+
+    window.State.onChange(checkDone);
+    checkDone();
+
+    document.getElementById('tl-send').addEventListener('click', sendResults);
+  }
+
+  function checkDone() {
+    const S = window.State.get();
+    const d1 = S.flags.instrumentoHecho, d2 = S.flags.evalAplicada, d3 = S.flags.microclaseHecha;
+    const n = [d1, d2, d3].filter(Boolean).length;
+    const btn = document.getElementById('tl-send');
+    const msg = document.getElementById('tl-final-msg');
+    if (sent) return;
+    if (n === 3) {
+      btn.disabled = false;
+      msg.innerHTML = 'Los tres pasos están completos. Ya puedes enviar tus resultados.';
+    } else {
+      btn.disabled = true;
+      msg.textContent = 'Vas ' + n + ' de 3 pasos completos. Termina los que faltan arriba.';
+    }
+  }
+
+  async function sendResults() {
+    if (sent) return;
+    sent = true;
+    const btn = document.getElementById('tl-send');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    const S = window.State.get();
+    try {
+      await fetch(API + '/session/' + room + '/taller', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          attendeeId: attendeeId,
+          instrumentoPts: S.instrumento ? S.instrumento.pts : null,
+          instrumentoCriterios: S.instrumento ? S.instrumento.total : null,
+          evalAciertos: S.flags.evalAciertos ?? null,
+          microclasePct: S.flags.microclasePct ?? null,
+          instrumentoDetalle: S.instrumento || null,
+          evaluadosDetalle: S.evaluados || null,
+          microclaseDetalle: (window.Microclase && window.Microclase.getDetalle) ? window.Microclase.getDetalle() : null
+        })
+      });
+      document.getElementById('tl-final').innerHTML = '<h2 class="title" style="font-size:1.2rem">¡Listo!</h2><p class="lede">Tus resultados ya quedaron con el facilitador.</p>';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      window.toast('No se pudo enviar. Intenta de nuevo.', 'bad');
+      sent = false; btn.disabled = false; btn.textContent = 'Enviar mis resultados al facilitador';
+    }
+  }
+
+  if (room) {
+    const back = document.getElementById('ir-a-votar');
+    back.style.display = 'block';
+    back.href = 'vote.html?room=' + room;
+  }
+
+  if (!room) {
+    document.getElementById('v-gate').innerHTML = gateCard('Falta el código de sala', 'Escanea de nuevo el código QR del facilitador.');
+  } else if (attendeeId) {
+    startWork();
+  } else {
+    askName();
+  }
+})();
+</script>
+</body>
+</html>
