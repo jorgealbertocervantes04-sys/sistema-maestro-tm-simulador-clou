@@ -52,12 +52,12 @@
                onerror="this.closest('.cover-bg').classList.add('cover-bg-missing')">
           <div class="cover-bg-tint"></div>
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
-            <div class="kicker">Sistema Maestro TM &middot; Mentores Operativos</div>
+            <div class="kicker">UNIVERSIDAD DEL AUTOTRANSPORTE&middot; Instructores Operativos</div>
             <h1 class="hero glow-cyan" style="margin-top:.9rem">Formando el Trayecto del Instructor</h1>
             <p class="lede">Dos fases. Primero vas a <strong class="c-amber">reconstruir hacia atr&aacute;s</strong> un siniestro real hasta encontrar a quien lo autoriz&oacute;.
             Despu&eacute;s vas a <strong class="c-cyan">ocupar su lugar</strong>: operar la unidad, auditarla pieza por pieza y dar clase frente a un operador de verdad.</p>
             <div class="grid-3" style="margin-top:1.5rem">
-              <div class="stat"><h4>Fase 1 &middot; L&iacute;nea de Vida</h4><div class="v c-amber num">92 d&iacute;as</div></div>
+              <div class="stat"><h4>Fase 1 &middot; I&nacute;nicio de Vida</h4><div class="v c-amber num">92 d&iacute;as</div></div>
               <div class="stat"><h4>Fase 2 &middot; Simulador</h4><div class="v c-cyan num">$80,000</div></div>
               <div class="stat"><h4>Desenlaces posibles</h4><div class="v num">6</div></div>
             </div>
@@ -66,9 +66,9 @@
         </div>`
     },
 
-    /* ============ FASE 1 · LÍNEA DE VIDA ============ */
+    /* ============ FASE 1 · INICIO ============ */
     {
-      title: 'Fase 1 · Línea de Vida', id: 'fase-1', chapter: 'Línea de Vida', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
+      title: 'Fase 1 · Inicio ', id: 'fase-1', chapter: 'Inicio', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
@@ -77,17 +77,17 @@
           de historia que se van a rebobinar frente a ti hasta llegar al punto exacto donde esto se pudo evitar
           <strong class="c-amber">y a la persona que estaba ahí</strong>.</p>
           <div class="steps">
-            <span class="on c-amber">1 · Sensibilización</span>
-            <span>2 · Retroceso forense</span>
-            <span>3 · El error</span>
+            <span class="on c-amber">1 · Antes del viaje</span>
+            <span>2 · En ruta</span>
+            <span>3 · Despues del viaje</span>
           </div>
-          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Esta fase no se califica. Se siente. El tablero de decisiones abre en la Fase 2.</p>
+          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Las personas son mas valiosas que el recurso.Tengamos en cuenta que la vida no tiene precio.</p>
         </div>`,
       note: 'Baja la luz del aula antes de avanzar. Di solo esto: "lo que van a ver pasó, y alguien firmó para que pasara". Nada más.'
     },
 
     {
-      id: 'elborras', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'elborras', chapter: 'En ruta', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Expediente 4471 · Carretera federal · 03:14 h</div>
@@ -98,11 +98,11 @@
     },
 
     {
-      id: 'siniestro', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'Elresultado', chapter: 'En ruta', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Expediente 4471 · Carretera federal · 03:14 h</div>
-          <h2 class="title glow-red" style="margin-top:.5rem">El Siniestro</h2>
+          <h2 class="title glow-red" style="margin-top:.5rem">El Resultado</h2>
           ${media('videos/siniestro.mp4', 'Evidencia audiovisual del siniestro')}
         </div>`,
       onEnter: (ctx) => { ctx.damage(0.6); w.Scene3D.impact(0.8); },
@@ -110,11 +110,11 @@
     },
 
     {
-      id: 'llamada', chapter: 'Línea de Vida', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
+      id: 'Los afectados', chapter: 'En ruta', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
-          <div class="kicker c-red">Reporte crítico · 03:00 h</div>
-          <h2 class="title" style="margin-top:.5rem">La Llamada</h2>
+          <div class="kicker c-red">El reporte · 03:00 h</div>
+          <h2 class="title" style="margin-top:.5rem">Los Afectados</h2>
           <p class="lede">Pérdida total de la unidad. El operador tiene tres meses en la empresa.</p>
           ${media('videos/llamada.mp4', 'Llamada de emergencia al instructor')}
         </div>`,
@@ -122,7 +122,7 @@
     },
 
     {
-      id: 'la-familia', chapter: 'Línea de Vida', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
+      id: 'la-familia', chapter: 'En ruta', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx" style="border-color:rgba(255,196,0,.28)">
           <div class="kicker c-amber">Lo que el expediente 4471 no contabiliza</div>
@@ -143,7 +143,7 @@
     },
 
     {
-      id: 'poll-causa', chapter: 'Línea de Vida', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
+      id: 'poll-causa', chapter: 'En ruta', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
       vote: true, question: '¿Cuál fue la falla raíz del siniestro?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
