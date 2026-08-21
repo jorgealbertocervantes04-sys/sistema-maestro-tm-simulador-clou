@@ -356,7 +356,7 @@
       title: 'Competencias del instructor', id: 'competencias', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan">
-          <div class="kicker">Perfil del instructor TM</div>
+          <div class="kicker">Perfil del instructor </div>
           <h2 class="title" style="margin-top:.5rem">No eres un firmante de papeles</h2>
           <p class="lede">Un instructor certificado no transmite datos: <strong class="c-cyan">audita condiciones físico-mecánicas, regula el estrés operativo y sostiene el criterio bajo presión comercial.</strong></p>
           <div class="grid-3" style="margin-top:1.6rem">
