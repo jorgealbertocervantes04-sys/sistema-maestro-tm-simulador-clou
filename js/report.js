@@ -6,7 +6,7 @@
 
   function build() {
     const jsPDFctor = w.jspdf && w.jspdf.jsPDF;
-    if (!jsPDFctor) { w.toast('El generador de PDF no está disponible.', 'bad'); return; }
+    if (!jsPDFctor) { w.toast('El generador de PDF está disponible.', 'bad'); return; }
     const S = w.State.get(), g = w.State.grade();
     const doc = new jsPDFctor({ unit: 'pt', format: 'letter' });
     const W = doc.internal.pageSize.getWidth();
@@ -23,7 +23,7 @@
       doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(13.5);
       doc.text('FORMANDO EL TRAYECTO DEL INSTRUCTOR', M, 34);
       doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(150, 205, 225);
-      doc.text('DICTAMEN INDIVIDUAL DE COMPETENCIAS · SIMULADOR FORENSE DE DECISIÓN', M, 52);
+      doc.text('DICTAMEN INDIVIDUAL DE COMPETENCIAS · SIMULADOR DE DECISIÓN', M, 52);
       doc.setFontSize(8); doc.setTextColor(...C.dim);
       doc.text(new Date().toLocaleString('es-MX'), W - M, 34, { align: 'right' });
       y = 108;
@@ -74,7 +74,7 @@
     page(true);
 
     /* --- veredicto --- */
-    const gradeColor = g.l.indexOf('ESTRATÉGICO') >= 0 ? C.green : g.l.indexOf('NO ACREDITADO') >= 0 ? C.red : C.ink;
+    const gradeColor = g.l.indexOf('APTO') >= 0 ? C.green : g.l.indexOf('NO ACREDITADO') >= 0 ? C.red : C.ink;
     doc.setFillColor(250, 252, 253); doc.setDrawColor(...gradeColor); doc.setLineWidth(1.2);
     doc.roundedRect(M, y, W - M * 2, 52, 5, 5, 'FD');
     doc.setFont('helvetica', 'normal'); doc.setFontSize(7.6); doc.setTextColor(...C.dim);
@@ -92,7 +92,7 @@
 
     /* --- estado de la unidad --- */
     h2('Estado de la unidad al salir del patio');
-    const names = { tires: 'Presión de llantas (dual interior)', brakes: 'Frenos de aire del dolly', kingpin: 'Quinta rueda y perno rey' };
+    const names = { tires: 'Presión de llantas (POSICION #4)', brakes: 'Frenos de aire del convertidor', kingpin: 'Quinta rueda y perno rey' };
     Object.keys(names).forEach(k => {
       const st = S.truck[k];
       const txt = st === 'ok' ? 'Corregida en taller' : st === 'fault' ? 'LIBERADA CON FALLA ACTIVA' : 'No auditada';
@@ -224,11 +224,11 @@
     for (let p = 1; p <= total; p++) {
       doc.setPage(p);
       doc.setFontSize(7.4); doc.setTextColor(...C.dim); doc.setFont('helvetica', 'normal');
-      doc.text('Formando el Trayecto del Instructor · Sistema Maestro TM · Mentores Operativos', M, H - 26);
+      doc.text('Formando el Trayecto del Instructor · Sistema de Formación · Instructores Operativos', M, H - 26);
       doc.text(p + ' / ' + total, W - M, H - 26, { align: 'right' });
     }
 
-    doc.save('Dictamen-Instructor-TM.pdf');
+    doc.save('Dictamen-Instructor.pdf');
     w.toast('Dictamen generado en PDF', 'good');
   }
 

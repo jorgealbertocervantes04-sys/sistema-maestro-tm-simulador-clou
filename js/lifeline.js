@@ -1,6 +1,6 @@
 /* ============================================================
-   LÍNEA DE VIDA — retroceso forense de 92 días hasta el origen
-   Fase 1 del Sistema Maestro TM
+   LÍNEA DE VIDA — retroceso de 92 días hasta el origen
+   
    ============================================================ */
 (function (w) {
   const I = w.svgIcon;
@@ -10,7 +10,7 @@
     {
       t: 'HOY', hora: '03:14 h', dia: 'Km 214 · Carretera federal 57',
       title: 'Volcadura y pérdida total',
-      body: 'El dual interior del eje motriz estalla a 92 km/h. El segundo remolque se desplaza, arrastra al primero y la unidad sale de la carpeta. Arnulfo “el Borras” Peña, 34 años, tres meses de antigüedad, muere en el lugar.',
+      body: 'La llanta posición 4 del eje motriz estalla a 92 km/h. El segundo remolque se desplaza, arrastra al primero y la unidad sale de la carpeta. Arnulfo “el Borras” Peña, 34 años, tres meses de antigüedad, muere en el lugar.',
       corte: 'Aquí ya no había nada que decidir. La decisión se había tomado tres meses antes.',
       cortable: false,
       cam: 'crash', mood: 'danger', speed: 0.2
@@ -18,7 +18,7 @@
     {
       t: 'T–1 DÍA', hora: '19:40 h', dia: 'Radio de despacho',
       title: '"El dual trasero se siente raro"',
-      body: 'El operador reporta una vibración por radio. La respuesta de despacho queda grabada: "aguanta, ya casi llegas". No se abre reporte. No se documenta. No se detiene la unidad.',
+      body: 'El operador reporta una vibración via whatsapp. La respuesta de despacho queda grabada: "si aguanta, ya casi llegas". No se abre reporte. No se documenta. No se detiene la unidad.',
       corte: 'Un reporte verbal atendido habría sacado la unidad de ruta esa noche.',
       cortable: true,
       cam: 'follow', mood: 'danger', speed: 0.7
@@ -26,24 +26,24 @@
     {
       t: 'T–3 DÍAS', hora: '02:10 h', dia: 'Telemetría Samsara',
       title: '11 h 20 min de conducción continua',
-      body: 'Segunda salida sin descanso reglamentario en la misma semana. El sistema de fatiga emite alerta amarilla y luego roja. Las dos alertas se cierran sin comentario desde el escritorio.',
+      body: 'Segunda salida sin descanso reglamentario en la misma semana. En samsara se emite alerta amarilla y luego roja. Las dos alertas se cierran sin comentario desde el escritorio.',
       corte: 'La alerta existía y funcionaba. Lo que faltó fue alguien con criterio para obedecerla.',
       cortable: true,
       cam: 'rear', mood: 'warn', speed: 1
     },
     {
       t: 'T–11 DÍAS', hora: '08:55 h', dia: 'Taller · Orden de trabajo 7712',
-      title: 'Pérdida lenta de aire en el dolly',
-      body: 'El taller detecta y documenta una fuga en el sistema neumático del dolly. La orden se abre correctamente. Nadie la cierra. La unidad vuelve a ruta ocho veces con la orden abierta.',
+      title: 'Pérdida lenta de aire en el convertidor',
+      body: 'El taller detecta y documenta una fuga en el sistema neumático del convertidor. La orden se abre correctamente. Nadie la cierra. La unidad vuelve a ruta ocho veces con la orden abierta.',
       corte: 'El hallazgo técnico fue correcto. Lo que falló fue el seguimiento del hallazgo.',
       cortable: true,
       cam: 'top', mood: 'warn', speed: 0.6
     },
     {
-      t: 'T–26 DÍAS', hora: '13:20 h', dia: 'Solicitud interna de capacitación',
-      title: 'El operador pidió que lo enseñaran',
-      body: 'Ramiro solicita por escrito capacitación en revisión de frenos de aire. La solicitud se marca como "pendiente de cupo" y permanece así hasta el día del siniestro.',
-      corte: 'Pidió aprender y le contestamos con una lista de espera.',
+      t: 'T–26 DÍAS', hora: '13:20 h', dia: ' capacitación',
+      title: 'Se habia indicado capacitar a todos los operadores en revision de frenos de aire',
+      body: 'A Ramiro solo se le entrego una hoja para que firmara y tomarse una foto como si le hubieran dado una capacitación',
+      corte: 'El no pidio que se le enseñe, pero el trabajo de alguien era hacerlo .',
       cortable: true,
       cam: 'wide', mood: 'warn', speed: 0.4
     },
@@ -58,7 +58,7 @@
     {
       t: 'T–92 DÍAS', hora: '07:12 h', dia: 'Patio de operaciones · Folio VC-0912',
       title: 'Validación de competencias del operador',
-      body: 'Se valida a Ramiro como competente para operar configuración Full doble remolque. Duración registrada de la evaluación: cuatro minutos. Evaluación práctica: no realizada. Documento firmado y archivado.',
+      body: 'Se valida a Ramiro como competente para operar configuración doblemente articulada. Duración registrada de la evaluación: veinte minutos. Evaluación práctica: no realizada. Documento firmado y archivado.',
       corte: 'Aquí empieza todo. Esta es la primera pieza de la cadena y también la única que dependía de una sola persona.',
       cortable: true, origen: true,
       cam: 'lowfront', mood: 'danger', speed: 0
@@ -113,7 +113,7 @@
     root.innerHTML = `
       <div class="ll-head">
         <div>
-          <div class="kicker c-red">Fase 1 · Reconstrucción forense en retroceso</div>
+          <div class="kicker c-red">Fase 1 · Reconstrucción en retroceso</div>
           <h2 class="title" style="margin:.35rem 0 0">Línea de Vida</h2>
         </div>
         <div class="ll-code">
@@ -147,12 +147,12 @@
 
       <div class="ll-foot">
         <div class="ll-count">
-          <span class="kicker">Momentos en los que esto se pudo detener</span>
+          <span class="kicker">Momentos en los que se pudo prevenir</span>
           <b class="num c-amber">${cortes}</b>
         </div>
         ${last
-          ? `<div class="ll-done">${I('alert')} La cadena está completa. Avanza para ver quién firmó.</div>`
-          : `<button class="btn danger" data-ll="back">${I('refresh')} Retroceder un paso más</button>`}
+          ? `<div class="ll-done">${I('alert')} La cadena está completa. Avanza para ver que paso.</div>`
+          : `<button class="btn danger" data-ll="back">${I('refresh')} Click para retroceder</button>`}
       </div>`;
     const st = document.getElementById('stage');
     if (st) st.scrollTop = 0;

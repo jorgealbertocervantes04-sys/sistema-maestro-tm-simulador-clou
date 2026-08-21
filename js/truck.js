@@ -1,5 +1,5 @@
 /* ============================================================
-   TRACTOCAMIÓN DOBLE REMOLQUE (FULL) — geometría procedural
+   TRACTOCAMIÓN DOBLEMENTE ARTICULADO (FULL) — geometría procedural
    Se comparte entre el fondo cinemático y el escáner forense.
    Unidades ≈ metros. El morro apunta hacia +Z.
    ============================================================ */
@@ -99,7 +99,7 @@
     slab(2.16, 1.0, 0.1, 0, 2.92, 5.28, glass, false);
     slab(0.08, 0.86, 1.3, 1.27, 2.7, 4.2, glass, false);
     slab(0.08, 0.86, 1.3, -1.27, 2.7, 4.2, glass, false);
-    // techo aerodinámico
+    // techo aerodinámico (deflector)
     slab(2.4, 0.5, 3.9, 0, 3.68, 3.2, body);
     // faros
     lamp(0.5, 0.26, 0.1, 0.92, 1.62, 7.24, 0xFFF3D0, 1.6);
@@ -130,16 +130,18 @@
     }
 
     // ejes del tractor
-    axle(6.0, 1.22, false, 0.56);   // direccional
-    axle(1.55, 1.18, true, 0.54);   // motriz 1
-    axle(0.28, 1.18, true, 0.54);   // motriz 2
+    axle(6.0, 1.22, false, 0.56); // direccional
+    axle(1.55, 1.18, true, 0.54); // motriz 1
+    axle(0.28, 1.18, true, 0.54); // motriz 2
+
+
 
     // quinta rueda
     const fw = slab(1.9, 0.16, 1.5, 0, 1.24, 0.72, chrome);
     const kp = new T.Mesh(new T.CylinderGeometry(0.13, 0.13, 0.3, 10), chrome);
     kp.position.set(0, 1.4, 0.72); root.add(kp);
 
-    /* ================= CAJA 1 ================= */
+    /* ================= SEMI-REMOLQUE (1) ================= */
     function boxTrailer(zc, len) {
       slab(2.56, 2.9, len, 0, 2.95, zc, body);
       // costillas
@@ -163,18 +165,18 @@
     // tren de aterrizaje
     [0.85, -0.85].forEach(x => slab(0.16, 1.1, 0.16, x, 0.85, -1.6, bodyDark, false));
 
-    /* ================= DOLLY ================= */
+    /* ================= CONVERTIDOR ================= */
     slab(0.14, 0.2, 2.3, 0.7, 1.02, -13.4, bodyDark);
     slab(0.14, 0.2, 2.3, -0.7, 1.02, -13.4, bodyDark);
     const lanza = new T.Mesh(new T.CylinderGeometry(0.11, 0.11, 1.6, 8), chrome);
     lanza.rotation.x = Math.PI / 2; lanza.position.set(0, 1.05, -12.55); root.add(lanza);
     const fw2 = slab(1.6, 0.14, 1.3, 0, 1.28, -13.9, chrome);
     axle(-14.05, 1.18, true, 0.54);
-    // mangueras neumáticas del dolly
+    // mangueras neumáticas del convertidor
     const hose = new T.Mesh(new T.TorusGeometry(0.34, 0.045, 6, 18, Math.PI * 1.2), new T.MeshStandardMaterial({ color: 0x1a2c3a, roughness: .9 }));
     hose.position.set(0.42, 1.62, -12.8); hose.rotation.set(0, 0.4, 0.6); root.add(hose);
 
-    /* ================= CAJA 2 ================= */
+    /* ================= REMOLQUE (2) ================= */
     boxTrailer(-20.2, 11.4);
     axle(-24.5, 1.2, true, 0.54);
     axle(-25.8, 1.2, true, 0.54);

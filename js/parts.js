@@ -79,9 +79,9 @@
       ens: 'Que jale suavemente cada línea frente a ti. Si una se mueve, la ve él mismo y ya no hay discusión.',
       risk: 'Una manguera rozada revienta en curva y aplica el freno de emergencia sin aviso.' },
 
-    { id: 'dolly', g: 'Acoplamiento', cam: 'dolly', mood: 'danger', n: 'Dolly y lanza',
+    { id: 'convertidor', g: 'Acoplamiento', cam: 'convertidor', mood: 'danger', n: 'Convertidor y lanza',
       spec: 'Conjunto convertidor entre caja 1 y caja 2.',
-      chk: 'Lanza sin fisura en soldadura, pasador con seguro, quinta rueda del dolly cerrada, cadenas de seguridad cruzadas.',
+      chk: 'Lanza sin fisura en soldadura, pasador con seguro, quinta rueda del convertidor cerrada, cadenas de seguridad cruzadas.',
       ens: 'Es la pieza que menos se revisa del Full y la que más lo desestabiliza. Dedícale tiempo explícito en cada validación.',
       risk: 'El efecto de latigazo del segundo remolque nace aquí y se amplifica con la velocidad.' },
 
@@ -169,7 +169,7 @@
     const n = Object.keys(seen).length;
     root.innerHTML = `
       <div class="expl-side">
-        <div class="kicker">Unidad Full doble remolque</div>
+        <div class="kicker">doblemente articulado</div>
         <h2 class="title" style="margin:.3rem 0 .1rem;font-size:clamp(1.1rem,2vw,1.5rem)">Recorrido de la unidad</h2>
         <div class="expl-prog"><div style="width:${(n / PARTS.length) * 100}%"></div></div>
         <div class="expl-count kicker">${n} de ${PARTS.length} puntos revisados</div>
