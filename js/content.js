@@ -14,6 +14,23 @@
     </div>
     ${caption ? `<p class="media-cap kicker">${caption}</p>` : ''}`;
 
+  /* Recuadro "aquí va una foto": el instructor lee la descripción y pone su propia
+     imagen real después. No se conecta a ningún archivo, es solo una guía visual. */
+  const imgSlot = (desc) => `
+    <div class="img-slot">
+      ${I('film')}
+      <div class="img-slot-txt"><div class="kicker">Foto sugerida para este momento</div><p>${desc}</p></div>
+    </div>`;
+
+  /* Pregunta visible para el grupo (no solo para las notas del facilitador):
+     el objetivo es que cada tema termine en una pregunta real que el instructor
+     lance en voz alta, para ir viendo cómo piensan y desarrollando su criterio. */
+  const pregunta = (texto) => `
+    <div class="q-audience">
+      <div class="q-mark">?</div>
+      <div><div class="kicker">Pregunta para el grupo</div><p>${texto}</p></div>
+    </div>`;
+
   const mods = (list) => `<div class="modules"><div class="kicker">Módulos de competencia cubiertos en esta estación</div>
     ${list.map(m => `<span class="mod-chip">${m}</span>`).join('')}</div>`;
 
@@ -52,56 +69,57 @@
                onerror="this.closest('.cover-bg').classList.add('cover-bg-missing')">
           <div class="cover-bg-tint"></div>
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
-            <div class="kicker">UNIVERSIDAD DEL AUTOTRANSPORTE&middot; Instructores Operativos</div>
+            <div class="kicker">Sistema Maestro TM &middot; Mentores Operativos</div>
             <h1 class="hero glow-cyan" style="margin-top:.9rem">Formando el Trayecto del Instructor</h1>
-            <p class="lede">Hoy no vas a operar una unidad. Primero vas a <strong class="c-amber"> reconstruir un accidente tiempo atr&aacute;s</strong> un siniestro real hasta encontrar donde estuvo el error. &acute;.
-            Despu&eacute;s vas a <strong class="c-cyan">ocupar su lugar</strong>: operar la unidad, dar clase frente a un operador de verdad.</p>
+            <p class="lede">Te vamos a contar una historia real. Un camión tuvo un accidente grave. Primero vamos a investigar juntos, paso a paso, qu&eacute; pas&oacute; y qui&eacute;n pudo haberlo evitado &mdash;como hace un detective.
+            Despu&eacute;s te vas a poner en los zapatos de esa persona: vas a manejar la unidad, revisarla pieza por pieza, y dar una clase de verdad a un operador real.</p>
             <div class="grid-3" style="margin-top:1.5rem">
-              <div class="stat"><h4>primer momento &middot; I&nacute;nicio de viaje</h4><div class="v c-amber num">92 d&iacute;as</div></div>
-              <div class="stat"><h4>momento 2 &middot; En ruta</h4><div class="v c-cyan num">$80,000</div></div>
-              <div class="stat"><h4>momento 3 &middot; Consecuencias</h4><div class="v num">6</div></div>
+              <div class="stat"><h4>Parte 1 &middot; La Historia</h4><div class="v c-amber num">92 d&iacute;as</div></div>
+              <div class="stat"><h4>Parte 2 &middot; Tu Turno</h4><div class="v c-cyan num">$80,000</div></div>
+              <div class="stat"><h4>Finales posibles</h4><div class="v num">6</div></div>
             </div>
-            <p class="lede" style="margin-top:1.3rem;font-size:.9rem;opacity:.7">&larr; &rarr; o barra espaciadora. <strong>I</strong> &iacute;ndice &middot; <strong>N</strong> notas &middot; <strong>V</strong> votaci&oacute;n &middot; <strong>R</strong> retroceso.</p>
+            <p class="lede" style="margin-top:1.3rem;font-size:.9rem;opacity:.7">&larr; &rarr; o barra espaciadora para avanzar. <strong>I</strong> ver el mapa &middot; <strong>N</strong> notas &middot; <strong>V</strong> votaci&oacute;n &middot; <strong>R</strong> regresar.</p>
           </div>
         </div>`
     },
 
-    /* ============ FASE 1 · INICIO ============ */
+    /* ============ FASE 1 · LÍNEA DE VIDA ============ */
     {
-      title: 'Fase 1 · Inicio de viaje', id: 'fase-1', chapter: 'Inicio', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
+      title: 'Parte 1 · La Historia', id: 'fase-1', chapter: 'Línea de Vida', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
-          <div class="pt">Línea de Vida</div>
-          <p class="lede" style="margin-top:1.1rem">Aqui conoceras el problema trata de analizar que fue lo que paso.
-          <strong class="c-amber">Y el como se pudiera evitar</strong>.</p>
+          <div class="pt">La Historia</div>
+          <p class="lede" style="margin-top:1.1rem">Antes de empezar, solo vas a mirar y escuchar. Vamos a mostrarte un accidente real, una llamada real, y noventa y dos d&iacute;as de historia que vamos a regresar como pel&iacute;cula hasta el momento exacto donde esto se pudo haber evitado
+          <strong class="c-amber">&mdash;y a la persona que estaba ah&iacute;</strong>.</p>
           <div class="steps">
-            <span class="on c-amber">1 · Antes del viaje</span>
-            <span>2 · En ruta</span>
-            <span>3 · Despues del viaje</span>
+            <span class="on c-amber">1 · Conoce la historia</span>
+            <span>2 · Regresamos el tiempo</span>
+            <span>3 · Encontramos el error</span>
           </div>
-          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Las personas son mas valiosas que el recurso.Tengamos en cuenta que la vida no tiene precio.</p>
+          ${pregunta('¿Alguna vez viste algo en el trabajo que te pareció peligroso, pero nadie dijo nada? Guarda esa idea, la vamos a usar más adelante.')}
+          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Esta primera parte no se califica. Solo se vive. Las decisiones y los puntos empiezan en la Parte 2.</p>
         </div>`,
       note: 'Baja la luz del aula antes de avanzar. Di solo esto: "lo que van a ver pasó, y alguien firmó para que pasara". Nada más.'
     },
 
     {
-      id: 'elborras', chapter: 'En ruta', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'elborras', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
-          <div class="kicker c-red">Expediente 4471 · Carretera federal · 03:14 h</div>
-          <h2 class="title glow-red" style="margin-top:.5rem">Él es el Borras</h2>
+          <div class="kicker c-red">Un camión, una madrugada, las 3:14 a.m.</div>
+          <h2 class="title glow-red" style="margin-top:.5rem">Este es Arnulfo, "el Borras"</h2>
           ${media('videos/elborras.mp4', 'Presentación del operador antes del siniestro')}
         </div>`,
       note: 'Antes de mostrar el choque, dale una cara y un nombre. Que el grupo lo conozca como persona antes de conocerlo como expediente.'
     },
 
     {
-      id: 'Elresultado', chapter: 'En ruta', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'siniestro', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
-          <div class="kicker c-red">Expediente 4471 · Carretera federal · 03:14 h</div>
-          <h2 class="title glow-red" style="margin-top:.5rem">El Resultado</h2>
+          <div class="kicker c-red">Un camión, una madrugada, las 3:14 a.m.</div>
+          <h2 class="title glow-red" style="margin-top:.5rem">Lo Que Pasó</h2>
           ${media('videos/siniestro.mp4', 'Evidencia audiovisual del siniestro')}
         </div>`,
       onEnter: (ctx) => { ctx.damage(0.6); w.Scene3D.impact(0.8); },
@@ -109,54 +127,56 @@
     },
 
     {
-      id: 'Los afectados', chapter: 'En ruta', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
+      id: 'llamada', chapter: 'Línea de Vida', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
-          <div class="kicker c-red">El reporte · 03:00 h</div>
-          <h2 class="title" style="margin-top:.5rem">Los Afectados</h2>
-          <p class="lede">Pérdida total de la unidad. El operador tiene tres meses en la empresa.</p>
+          <div class="kicker c-red">Esa misma madrugada</div>
+          <h2 class="title" style="margin-top:.5rem">La Llamada</h2>
+          <p class="lede">El camión se perdió por completo. Arnulfo llevaba apenas tres meses trabajando en la empresa.</p>
           ${media('videos/llamada.mp4', 'Llamada de emergencia al instructor')}
+          ${pregunta('¿Quién de ustedes ha recibido una llamada así, de madrugada, por un accidente? Levanten la mano.')}
         </div>`,
-      note: 'Pregunta al grupo: ¿quién ha recibido una llamada así? Levanten la mano. Ese es el ancla emocional del curso.'
+      note: 'Haz la pregunta en voz alta y espera manos levantadas. Ese es el ancla emocional del curso: que sientan que esto les puede pasar a ellos.'
     },
 
     {
-      id: 'la-familia', chapter: 'En ruta', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
+      id: 'la-familia', chapter: 'Línea de Vida', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx" style="border-color:rgba(255,196,0,.28)">
-          <div class="kicker c-amber">Lo que el expediente 4471 no contabiliza</div>
+          <div class="kicker c-amber">Lo que ningún reporte cuenta</div>
           <h2 class="title" style="margin-top:.5rem">La Familia</h2>
-          <p class="lede">El reporte de siniestro registra una unidad, una carga y un monto. Esto es lo que quedó del otro lado del teléfono esa madrugada.</p>
+          <p class="lede">El reporte del accidente solo anota un camión, una carga y un monto en pesos. Esto es lo que quedó del otro lado del teléfono esa madrugada.</p>
           ${media('videos/la-familia.mp4', 'Marisol recibe la llamada esa madrugada')}
           <div class="fam">
-            <div class="fam-c"><div class="n">Arnulfo “el Borras” Peña</div><div class="r">Operador · 34 años</div></div>
+            <div class="fam-c"><div class="n">Arnulfo "el Borras" Peña</div><div class="r">Operador · 34 años</div></div>
             <div class="fam-c"><div class="n">Marisol Aguilar</div><div class="r">Esposa · 31 años</div></div>
             <div class="fam-c"><div class="n">Emiliano</div><div class="r">Hijo · 7 años</div></div>
             <div class="fam-c"><div class="n">Renata</div><div class="r">Hija · 4 años</div></div>
           </div>
-          <p class="fam-note">Hay algo que el reporte ni un nunmero puede devolver y es la vida.
-          : <strong class="c-amber">no hay presupuesto que lo reponga</strong>.</p>
+          <p class="fam-note">En este curso te vamos a medir con números y con pesos, porque es el idioma que todos en la empresa entienden.
+          Pero lo que acabas de ver no cabe en ningún número: <strong class="c-amber">no hay dinero que lo repare</strong>.</p>
         </div>`,
       onEnter: () => { w.Scene3D.pulseLights(0xFFC400); },
       note: 'Lee los cuatro nombres en voz alta, uno por uno, con pausa. No agregues comentario. Deja diez segundos de silencio antes de avanzar.'
     },
 
     {
-      id: 'poll-causa', chapter: 'En ruta', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
-      vote: true, question: '¿Cuál habra sido la falla raíz del siniestro?',
+      id: 'poll-causa', chapter: 'Línea de Vida', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
+      vote: true, question: '¿Cuál creen que fue el verdadero error que llevó a este accidente?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
-          <div class="kicker c-orange">Análisis clínico inicial</div>
-          <h2 class="title" style="margin-top:.5rem">¿Cuál fue el error que se cometió para llegar a esto?</h2>
-          <p class="lede">La telemetría descarta falla de mantenimiento: los servicios estaban vigentes. El operador no tenía reportes previos.</p>
+          <div class="kicker c-orange">Piensen como detectives</div>
+          <h2 class="title" style="margin-top:.5rem">¿Cuál fue el error que llevó a esto?</h2>
+          <p class="lede">Ya revisamos el camión: no era una falla mecánica, todo estaba en regla. Arnulfo tampoco tenía ningún reporte de mal comportamiento antes de esa noche.</p>
         </div>`,
       choices: [
-        { key: 'A', label: 'Falla mecánica imprevisible', hint: 'Nada pudo anticiparse', tone: 'bad', cost: 12000,
-          verdict: 'La telemetría descarta la falla mecánica. Atribuirla al azar es la forma más cara de no aprender: cierra la investigación antes de encontrar la causa.' },
-        { key: 'B', label: 'Exceso de confianza en ruta', hint: 'El operador se relajó', tone: 'mid', cost: 5000, xp: 30,
-          verdict: 'Es un síntoma, no la causa. El exceso de confianza no nace en la carretera: se autoriza en el patio cuando nadie corrige la primera desviación.' },
-        { key: 'C', label: 'Se firmó sin verificar, bajo presión de patio', hint: 'La validación se dio por hecha', tone: 'good', xp: 120, flag: 'diagnosticoCorrecto',
-          verdict: 'Vamos a descubrir juntos qué pasó exactamente. Toda la cadena de fallas nace en el proceso formativo, y hoy tu experiencia nos va a ayudar a reconstruirla. Hoy vas a estar del otro lado de esa firma.' }
+        { key: 'A', label: 'Una falla del camión que nadie pudo prever', hint: 'Mala suerte, nada se pudo hacer', tone: 'bad', cost: 12000,
+          verdict: 'Ya revisamos el camión: no era una falla mecánica. Culpar a la mala suerte es la forma más cara de no aprender nada: cierra la investigación antes de encontrar la verdadera causa.' },
+        { key: 'B', label: 'Arnulfo se confió de más en el camino', hint: 'Bajó la guardia', tone: 'mid', cost: 5000, xp: 30,
+          verdict: 'Eso es un síntoma, no la causa. Confiarse de más no nace en el camino: nace cuando, en el patio, nadie corrige el primer descuido pequeño.' },
+        { key: 'C', label: 'Alguien firmó su aprobación sin revisar bien, con prisa', tone: 'good', xp: 120, flag: 'diagnosticoCorrecto',
+          hint: 'La revisión se dio por hecha sin comprobarla',
+          verdict: 'Vamos a descubrirlo juntos, paso a paso. Toda la cadena de errores empieza en cómo se formó a Arnulfo, y hoy tu experiencia como instructor nos va a ayudar a reconstruirla. Hoy vas a estar del otro lado de esa firma.' }
       ],
       note: 'Si el grupo elige A o B, no los corrijas de inmediato: pregunta "¿y qué tuvo que pasar antes para que eso fuera posible?".'
     },
@@ -174,73 +194,75 @@
         const ok = !!S.flags.diagnosticoCorrecto;
         return `
         <div class="panel pad w-md mx accent-${ok ? 'cyan' : 'orange'}">
-          <div class="kicker c-${ok ? 'cyan' : 'orange'}">Contraste con el diagnóstico del grupo</div>
-          <h2 class="title" style="margin-top:.5rem">${ok ? 'El grupo lo vio antes que el expediente' : 'El expediente contradijo al grupo'}</h2>
+          <div class="kicker c-${ok ? 'cyan' : 'orange'}">Comparando con lo que dijo el grupo</div>
+          <h2 class="title" style="margin-top:.5rem">${ok ? 'El grupo lo vio antes que el reporte' : 'El reporte les dio la vuelta'}</h2>
           ${media('videos/veredicto-linea.mp4', 'Reconstrucción de los seis avisos ignorados')}
           <p class="lede">${ok
-            ? 'Señalaron la validación flexible en patio antes de ver la línea de tiempo. Ese instinto es exactamente la competencia que este curso viene a convertir en hábito medible.'
-            : 'El grupo apuntó a la carretera y la carretera solo ejecutó lo que el patio autorizó. No es un error del grupo: es el sesgo natural de toda la industria y por eso el curso empieza aquí.'}</p>
+            ? 'Ustedes señalaron la firma apurada en el patio antes de ver toda la línea del tiempo. Ese instinto es exactamente lo que este curso quiere convertir en un hábito, algo que hagan siempre, sin pensarlo.'
+            : 'El grupo apuntó al camino, y el camino solo terminó lo que el patio ya había autorizado. No es un error de ustedes: es algo que le pasa a toda la industria, y por eso el curso empieza justo aquí.'}</p>
           <div class="grid-3" style="margin:1.6rem 0">
             <div class="stat"><h4>Días de aviso</h4><div class="v num c-amber">92</div></div>
-            <div class="stat"><h4>Puntos de corte perdidos</h4><div class="v num c-amber">6</div></div>
-            <div class="stat"><h4>Personas que pudieron parar</h4><div class="v num c-red">5</div></div>
+            <div class="stat"><h4>Momentos donde se pudo parar</h4><div class="v num c-amber">6</div></div>
+            <div class="stat"><h4>Personas que pudieron detenerlo</h4><div class="v num c-red">5</div></div>
           </div>
-          <p class="fam-note">Ningún siniestro grave nace de un solo error. Nace de seis avisos ignorados y de una firma que los volvió legales.
-          <strong class="c-cyan">A partir de aquí, esa firma es la tuya.</strong></p>
+          <p class="fam-note">Ningún accidente grave nace de un solo error. Nace de varios avisos que nadie atendió, y de una firma que los volvió "aprobados".
+          <strong class="c-cyan">Desde aquí, esa firma va a ser la tuya.</strong></p>
         </div>`;
       },
-      note: 'Si el grupo acertó, refuerza sin celebrar. Si falló, protege al grupo: el sesgo es de la industria, no de ellos.'
+      note: 'Si el grupo acertó, refuerza sin celebrar de más. Si falló, protege al grupo: el error es de la industria completa, no de ellos.'
     },
 
     {
       id: 'el-culpable', chapter: 'Línea de Vida', cam: 'lowfront', mood: 'danger', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel accent-red pad w-md mx brackets c-red">
-          <div class="kicker c-red">T–92 días · 07:12 h · origen de la cadena causal</div>
-          <h2 class="title glow-red" style="margin:.5rem 0 1.3rem">El Origen</h2>
+          <div class="kicker c-red">92 días antes del accidente · 7:12 a.m. · aquí empezó todo</div>
+          <h2 class="title glow-red" style="margin:.5rem 0 1.3rem">Aquí Empezó Todo</h2>
           <div class="doc">
             <div class="doc-h">
-              <b>Validación de competencias del operador</b>
+              <b>Examen de manejo de Arnulfo</b>
               <span>Folio VC-0912</span>
             </div>
             <div class="doc-rows">
-              <div class="doc-row"><span>Operador evaluado</span><b>Arnulfo “el Borras” Peña</b></div>
-              <div class="doc-row"><span>Configuración autorizada</span><b>Full doble remolque</b></div>
-              <div class="doc-row bad"><span>Duración de la evaluación</span><b>4 minutos</b></div>
-              <div class="doc-row bad"><span>Evaluación práctica en unidad</span><b>No realizada</b></div>
-              <div class="doc-row bad"><span>Verificación de frenos de aire</span><b>Omitida</b></div>
-              <div class="doc-row"><span>Dictamen emitido</span><b>Competente</b></div>
+              <div class="doc-row"><span>Operador evaluado</span><b>Arnulfo "el Borras" Peña</b></div>
+              <div class="doc-row"><span>Tipo de camión autorizado</span><b>Doble remolque completo</b></div>
+              <div class="doc-row bad"><span>Cuánto duró el examen</span><b>4 minutos</b></div>
+              <div class="doc-row bad"><span>¿Se probó manejando de verdad?</span><b>No</b></div>
+              <div class="doc-row bad"><span>¿Se revisaron los frenos de aire?</span><b>No, se saltó ese paso</b></div>
+              <div class="doc-row"><span>Resultado del examen</span><b>Aprobado</b></div>
             </div>
             <div class="doc-sig">
-              <div class="lbl">Firma de validación</div>
+              <div class="lbl">Firma de quien lo aprobó</div>
               <svg class="sig-svg" viewBox="0 0 340 96" aria-label="Firma manuscrita">
                 <path d="M14 70 C34 22, 52 16, 58 40 C64 64, 48 78, 44 62 C40 46, 62 30, 82 52 C96 68, 108 56, 112 38 C116 20, 130 22, 132 44 C134 64, 148 66, 158 48 C168 30, 184 28, 188 50 C192 70, 208 72, 220 52 C232 32, 252 30, 258 52 C263 70, 278 66, 292 44 C300 31, 312 30, 322 40"/>
                 <path d="M96 82 C142 74, 214 72, 286 78"/>
               </svg>
-              <div class="doc-line">Instructor responsable de la validación</div>
+              <div class="doc-line">Instructor responsable de aprobarlo</div>
             </div>
-            <div class="doc-stamp">Cadena rota aquí</div>
+            <div class="doc-stamp">Aquí se rompió la cadena</div>
           </div>
           ${media('videos/el-culpable.mp4', 'Reconstrucción de la validación de 4 minutos')}
           <p class="lede" style="margin-top:1.6rem;font-size:clamp(1.05rem,1.9vw,1.35rem)">
-            El culpable no iba manejando esa noche. El culpable <strong class="c-red">firmó</strong>, noventa y dos días antes,
+            El verdadero responsable no iba manejando esa noche. El verdadero responsable <strong class="c-red">firmó</strong>, noventa y dos días antes,
             en un patio tranquilo, con prisa y sin mala intención.
           </p>
+          ${pregunta('¿Cuántos exámenes o revisiones han firmado ustedes esta semana? ¿Cuántos de esos duraron más de cuatro minutos?')}
         </div>`,
       onEnter: (ctx) => { w.Scene3D.impact(0.5); w.Audio3D && w.Audio3D.hit(); },
-      note: 'Deja que la firma se dibuje completa antes de hablar. Cuando caiga el sello, pregunta: "¿cuántas validaciones firmaron ustedes esta semana y cuántas duraron más de cuatro minutos?".'
+      note: 'Deja que la firma se dibuje completa antes de hablar. Cuando caiga el sello, haz la pregunta de la pantalla en voz alta y deja que respondan con confianza, sin juzgarlos.'
     },
     {
       id: 'la-formula-1', chapter: 'Línea de Vida', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan" style="text-align:center">
-          <div class="kicker">Antes de firmar</div>
-          <h2 class="title" style="margin-top:.5rem">La Fórmula 1</h2>
+          <div class="kicker">Antes de que tú empieces a firmar</div>
+          <h2 class="title" style="margin-top:.5rem">El Equipo Que Nunca Se Salta un Paso</h2>
           ${media('videos/la-formula-1.mp4', 'Un pit stop de Fórmula 1: menos de dos segundos, cero improvisación')}
-          <p class="lede" style="margin-top:1.2rem">Veinte personas mueven un auto de 800 kilos en menos de dos segundos. Nadie improvisa. Nadie se salta un paso porque "ya lo hizo mil veces". El proceso no es lo que los hace lentos: es lo que los hace posibles bajo presión real.</p>
-          <p class="lede" style="opacity:.8">Eso es lo que estás a punto de firmar en la Fase 2. No es burocracia. Es estándar.</p>
+          ${imgSlot('Foto de un equipo de mecánicos de carreras (pit stop) trabajando juntos en un auto, o foto de un taller mecánico con varias personas revisando un vehículo con orden y cuidado.')}
+          <p class="lede" style="margin-top:1.2rem">Mira a un equipo de mecánicos de carreras: veinte personas mueven un auto de 800 kilos en menos de dos segundos. Nadie se salta un paso "porque ya lo ha hecho mil veces". Seguir el proceso no los hace lentos: es justo lo que los hace capaces de hacerlo tan rápido y tan bien.</p>
+          <p class="lede" style="opacity:.8">Eso es lo que vas a firmar en la Parte 2. No es puro papeleo. Es la diferencia entre que algo salga bien o que alguien salga lastimado.</p>
         </div>`,
-      note: 'Puente entre la Fase 1 y la Fase 2. El grupo acaba de ver el costo de saltarse el proceso; ahora les muestras qué se ve cuando el proceso sí se respeta bajo presión real, antes de que ellos mismos empiecen a firmar.'
+      note: 'Puente entre la Parte 1 y la Parte 2. El grupo acaba de ver el costo de saltarse el proceso; ahora les muestras qué se ve cuando el proceso sí se respeta bajo presión real, antes de que ellos mismos empiecen a firmar.'
     },
     {
       title: 'Fase 2 · Ahora firmas tú', id: 'fase-2', chapter: 'Patio', cam: 'lowfront', mood: 'safe', speed: 0, anim: 'enter',
@@ -967,7 +989,7 @@
         <div class="panel accent-amber pad w-lg mx brackets c-amber">
           <div class="kicker c-amber">Estación 5 · construye tu instrumento</div>
           <h2 class="title">Dime qué evalúas y te digo a quién vas a perder</h2>
-          ${media('videos/pablo.mp4', 'Carlos Capillas aplica su instrumento de evaluación a un operador real')}
+          ${media('videos/eval-brief-carlos-capillas.mp4', 'Carlos Capillas aplica su instrumento de evaluación a un operador real')}
           <p class="lede">Todo instructor evalúa. La mayoría lo hace sin haber escrito nunca qué evalúa, y termina calificando lo que se ve desde la ventana de la oficina: puntualidad, uniforme y que no dé problemas.</p>
           <p class="lede">Arnulfo “el Borras” Peña habría sacado calificación alta en esa hoja. Fue puntual seis años.</p>
           <p class="lede" style="opacity:.8">Vas a construir tu propio instrumento con al menos <strong class="c-amber">60 criterios justificados</strong> en diez dominios: conducta, aspecto, técnica, inspección, normatividad, seguridad, comunicación, fatiga, custodia y criterio ético. Después vas a calificar operadores con él y vas a ver si tu hoja los distingue.</p>
