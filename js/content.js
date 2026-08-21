@@ -287,7 +287,7 @@
       note: 'Aquí cambia la energía del aula. Sube la luz, pide que se sienten derechos. Frase de entrada: "la Fase 1 fue de alguien más; la Fase 2 es de ustedes".'
     },
 
-    /* ============ AUDITORÍA FORENSE (INICIO DE LA CADENA) ============ */
+    /* ============  (INICIO DE LA CADENA) ============ */
     {
       id: 'patio-brief', chapter: 'Patio', cam: 'top', mood: 'warn', speed: 0, anim: 'enter',
       html: (S) => `
@@ -339,7 +339,7 @@
     },
 
     {
-      id: 'evidencia-patio', chapter: 'Patio', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left',
+      title: 'Evidencia de patio', id: 'evidencia-patio', chapter: 'Patio', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-orange pad w-lg mx" style="text-align:center">
           <div class="kicker c-orange">Evidencia de audio · Interacción real bajo presión</div>
@@ -351,7 +351,7 @@
 
     /* ============ MARCO ============ */
     {
-      id: 'competencias', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
+      title: 'Competencias del instructor', id: 'competencias', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan">
           <div class="kicker">Perfil del instructor TM</div>
@@ -367,7 +367,7 @@
 
     /* ============ MARCO · METODOLOGÍA UDAT ============ */
     {
-      id: 'udat', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
+      id: 'UDAT', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-cyan pad w-lg mx brackets">
           <div class="kicker c-cyan">Metodología UDAT · marco de formación</div>
@@ -420,13 +420,15 @@
         </div>`,
       notes: 'No expliques las cuatro letras: haz que el grupo las abra. Al cerrar, pregunta en cuál de las cuatro falló el caso de la Fase 1 y deja que discutan. La respuesta es L.'
     },
+   
     {
       title: 'Taxonomía PIEL aplicada', id: 'piel-aplicado', chapter: 'Marco', cam: 'hood', mood: 'warn', speed: 0.4, anim: 'enter',
       build: 'piel',
       notes: 'Ejercicio de lenguaje común. Si el instructor no sabe nombrar la competencia, su retroalimentación se queda en "hazlo bien". Insiste: la clasificación correcta es la que permite diseñar el ejercicio de refuerzo.'
     },
+   
     {
-      id: 'andragogia', chapter: 'Marco', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
+      id: 'Andragogia', chapter: 'Marco', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
       html: () => `
         <div class="panel pad w-sm mx" style="text-align:center">
           <div style="width:56px;height:56px;color:var(--cyan);margin:0 auto 1rem">${I('brain')}</div>
@@ -436,8 +438,6 @@
         </div>`,
       note: 'Aquí cambia el contrato con el grupo: de espectadores a operadores. Dilo explícitamente.'
     },
-
-    /* ============ FASE 2 · SIMULADOR ============ */
 
     /* ============ MARCO · LOGRAR EL CAMBIO REAL ============ */
     {
@@ -483,13 +483,15 @@
         </div>`,
       notes: 'Pregunta directa al grupo: de las tres, ¿cuál es la que su empresa nunca da? Casi siempre responden soporte activo. Ese es el hallazgo del bloque.'
     },
+    
     {
       title: 'Ciclo del aprendizaje real', id: 'ciclo', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'enter',
       build: 'ciclo',
       notes: 'Este orden no es negociable. La mayoría de los instructores empieza en simulación y termina en conexión, y por eso el operador practica sin saber para qué.'
     },
+    
     {
-      id: 'retro-empatia', chapter: 'Estación 2', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
+      title: 'Retroalimentación', id: 'Retroalimentacion', chapter: 'Estación 2', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-green pad w-lg mx brackets">
           <div class="kicker c-green">Herramientas del instructor</div>
@@ -566,8 +568,9 @@
         </div>`,
       notes: 'Estas seis piezas son el kit que van a usar en la micro-clase de la siguiente escena. Pide que anoten las dos secuencias antes de avanzar: se les van a olvidar en cuanto tengan al operador enfrente.'
     },
+ 
     {
-      id: 'micro-brief', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
+      id: 'Micro-Clase', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-amber pad w-lg mx brackets c-amber">
           <div class="kicker c-amber">Estación 2 · Factor humano</div>
@@ -585,16 +588,19 @@
         </div>`,
       notes: 'Aquí se cambia el chip. Hasta ahora auditaron una unidad; ahora los audita el grupo a ellos. Pide que el participante realmente se pare y hable: el ejercicio pierde todo si solo se hace mentalmente.'
     },
+   
     {
-      title: 'Micro-clase en piso', id: 'microclase', chapter: 'Estación 2', cam: 'follow', mood: 'normal', speed: 0, anim: 'enter',
+      title: 'Micro-clase', id: 'microclase', chapter: 'Estación 2', cam: 'follow', mood: 'normal', speed: 0, anim: 'enter',
       build: 'microclase',
       notes: 'Elige un voluntario para hacer de operador. El resto del grupo marca la rúbrica en tiempo real, tú no. Al terminar, la primera pregunta es siempre para el que hizo de operador: "¿te dieron ganas de cambiar?".'
     },
+   
     {
-      title: 'Ingeniería del estrés', id: 'ing-estres', chapter: 'Estación 2', cam: 'follow', mood: 'warn', speed: 0.5, anim: 'left',
+      title: 'Manejo del estrés', id: 'Control-estres', chapter: 'Estación 2', cam: 'follow', mood: 'warn', speed: 0.5, anim: 'left',
       build: 'estres',
       notes: 'Aquí suelen resistirse: "no quiero estresar a mi gente". Aclara que el estrés ya existe en la carretera; lo único que decides es si aparece por primera vez contigo o solo cuando ya no puedes ayudarlo.'
     },
+   
     {
       id: 'pc-06', chapter: 'Estación 2', cam: 'axle', mood: 'warn', speed: 0, anim: 'right', vote: true, question: 'El Borras se va a equivocar frente al grupo: ¿qué haces?',
       html: () => `
@@ -614,11 +620,12 @@
       ],
       note: 'Este es el punto donde se separa el capacitador del acompañante. Pregunta al grupo cuántos hubieran tomado el volante: casi todos. Ese reflejo es el que hay que desmontar.'
     },
+   
     {
       id: 'est-1', chapter: 'Estación 1', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'La carta porte no cuadra: ¿qué decides?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
-          <div class="kicker c-orange">Estación 1 de 5 · Patio, normatividad y activos</div>
+          <div class="kicker c-orange">Estación 1 · Patio, normatividad y activos</div>
           <h2 class="title" style="margin-top:.5rem">La Carta Porte No Cuadra</h2>
           <p class="lede">La báscula marca <strong>28.4 t</strong>; la carta porte declara <strong>26.0 t</strong>. Despacho responde por radio: "así la mandó el cliente, no le muevas". El retén de la Guardia Nacional está a 90 km.</p>
           ${mods(['Marco normativo SCT y Ley de Caminos', 'Inspección físico-mecánica avanzada', 'Auditoría de carga, pesos y dimensiones', 'Custodia y cuidado de activos'])}
@@ -650,7 +657,7 @@
       id: 'est-2', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'El operador no durmió: ¿lo dejas salir a ruta?',
       html: () => `
         <div class="panel pad w-md mx">
-          <div class="kicker c-cyan">Estación 2 de 5 · Factor humano</div>
+          <div class="kicker c-cyan">Estación 2 · Factor humano</div>
           <h2 class="title" style="margin-top:.5rem">El Operador Que No Durmió</h2>
           <p class="lede">Tres meses de antigüedad. Llega evasivo, con los ojos irritados; afirma que descansó ocho horas. Su prueba de reacción salió en rango rojo y su compañero comenta que anduvo de mudanza toda la noche. Cuando le preguntas, se pone a la defensiva delante de tres compañeros.</p>
           ${mods(['Psicología del operador de quinta rueda', 'Inteligencia emocional del capacitador', 'Manejo de objeciones y resistencia', 'Comunicación asertiva operativa', 'Prevención de adicciones y salud ocupacional'])}
@@ -786,7 +793,7 @@
       html: () => `
         <div class="panel accent-cyan pad w-md mx">
           <div class="kicker">Estación 5 de 5 · Cierre formativo</div>
-          <h2 class="title" style="margin-top:.5rem">Veinte Minutos Que Valen la Ruta</h2>
+          <h2 class="title" style="margin-top:.5rem">Veinte Minutos Que Valen una vida</h2>
           <p class="lede">Unidad descargada. Tienes veinte minutos con el operador antes de su descanso. Es la única ventana real de aprendizaje del viaje completo.</p>
           ${mods(['Andragogía: el ciclo de Kolb en cabina', 'Metodología de retroalimentación activa', 'Liderazgo de cero tolerancia', 'Evaluación por competencias CONOCER', 'Trascendencia y bienestar familiar'])}
         </div>`,
@@ -813,6 +820,7 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(260000, 'Desacople catastrófico del semirremolque', 'bad'); ctx.damage(1); w.Scene3D.impact(1.8); ctx.engine(false); }
     },
+    
     {
       id: 'fin-descenso', chapter: 'Desenlace', cam: 'crash', mood: 'danger', speed: 0, anim: 'impact',
       when: (S) => w.State.ending() === 'descenso',
@@ -825,6 +833,7 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(180000, 'Colapso en descenso por frenos y fatiga', 'bad'); ctx.damage(1); w.Scene3D.impact(1.6); ctx.engine(false); }
     },
+    
     {
       id: 'fin-microsueno', chapter: 'Desenlace', cam: 'crash', mood: 'danger', speed: 0, anim: 'impact',
       when: (S) => w.State.ending() === 'microsueno',
@@ -838,6 +847,7 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(95000, 'Salida de camino por microsueño', 'bad'); ctx.damage(1); w.Scene3D.impact(1.5); ctx.engine(false); }
     },
+    
     {
       id: 'fin-incidente', chapter: 'Desenlace', cam: 'rear', mood: 'warn', speed: 0.3, anim: 'impact',
       when: (S) => w.State.ending() === 'incidente',
@@ -850,6 +860,7 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(38000, 'Incidente en maniobra de andén', 'bad'); ctx.damage(0.7); ctx.engine(false); }
     },
+    
     {
       id: 'fin-utilidad', chapter: 'Desenlace', cam: 'rear', mood: 'warn', speed: 0.2, anim: 'enter',
       when: (S) => w.State.ending() === 'utilidad',
@@ -858,10 +869,11 @@
           <div class="kicker c-orange">Km 640 · Desenlace</div>
           <h2 class="title" style="margin-top:.5rem">Llegaste, Pero Sin Utilidad</h2>
           <p class="lede">Sin siniestro y sin lesionados: eso ya es un logro. Pero de los $80,000 proyectados quedan <strong class="c-amber num">${money(S.budget)}</strong>. El viaje se hizo por cumplir, no por rentabilidad.</p>
-          <p class="lede" style="opacity:.8">Una flota que opera así sobrevive el mes y no sobrevive el año.</p>
+          <p class="lede" style="opacity:.8">Una flota que opera así sobrevive el mes, pero no sobrevive el año.</p>
         </div>`,
       onEnter: (ctx) => { ctx.engine(false); }
     },
+    
     {
       id: 'fin-seguro', chapter: 'Desenlace', cam: 'rear', mood: 'safe', speed: 0.2, anim: 'enter',
       when: (S) => w.State.ending() === 'seguro',
@@ -884,6 +896,7 @@
       build: 'telemetria',
       notes: 'La telemetría no acusa: abre la conversación. Si la usas como prueba en un juicio, el operador aprende a esconderse del sensor, no a manejar mejor.'
     },
+    
     {
       id: 'roles-3', chapter: 'Estación 5', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left',
       html: () => `
@@ -924,7 +937,7 @@
               <div class="rv-hint">Ver</div>
             </div>
           </div>
-          <p class="lede" style="margin-top:1.1rem;font-size:.92rem;opacity:.82">Regla práctica: <strong>di en voz alta con qué sombrero llegas</strong>. "Hoy vengo a evaluar" y "hoy vengo a acompañarte" producen conversaciones distintas con la misma persona.</p>
+          <p class="lede" style="margin-top:1.1rem;font-size:.92rem;opacity:.82">Regla práctica: <strong>di dime tu como llegas</strong>. "Hoy vengo a evaluar" y "hoy vengo a acompañarte" producen conversaciones distintas con la misma persona.</p>
         </div>`,
       notes: 'Pregunta al grupo cuál es su sombrero por default. Casi siempre es evaluador, porque es el que la empresa premia. Ahí está el problema cultural completo.'
     },
@@ -942,7 +955,7 @@
               <div class="rv-t">Resiliencia</div>
               <div class="rv-s">Bajo presión sostiene el proceso</div>
               <div class="rv-body">
-                <p><em>Evidencia:</em> con retraso acumulado, ¿siguió haciendo la inspección completa o la recortó?</p>
+                <p><em>Evidencia:</em> con el tiempo encima ¿siguió haciendo la inspección completa o la recortó?</p>
                 <p>Se observa el día malo, nunca el día tranquilo.</p>
               </div>
               <div class="rv-hint">Ver</div>
@@ -953,7 +966,7 @@
               <div class="rv-s">Reporta lo que nadie vio</div>
               <div class="rv-body">
                 <p><em>Evidencia:</em> ¿reportó el golpe menor, la fuga leve o el error propio sin que se lo detectaran?</p>
-                <p>Este indicador solo sube si reportar nunca se castiga.</p>
+                <p>Este indicador solo sube si al darse cuenta nunca se le da solución.</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
@@ -982,7 +995,7 @@
       notes: 'Pide que agreguen una cuarta fila con la omisión más frecuente de su propio patio. Ese ejercicio convierte la tabla genérica en su tabla.'
     },
 
-    /* ============ ESTACIÓN 5 · INSTRUMENTO DE EVALUACIÓN ============ */
+    /* ============ ESTACIÓN 5 · ============ */
     {
       id: 'eval-brief', chapter: 'Estación 5', cam: 'top', mood: 'warn', speed: 0, anim: 'right',
       html: () => `
@@ -996,21 +1009,25 @@
         </div>`,
       notes: 'Advierte antes de empezar: en el banco hay criterios que suenan bien y son trampa. No les digas cuáles. El hallazgo tiene que ser suyo al final.'
     },
+    
     {
       title: 'Constructor del instrumento', id: 'evconstruye', chapter: 'Estación 5', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       build: 'evconstruye',
       notes: 'Dales tiempo real: 12 a 15 minutos. Recorre el salón y pregunta por qué eligieron un criterio y no otro. Insiste en que redacten al menos dos criterios propios.'
     },
+    
     {
       title: 'Tu hoja frente a tres operadores', id: 'evaplica', chapter: 'Estación 5', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
       build: 'evaplica',
       notes: 'Momento clave del bloque. Si su instrumento aprueba al Borras, no los rescates: deja que el silencio haga el trabajo antes de explicar.'
     },
+    
     {
       title: 'Aplícalo a tu gente', id: 'evcampo', chapter: 'Estación 5', cam: 'top', mood: 'normal', speed: 0, anim: 'right',
       build: 'evcampo',
       notes: 'Que escriban el nombre real de un operador de su flota. Al terminar pueden descargar la hoja y usarla el lunes. Eso convierte el curso en herramienta.'
     },
+   
     {
       id: 'pc-07', chapter: 'Estación 5', cam: 'lowfront', mood: 'warn', speed: 0.2, anim: 'left', vote: true, question: 'El operador se detuvo: ¿cómo respondes?',
       html: () => `
@@ -1030,6 +1047,7 @@
       ],
       note: 'Este es el punto de control más importante del curso. El folio VC-0912 se firmó porque nadie tomó la opción C ese día. Dilo así, sin suavizarlo.'
     },
+   
     {
       id: 'indicador', chapter: 'Estación 5', cam: 'trailer', mood: 'safe', speed: 0.3, anim: 'enter',
       html: () => `
