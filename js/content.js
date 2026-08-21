@@ -74,8 +74,8 @@
             <p class="lede">Te vamos a contar una historia real. Un camión tuvo un accidente grave. Primero vamos a investigar juntos, paso a paso, qu&eacute; pas&oacute; y qui&eacute;n pudo haberlo evitado &mdash;.
             Despu&eacute;s te pondras en su lugar.</p>
             <div class="grid-3" style="margin-top:1.5rem">
-              <div class="stat"><h4>Parte 1 &middot; La Historia</h4><div class="v c-amber num">92 d&iacute;as</div></div>
-              <div class="stat"><h4>Parte 2 &middot; Tu Turno</h4><div class="v c-cyan num">$80,000</div></div>
+              <div class="stat"><h4>El problema &middot; La Historia</h4><div class="v c-amber num">92 d&iacute;as</div></div>
+              <div class="stat"><h4>Cambio de pensamiento &middot; Tu Turno</h4><div class="v c-cyan num">$80,000</div></div>
               <div class="stat"><h4>Finales posibles</h4><div class="v num">6</div></div>
             </div>
             <p class="lede" style="margin-top:1.3rem;font-size:.9rem;opacity:.7">&larr; &rarr; o barra espaciadora para avanzar. <strong>I</strong> ver el mapa &middot; <strong>N</strong> notas &middot; <strong>V</strong> votaci&oacute;n &middot; <strong>R</strong> regresar.</p>
@@ -83,9 +83,9 @@
         </div>`
     },
 
-    /* ============ FASE 1 · LA HISTORIA ============ */
+    /* ============ El POBLEMA· LA HISTORIA ============ */
     {
-      title: 'Parte 1 · La Historia', id: 'fase-1', chapter: 'La historia', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
+      title: 'El problema &middot; La Historia', id: '', chapter: 'La historia', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
@@ -94,7 +94,7 @@
           <strong class="c-amber">&mdash;y a la persona que estaba ah&iacute;</strong>.</p>
           <div class="steps">
             <span class="on c-amber">1 · Conoce la historia</span>
-            <span>2 · Regresamos el tiempo</span>
+            <span>2 · click para retroceder</span>
             <span>3 · Encontramos el error</span>
           </div>
           ${pregunta('¿Alguna vez viste algo en el trabajo que te pareció peligroso, pero nadie dijo nada? Guarda esa idea, la vamos a usar más adelante.')}
@@ -165,31 +165,31 @@
       vote: true, question: '¿Cuál creen que fue el verdadero error que llevó a este accidente?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
-          <div class="kicker c-orange">Piensen como detectives</div>
+          <div class="kicker c-orange">Piensa como el experto que eres</div>
           <h2 class="title" style="margin-top:.5rem">¿Cuál fue el error que llevó a esto?</h2>
-          <p class="lede">Ya revisamos el camión: no era una falla mecánica, todo estaba en regla. Arnulfo tampoco tenía ningún reporte de mal comportamiento antes de esa noche.</p>
+          <p class="lede">Ya revisamos el camión: no era una falla mecánica, Aunque se descubrio habian fallas sin reportar. Arnulfo tenia algunos reportes de mal comportamiento.</p>
         </div>`,
       choices: [
         { key: 'A', label: 'Una falla del camión que nadie pudo prever', hint: 'Mala suerte, nada se pudo hacer', tone: 'bad', cost: 12000,
           verdict: 'Ya revisamos el camión: no era una falla mecánica. Culpar a la mala suerte es la forma más cara de no aprender nada: cierra la investigación antes de encontrar la verdadera causa.' },
         { key: 'B', label: 'Arnulfo se confió de más en el camino', hint: 'Bajó la guardia', tone: 'mid', cost: 5000, xp: 30,
           verdict: 'Eso es un síntoma, no la causa. Confiarse de más no nace en el camino: nace cuando, en el patio, nadie corrige el primer descuido pequeño.' },
-        { key: 'C', label: 'Alguien firmó su aprobación sin revisar bien, con prisa', tone: 'good', xp: 120, flag: 'diagnosticoCorrecto',
-          hint: 'La revisión se dio por hecha sin comprobarla',
-          verdict: 'Vamos a descubrirlo juntos, paso a paso. Toda la cadena de errores empieza en cómo se formó a Arnulfo, y hoy tu experiencia como instructor nos va a ayudar a reconstruirla. Hoy vas a estar del otro lado de esa firma.' }
+        { key: 'C', label: 'Alguien firmó su aprobación sin revisar bien lo que se debe de revisar, por prisa?', tone: 'good', xp: 120, flag: 'diagnosticoCorrecto',
+          hint: 'La revisión se omitio y alguien se dio cuenta',
+          verdict: 'Vamos a descubrirlo juntos, paso a paso. Toda la cadena de errores empieza en cómo se le dio el seguiumiento a Arnulfo, y hoy tu experiencia como instructor nos va a ayudar a reconstruirla.' }
       ],
-      note: 'Si el grupo elige A o B, no los corrijas de inmediato: pregunta "¿y qué tuvo que pasar antes para que eso fuera posible?".'
+      note: 'Si el grupo elige A o B, no los corrijas de inmediato: pregunta "¿y qué tuvo que pasar antes para que eso fuera posible?"'
     },
 
     {
-      id: 'linea-vida', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'enter',
+      id: 'El tiempo en la empresa', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'enter',
       build: 'lifeline',
       html: () => '',
       note: 'No avances tú. Pide a un participante distinto que presione "Retroceder" en cada paso y que lea la tarjeta en voz alta. Después de cada nodo pregunta: ¿quién en esta sala ocupa ese puesto?'
     },
 
     {
-      id: 'veredicto-linea', chapter: 'Línea de Vida', cam: 'wide', mood: 'warn', speed: 0, anim: 'left',
+      id: 'veredicto-de trayectoria', chapter: 'La Historia', cam: 'wide', mood: 'warn', speed: 0, anim: 'left',
       html: (S) => {
         const ok = !!S.flags.diagnosticoCorrecto;
         return `
@@ -202,7 +202,7 @@
             : 'El grupo apuntó al camino, y el camino solo terminó lo que el patio ya había autorizado. No es un error de ustedes: es algo que le pasa a toda la industria, y por eso el curso empieza justo aquí.'}</p>
           <div class="grid-3" style="margin:1.6rem 0">
             <div class="stat"><h4>Días de aviso</h4><div class="v num c-amber">92</div></div>
-            <div class="stat"><h4>Momentos donde se pudo parar</h4><div class="v num c-amber">6</div></div>
+            <div class="stat"><h4>Momentos donde detectar el riesgo</h4><div class="v num c-amber">6</div></div>
             <div class="stat"><h4>Personas que pudieron detenerlo</h4><div class="v num c-red">5</div></div>
           </div>
           <p class="fam-note">Ningún accidente grave nace de un solo error. Nace de varios avisos que nadie atendió, y de una firma que los volvió "aprobados".
@@ -213,11 +213,11 @@
     },
 
     {
-      id: 'el-culpable', chapter: 'Línea de Vida', cam: 'lowfront', mood: 'danger', speed: 0, anim: 'enter',
+      id: 'el-culpable', chapter: 'La Historia', cam: 'lowfront', mood: 'danger', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel accent-red pad w-md mx brackets c-red">
           <div class="kicker c-red">92 días antes del accidente · 7:12 a.m. · aquí empezó todo</div>
-          <h2 class="title glow-red" style="margin:.5rem 0 1.3rem">Aquí Empezó Todo</h2>
+          <h2 class="title glow-red" style="margin:.4rem 0 1.1rem">Aquí Empezó Todo</h2>
           <div class="doc">
             <div class="doc-h">
               <b>Examen de manejo de Arnulfo</b>
@@ -226,46 +226,46 @@
             <div class="doc-rows">
               <div class="doc-row"><span>Operador evaluado</span><b>Arnulfo "el Borras" Peña</b></div>
               <div class="doc-row"><span>Tipo de camión autorizado</span><b>Doble remolque completo</b></div>
-              <div class="doc-row bad"><span>Cuánto duró el examen</span><b>4 minutos</b></div>
+              <div class="doc-row bad"><span>Cuánto duró el examen</span><b>20 minutos</b></div>
               <div class="doc-row bad"><span>¿Se probó manejando de verdad?</span><b>No</b></div>
               <div class="doc-row bad"><span>¿Se revisaron los frenos de aire?</span><b>No, se saltó ese paso</b></div>
               <div class="doc-row"><span>Resultado del examen</span><b>Aprobado</b></div>
             </div>
             <div class="doc-sig">
               <div class="lbl">Firma de quien lo aprobó</div>
-              <svg class="sig-svg" viewBox="0 0 340 96" aria-label="Firma manuscrita">
+              <svg class="sig-svg" viewBox="0 0 240 86" aria-label="Firma manuscrita(instructor a cargo TM)">
                 <path d="M14 70 C34 22, 52 16, 58 40 C64 64, 48 78, 44 62 C40 46, 62 30, 82 52 C96 68, 108 56, 112 38 C116 20, 130 22, 132 44 C134 64, 148 66, 158 48 C168 30, 184 28, 188 50 C192 70, 208 72, 220 52 C232 32, 252 30, 258 52 C263 70, 278 66, 292 44 C300 31, 312 30, 322 40"/>
                 <path d="M96 82 C142 74, 214 72, 286 78"/>
               </svg>
               <div class="doc-line">Instructor responsable de aprobarlo</div>
             </div>
-            <div class="doc-stamp">Aquí se rompió la cadena</div>
+            <div class="doc-stamp">Aquí no deberia estar tu firma</div>
           </div>
-          ${media('videos/el-culpable.mp4', 'Reconstrucción de la validación de 4 minutos')}
+          ${media('videos/el-culpable.mp4', 'Reconstrucción de la validación de 20 minutos')}
           <p class="lede" style="margin-top:1.6rem;font-size:clamp(1.05rem,1.9vw,1.35rem)">
             El verdadero responsable no iba manejando esa noche. El verdadero responsable <strong class="c-red">firmó</strong>, noventa y dos días antes,
             en un patio tranquilo, con prisa y sin mala intención.
           </p>
-          ${pregunta('¿Cuántos exámenes o revisiones han firmado ustedes esta semana? ¿Cuántos de esos duraron más de cuatro minutos?')}
+          ${pregunta('¿Cuántos exámenes o revisiones han firmado ustedes esta semana? ¿Cuántos de esos duraron veinte minutos en alguna de sus partes?')}
         </div>`,
       onEnter: (ctx) => { w.Scene3D.impact(0.5); w.Audio3D && w.Audio3D.hit(); },
       note: 'Deja que la firma se dibuje completa antes de hablar. Cuando caiga el sello, haz la pregunta de la pantalla en voz alta y deja que respondan con confianza, sin juzgarlos.'
     },
+   
     {
-      id: 'la-formula-1', chapter: 'Línea de Vida', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
+      id: 'la-formula-1', chapter: 'La Hstoria', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan" style="text-align:center">
-          <div class="kicker">Antes de que tú empieces a firmar</div>
+          <div class="kicker">Antes de que tú firmes</div>
           <h2 class="title" style="margin-top:.5rem">El Equipo Que Nunca Se Salta un Paso</h2>
           ${media('videos/la-formula-1.mp4', 'Un pit stop de Fórmula 1: menos de dos segundos, cero improvisación')}
-          ${imgSlot('Foto de un equipo de mecánicos de carreras (pit stop) trabajando juntos en un auto, o foto de un taller mecánico con varias personas revisando un vehículo con orden y cuidado.')}
-          <p class="lede" style="margin-top:1.2rem">Mira a un equipo de mecánicos de carreras: veinte personas mueven un auto de 800 kilos en menos de dos segundos. Nadie se salta un paso "porque ya lo ha hecho mil veces". Seguir el proceso no los hace lentos: es justo lo que los hace capaces de hacerlo tan rápido y tan bien.</p>
-          <p class="lede" style="opacity:.8">Eso es lo que vas a firmar en la Parte 2. No es puro papeleo. Es la diferencia entre que algo salga bien o que alguien salga lastimado.</p>
+          <p class="lede" style="opacity:.8">Al igual que cuando te casas o firmas un papel importante, tu firma en este caso te puede convertir en el culpable</p>
         </div>`,
       note: 'Puente entre la Parte 1 y la Parte 2. El grupo acaba de ver el costo de saltarse el proceso; ahora les muestras qué se ve cuando el proceso sí se respeta bajo presión real, antes de que ellos mismos empiecen a firmar.'
     },
+   
     {
-      title: 'Fase 2 · Ahora firmas tú', id: 'fase-2', chapter: 'Patio', cam: 'lowfront', mood: 'safe', speed: 0, anim: 'enter',
+      title: ' · Ahora firmas tú', id: 'fase-2', chapter: 'Patio', cam: 'lowfront', mood: 'safe', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-cyan accent-cyan">
           <div class="pn c-cyan">02</div>
