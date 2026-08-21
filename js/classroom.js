@@ -64,10 +64,10 @@
   }
 
   const PULSE = [
-    { key: 'A', label: 'Me tensó' },
+    { key: 'A', label: 'Es clara la información' },
     { key: 'B', label: 'Tengo dudas' },
     { key: 'C', label: 'Lo tengo claro' },
-    { key: 'D', label: 'No lo esperaba' }
+    { key: 'D', label: 'Me desagrada' }
   ];
 
   /* Pulso rápido: para las escenas que NO tienen una decisión formal (video, teoría,
