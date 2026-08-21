@@ -65,7 +65,7 @@
       id: 'portada', chapter: 'Apertura', cam: 'opening', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="cover cover-bg" id="cover-bg-wrap">
-          <img class="logo.png" src="portada (2).png" alt="Formando el Trayecto del Instructor"
+          <img class="" src="portada (2).png" alt="Formando el Trayecto del Instructor"
                onerror="this.closest('.cover-bg').classList.add('cover-bg-missing')">
           <div class="cover-bg-tint"></div>
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
@@ -90,7 +90,7 @@
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
           <div class="pt">La Historia</div>
-          <p class="lede" style="margin-top:1.1rem">Antes de empezar, solo vas a mirar y escuchar. Vamos a mostrarte un accidente real, una llamada real, y noventa y dos d&iacute;as de historia que vamos a regresar como pel&iacute;cula hasta el momento exacto donde esto se pudo haber evitado
+          <p class="lede" style="margin-top:1.1rem">Antes de empezar, solo vas a mirar y escuchar. Vamos a mostrarte un accidente real, una llamada , y noventa y dos d&iacute;as de historia que vamos a regresar como pel&iacute;cula hasta el momento exacto donde esto se pudo haber evitado
           <strong class="c-amber">&mdash;y a la persona que estaba ah&iacute;</strong>.</p>
           <div class="steps">
             <span class="on c-amber">1 · Conoce la historia</span>
