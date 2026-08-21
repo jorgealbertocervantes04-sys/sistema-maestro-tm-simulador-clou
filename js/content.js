@@ -65,11 +65,11 @@
       id: 'portada', chapter: 'Apertura', cam: 'opening', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="cover cover-bg" id="cover-bg-wrap">
-          <img class="cover-bg-img" src="portada (2).png" alt="Formando el Trayecto del Instructor"
+          <img class="logo.png" src="portada (2).png" alt="Formando el Trayecto del Instructor"
                onerror="this.closest('.cover-bg').classList.add('cover-bg-missing')">
           <div class="cover-bg-tint"></div>
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
-            <div class="kicker">Sistema Maestro TM &middot; Mentores Operativos</div>
+            <div class="kicker">Jorge Osuna &middot; Instructores Operativos</div>
             <h1 class="hero glow-cyan" style="margin-top:.9rem">Formando el Trayecto del Instructor</h1>
             <p class="lede">Te vamos a contar una historia real. Un camión tuvo un accidente grave. Primero vamos a investigar juntos, paso a paso, qu&eacute; pas&oacute; y qui&eacute;n pudo haberlo evitado &mdash;como hace un detective.
             Despu&eacute;s te vas a poner en los zapatos de esa persona: vas a manejar la unidad, revisarla pieza por pieza, y dar una clase de verdad a un operador real.</p>
