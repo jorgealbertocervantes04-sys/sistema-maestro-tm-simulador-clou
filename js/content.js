@@ -65,14 +65,14 @@
       id: 'portada', chapter: 'Apertura', cam: 'opening', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="cover cover-bg" id="cover-bg-wrap">
-          <img class="" src="portada (2).png" alt="Formando el Trayecto del Instructor"
+          <img class="cover-bg-img" src="portada (2).png" alt="Formando el Trayecto del Instructor"
                onerror="this.closest('.cover-bg').classList.add('cover-bg-missing')">
           <div class="cover-bg-tint"></div>
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
-            <div class="kicker">Jorge Osuna &middot; Instructores Operativos</div>
+            <div class="kicker">Jorge Osuna&middot; Instructores Operativos</div>
             <h1 class="hero glow-cyan" style="margin-top:.9rem">Formando el Trayecto del Instructor</h1>
-            <p class="lede">Te vamos a contar una historia real. Un camión tuvo un accidente grave. Primero vamos a investigar juntos, paso a paso, qu&eacute; pas&oacute; y qui&eacute;n pudo haberlo evitado &mdash;como hace un detective.
-            Despu&eacute;s te vas a poner en los zapatos de esa persona: vas a manejar la unidad, revisarla pieza por pieza, y dar una clase de verdad a un operador real.</p>
+            <p class="lede">Te vamos a contar una historia real. Un camión tuvo un accidente grave. Primero vamos a investigar juntos, paso a paso, qu&eacute; pas&oacute; y qui&eacute;n pudo haberlo evitado &mdash;.
+            Despu&eacute;s te pondras en su lugar.</p>
             <div class="grid-3" style="margin-top:1.5rem">
               <div class="stat"><h4>Parte 1 &middot; La Historia</h4><div class="v c-amber num">92 d&iacute;as</div></div>
               <div class="stat"><h4>Parte 2 &middot; Tu Turno</h4><div class="v c-cyan num">$80,000</div></div>
@@ -83,14 +83,14 @@
         </div>`
     },
 
-    /* ============ FASE 1 · LÍNEA DE VIDA ============ */
+    /* ============ FASE 1 · LA HISTORIA ============ */
     {
-      title: 'Parte 1 · La Historia', id: 'fase-1', chapter: 'Línea de Vida', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
+      title: 'Parte 1 · La Historia', id: 'fase-1', chapter: 'La historia', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
           <div class="pt">La Historia</div>
-          <p class="lede" style="margin-top:1.1rem">Antes de empezar, solo vas a mirar y escuchar. Vamos a mostrarte un accidente real, una llamada , y noventa y dos d&iacute;as de historia que vamos a regresar como pel&iacute;cula hasta el momento exacto donde esto se pudo haber evitado
+          <p class="lede" style="margin-top:1.1rem">Antes de empezar, solo vas a mirar y escuchar. Vamos a mostrarte un accidente , una llamada , y noventa y dos d&iacute;as de historia que vamos a regresar como pel&iacute;cula hasta el momento exacto donde esto se pudo haber evitado
           <strong class="c-amber">&mdash;y a la persona que estaba ah&iacute;</strong>.</p>
           <div class="steps">
             <span class="on c-amber">1 · Conoce la historia</span>
@@ -98,13 +98,13 @@
             <span>3 · Encontramos el error</span>
           </div>
           ${pregunta('¿Alguna vez viste algo en el trabajo que te pareció peligroso, pero nadie dijo nada? Guarda esa idea, la vamos a usar más adelante.')}
-          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Esta primera parte no se califica. Solo se vive. Las decisiones y los puntos empiezan en la Parte 2.</p>
+          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Esta primera parte ponte en los zapatos de todos los implicados en la historia . Parte 2.</p>
         </div>`,
-      note: 'Baja la luz del aula antes de avanzar. Di solo esto: "lo que van a ver pasó, y alguien firmó para que pasara". Nada más.'
+      note: 'Baja la luz del aula antes de avanzar. Di solo esto: "lo que van a ver pasó, y alguien pudo haber echo algo para evitarlo". Nada más.'
     },
 
     {
-      id: 'elborras', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'Elborras', chapter: 'La Historia', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Un camión, una madrugada, las 3:14 a.m.</div>
@@ -115,7 +115,7 @@
     },
 
     {
-      id: 'siniestro', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'siniestro', chapter: 'La Historia', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Un camión, una madrugada, las 3:14 a.m.</div>
@@ -127,7 +127,7 @@
     },
 
     {
-      id: 'llamada', chapter: 'Línea de Vida', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
+      id: 'La llamada', chapter: 'La Historia', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Esa misma madrugada</div>
@@ -140,7 +140,7 @@
     },
 
     {
-      id: 'la-familia', chapter: 'Línea de Vida', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
+      id: 'La familia', chapter: 'La Historia', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx" style="border-color:rgba(255,196,0,.28)">
           <div class="kicker c-amber">Lo que ningún reporte cuenta</div>
@@ -153,7 +153,7 @@
             <div class="fam-c"><div class="n">Emiliano</div><div class="r">Hijo · 7 años</div></div>
             <div class="fam-c"><div class="n">Renata</div><div class="r">Hija · 4 años</div></div>
           </div>
-          <p class="fam-note">En este curso te vamos a medir con números y con pesos, porque es el idioma que todos en la empresa entienden.
+          <p class="fam-note">En este curso te vamos a medir con números y con pesos.
           Pero lo que acabas de ver no cabe en ningún número: <strong class="c-amber">no hay dinero que lo repare</strong>.</p>
         </div>`,
       onEnter: () => { w.Scene3D.pulseLights(0xFFC400); },
@@ -161,7 +161,7 @@
     },
 
     {
-      id: 'poll-causa', chapter: 'Línea de Vida', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
+      id: 'poll-causa', chapter: 'La Historia', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
       vote: true, question: '¿Cuál creen que fue el verdadero error que llevó a este accidente?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
