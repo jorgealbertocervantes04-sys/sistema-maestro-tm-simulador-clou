@@ -3,7 +3,9 @@
    ============================================================ */
 (function (w) {
   const I = w.svgIcon;
-  const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US');
+  function money(n) {
+    return (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US');
+  }
 
   const media = (file, label, poster, caption) => `
     <div class="media" data-media>
