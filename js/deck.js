@@ -62,7 +62,7 @@
     wrap.className = 'slide ' + anim;
     wrap.dataset.id = s.id;
 
-    if (s.build === 'scoreboard') wrap.innerHTML = buildScoreboard(S);
+    if (s.build === 'scoreboard') { wrap.innerHTML = buildScoreboard(S); w.State.submitParticipantEvidence(); }
     else if (s.build === 'dictamen') wrap.innerHTML = buildDictamen(S);
     else wrap.innerHTML = typeof s.html === 'function' ? s.html(S) : (s.html || '');
     if (s.build === 'lifeline' && w.Lifeline) w.Lifeline.mount(wrap);

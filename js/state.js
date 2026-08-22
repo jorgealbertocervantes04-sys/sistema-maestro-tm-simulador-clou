@@ -144,6 +144,40 @@
 
     reset() { Object.assign(S, fresh()); emit(); },
 
+    /* ---- evidencia del recorrido libre del simulador (participante desde su celular) ----
+       Si abrieron index.html desde el enlace "Explorar el simulador" del QR, la URL trae
+       ?room=X&participante=ID. Al llegar al tablero de resultados, se manda una sola vez
+       el desenlace final para que quede junto con el resto de su evidencia individual
+       y se sume también al reporte grupal del facilitador. */
+    participantContext() {
+      try {
+        const p = new URLSearchParams(location.search);
+        const room = p.get('room'); const attendeeId = p.get('participante');
+        if (room && attendeeId) return { room, attendeeId };
+      } catch (e) {}
+      return null;
+    },
+    async submitParticipantEvidence() {
+      if (S._evidenciaEnviada) return;
+      const ctx = State.participantContext();
+      if (!ctx) return;
+      S._evidenciaEnviada = true;
+      const g = State.grade();
+      try {
+        await fetch(w.TM_API + '/session/' + ctx.room + '/taller', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            attendeeId: ctx.attendeeId,
+            simuladorEnding: State.ending(),
+            simuladorGrado: g.l,
+            simuladorRiesgo: State.risk(),
+            simuladorXp: S.xp,
+            simuladorDetalle: { budget: S.budget, spent: S.spent, gaps: State.gaps(), strengths: State.strengths(), log: S.log, flags: S.flags }
+          })
+        });
+      } catch (e) { S._evidenciaEnviada = false; }
+    },
+
     /* ---- persistencia en backend (localStorage no disponible) ---- */
     async load() {
       try {

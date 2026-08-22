@@ -148,6 +148,19 @@
       ctx.y += 6;
       taller.forEach(t => ctx.row((nameById[t.attendee_id] || '—') + '  ·  instrumento ' + (t.instrumento_pts ?? '—') + '/100  ·  aciertos ' + (t.eval_aciertos ?? '—') + '  ·  micro-clase ' + (t.microclase_pct ?? '—') + '%'));
     }
+    ctx.y += 6;
+
+    const nameById2 = {}; data.attendance.forEach(a => nameById2[a.id] = a.name);
+    const simulador = taller.filter(t => t.simulador_ending);
+    ctx.h2('Simulador completo, por su cuenta (' + simulador.length + ' de ' + data.attendance.length + ' lo terminaron)');
+    if (!simulador.length) ctx.row('Nadie ha terminado el recorrido libre del simulador todavía.');
+    else {
+      const ENDING_ES = { desacople: 'Desacople del remolque', descenso: 'Colapso de frenos en descenso', microsueno: 'Microsueño al volante', incidente: 'Incidente en ruta', utilidad: 'Llegó, pero gastó de más', seguro: 'Llegó seguro y a tiempo' };
+      const conteo = {}; simulador.forEach(t => { conteo[t.simulador_ending] = (conteo[t.simulador_ending] || 0) + 1; });
+      Object.keys(conteo).forEach(k => ctx.row((ENDING_ES[k] || k) + ': ' + conteo[k] + ' participante(s)'));
+      ctx.y += 6;
+      simulador.forEach(t => ctx.row((nameById2[t.attendee_id] || '—') + '  ·  ' + (t.simulador_grado || '—') + '  ·  riesgo ' + (t.simulador_riesgo ?? '—') + '%  ·  ' + (ENDING_ES[t.simulador_ending] || t.simulador_ending)));
+    }
     return doc;
   }
 
@@ -232,6 +245,29 @@
         ctx.row('Micro-clase: desempeño ' + t.microclase_pct + '%.');
       }
     }
+    ctx.y += 10;
+
+    /* --- recorrido libre del simulador completo, hecho por su cuenta desde el celular --- */
+    ctx.h2('Simulador completo (a su propio ritmo)');
+    if (!t || !t.simulador_ending) {
+      ctx.row('No terminó el recorrido libre del simulador en esta sesión.');
+    } else {
+      const ENDING_ES = { desacople: 'Desacople del remolque', descenso: 'Colapso de frenos en descenso', microsueno: 'Microsueño al volante', incidente: 'Incidente en ruta', utilidad: 'Llegó, pero gastó de más', seguro: 'Llegó seguro y a tiempo' };
+      ctx.row('Resultado: ' + (t.simulador_grado || '—') + '   ·   Desenlace: ' + (ENDING_ES[t.simulador_ending] || t.simulador_ending) + '   ·   Índice de riesgo: ' + (t.simulador_riesgo ?? '—') + '%');
+      const sd = t.simulador_detalle;
+      if (sd) {
+        ctx.y += 4;
+        if (sd.strengths && sd.strengths.length) {
+          ctx.row('Fortalezas demostradas:', 12);
+          sd.strengths.forEach(x => doc.splitTextToSize('· ' + x, W - 2 * M - 10).forEach(l => ctx.row(l, 13)));
+        }
+        ctx.y += 4;
+        if (sd.gaps && sd.gaps.length) {
+          ctx.row('Áreas de mejora detectadas:', 12);
+          sd.gaps.forEach(x => doc.splitTextToSize('· ' + x, W - 2 * M - 10).forEach(l => ctx.row(l, 13)));
+        }
+      }
+    }
     return doc;
   }
 
@@ -294,7 +330,8 @@
         instrumentoTrampas: t.instrumento_detalle && t.instrumento_detalle.trampas ? t.instrumento_detalle.trampas.length : '',
         evalAciertos: t.eval_aciertos ?? '', microclasePct: t.microclase_pct ?? '',
         microclaseOperador: t.microclase_detalle ? t.microclase_detalle.operador : '',
-        instrumentoDetalle: t.instrumento_detalle || null, evaluadosDetalle: t.evaluados_detalle || null, microclaseDetalle: t.microclase_detalle || null
+        simuladorEnding: t.simulador_ending || '', simuladorGrado: t.simulador_grado || '', simuladorRiesgo: t.simulador_riesgo ?? '',
+        instrumentoDetalle: t.instrumento_detalle || null, evaluadosDetalle: t.evaluados_detalle || null, microclaseDetalle: t.microclase_detalle || null, simuladorDetalle: t.simulador_detalle || null
       };
     });
   }

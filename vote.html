@@ -37,7 +37,9 @@
   </main>
   <div id="v-taller-link" style="display:none;margin-top:1rem">
     <a href="#" id="ir-al-taller" class="btn wide">Ir a mi taller individual →</a>
+    <a href="#" id="ir-al-simulador" class="btn wide ghost" style="margin-top:.6rem">Explorar el simulador completo, a mi ritmo →</a>
   </div>
+  <p id="v-sim-help" style="display:none;font-size:.8rem;color:var(--ink-3);text-align:center;margin:.6rem 0 0">Puedes explorarlo cuantas veces quieras, a tu propio paso. Lo que decidas ahí es solo para ti, no afecta la votación del grupo.</p>
   <footer class="kicker">Tu voto es anónimo. Solo se muestra el porcentaje del grupo.</footer>
 </div>
 
@@ -193,13 +195,17 @@
     });
   }
 
-  /* ---------------- taller individual: mismo QR, mismo attendeeId ---------------- */
+  /* ---------------- taller individual + simulador libre: mismo QR, mismo attendeeId ---------------- */
   function showTallerLink() {
     if (!room) return;
     const box = document.getElementById('v-taller-link');
     const a = document.getElementById('ir-al-taller');
+    const sim = document.getElementById('ir-al-simulador');
+    const simHelp = document.getElementById('v-sim-help');
     if (!box || !a) return;
     a.href = 'taller.html?room=' + room;
+    if (sim) sim.href = 'index.html' + (room && attendeeId ? '?room=' + room + '&participante=' + attendeeId : '');
+    if (simHelp) simHelp.style.display = 'block';
     box.style.display = 'block';
   }
 
