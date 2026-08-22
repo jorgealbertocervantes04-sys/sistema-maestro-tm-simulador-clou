@@ -103,9 +103,11 @@
       const b = document.createElement('button');
       b.className = 'choice tone-' + c.tone + (done ? (done === c.key ? ' picked' : ' dim') : '');
       b.disabled = !!done;
+      /* El costo NUNCA se muestra antes de elegir: si aparece aquí, basta con ver
+         cuál opción "sale gratis" para adivinar la respuesta correcta sin pensarla.
+         Se revela después, como parte de la consecuencia, dentro de verdictEl(). */
       b.innerHTML = `<span class="ck">${c.key}</span>
-        <span class="ct"><b>${c.label}</b><i>${c.hint || ''}</i></span>
-        <span class="cc">${c.cost ? money(-c.cost) : c.credit ? money(c.credit) : ''}</span>`;
+        <span class="ct"><b>${c.label}</b><i>${c.hint || ''}</i></span>`;
       b.addEventListener('click', () => pick(s, c));
       box.appendChild(b);
     });
@@ -119,7 +121,9 @@
   function verdictEl(c) {
     const v = document.createElement('div');
     v.className = 'verdict tone-' + c.tone;
-    v.innerHTML = `<div class="kicker">${c.tone === 'good' ? 'Criterio correcto' : c.tone === 'mid' ? 'Mitigación parcial' : 'Criterio comprometido'}</div>
+    const impacto = c.cost ? `<span class="v-cost bad">${money(-c.cost)}</span>`
+      : c.credit ? `<span class="v-cost good">${money(c.credit)}</span>` : '';
+    v.innerHTML = `<div class="kicker">${c.tone === 'good' ? 'Criterio correcto' : c.tone === 'mid' ? 'Mitigación parcial' : 'Criterio comprometido'}${impacto}</div>
       <p>${c.verdict}</p>`;
     return v;
   }

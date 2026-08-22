@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Formando el Trayecto del Instructor · Instructores operativos</title>
-<meta name="description" content="Simulador inmersivo de decisión para instructores.">
+<title>Formando el Trayecto del Instructor · Simulador Forense</title>
+<meta name="description" content="Simulador inmersivo de decisión para instructores de autotransporte federal de carga pesada.">
 <link rel="stylesheet" href="css/app.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2302040A'/><path d='M4 20h9V9H4zM15 20h6l4-5h-10z' fill='none' stroke='%23FB6500' stroke-width='2'/><circle cx='9' cy='23' r='2.4' fill='%23FB6500'/><circle cx='22' cy='23' r='2.4' fill='%23FB6500'/></svg>">
 </head>
@@ -16,10 +16,10 @@
 
 <!-- ============ LOGO CORPORATIVO · flotando en 3D en las esquinas de toda escena ============ -->
 <div class="corner-logo tl3d" aria-hidden="true">
-  <img src="assets/logo.png" alt="UDAT logo featuring a stylized trailer and wheels with the title Formando el Trayecto del Instructor in a dark professional training simulator interface with a serious focused tone" onerror="this.closest('.corner-logo').style.display='none'">
+  <img src="assets/logo.png" alt="" onerror="this.closest('.corner-logo').style.display='none'">
 </div>
 <div class="corner-logo br3d" aria-hidden="true">
-  <img src="assets/logoudat.png" alt="UDAT logo featuring a stylized trailer and wheels with the title Formando el Trayecto del Instructor in a dark professional training simulator interface with a serious focused tone" onerror="this.closest('.corner-logo').style.display='none'">
+  <img src="assets/logo.png" alt="" onerror="this.closest('.corner-logo').style.display='none'">
 </div>
 
 <!-- ============ ARRANQUE / DESBLOQUEO DE AUDIO ============ -->
@@ -32,9 +32,9 @@
       <circle cx="43" cy="34" r="4" stroke="currentColor" stroke-width="2.4"/>
       <path d="M62 12h20M72 12v18M90 30V12l8 11 8-11v18" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"/>
     </svg>
-    <p class="boot-kick">Formacion de instructores &middot; Instructores Operativos</p>
+    <p class="boot-kick">Sistema Maestro TM &middot; Mentores Operativos</p>
     <h1>Formando el Trayecto<br>del Instructor</h1>
-    <p class="kicker">Simulador de decisi&oacute;n &middot; Autotransporte federal de carga</p>
+    <p class="kicker">Simulador forense de decisi&oacute;n &middot; Autotransporte federal de carga</p>
     <div class="boot-load"><span></span></div>
     <button class="btn" id="btn-start"><span data-icon="play"></span> Iniciar sesión de entrenamiento</button>
     <div id="boot-resume" class="hidden">
@@ -49,8 +49,8 @@
 <header id="rail">
   <div class="rail-left">
     <span class="mark logo-slot">
-      <img src="assets/logo.png" alt="UDAT corporate logo with a stylized trailer and wheels in a dark training interface, with the title Formando el Trayecto del Instructor and a focused professional mood" onerror="this.closest('.logo-slot').classList.add('missing')">
-      <svg class="mark-fallback" viewBox="0 0 60 50" aria-label="UDAT" fill="none">
+      <img src="assets/logo.png" alt="Logo" onerror="this.closest('.logo-slot').classList.add('missing')">
+      <svg class="mark-fallback" viewBox="0 0 60 40" aria-label="TM" fill="none">
         <path d="M4 28h22V13H4z" stroke="currentColor" stroke-width="2.6"/>
         <path d="M29 28h12l7-9H29z" stroke="currentColor" stroke-width="2.6"/>
         <circle cx="13" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
@@ -61,11 +61,11 @@
   </div>
 
   <div class="rail-mid">
-    <div class="phase-tag"><span></span><em class="pt-full">La Historia &middot; l&iacute;nea de Vida &middot; reconstrucci&oacute;n sin puntaje</em><em class="pt-short">La historia</em></div>
+    <div class="phase-tag"><span></span><em class="pt-full">Fase 1 &middot; L&iacute;nea de Vida &middot; reconstrucci&oacute;n sin puntaje</em><em class="pt-short">Fase 1</em></div>
     <div class="budget">
       <div class="budget-ghost"></div>
       <div class="budget-fill"></div>
-      <div class="budget-txt"><span class="kicker">Utilidad de viaje</span><b class="num" data-budget>$80,000</b></div>
+      <div class="budget-txt"><span class="kicker">Presupuesto de ruta</span><b class="num" data-budget>$80,000</b></div>
     </div>
   </div>
 
@@ -110,7 +110,7 @@
   <canvas id="fcanvas"></canvas>
   <div id="flabels"></div>
   <div class="f-hud tl">
-    <div class="kicker">Auditoría de patio</div>
+    <div class="kicker">Auditoría forense de patio</div>
     <h3>Escáner holográfico</h3>
     <p>Gira con el mouse, acerca con la rueda. Localiza y resuelve las tres anomalías marcadas.</p>
   </div>
@@ -136,7 +136,7 @@
   <canvas id="icanvas"></canvas>
   <div id="ilabels"></div>
   <div class="f-hud tl">
-    <div class="kicker">Simulador de inspección · unidad doblemente articulada</div>
+    <div class="kicker">Simulador de inspección · unidad Full</div>
     <h3>Emite tu veredicto en los 18 puntos</h3>
     <p>Gira con el mouse, acerca con la rueda. Toca cada punto sobre la unidad, lee la evidencia y decide: conforme, observación o no conforme. Cada veredicto es irreversible.</p>
     <div class="ins-filtros">
@@ -190,6 +190,11 @@
     <button class="btn ghost small" id="btn-evidencia-grupal" style="flex:1">PDF grupal</button>
     <button class="btn ghost small" id="btn-evidencia-todos" style="flex:1">Todos los individuales</button>
   </div>
+  <div class="row" style="gap:.4rem;margin:0 0 .5rem">
+    <select class="ev-in" id="sel-sesion" style="flex:1"><option value="">Sesión actual</option></select>
+    <button class="ibtn" id="btn-sesiones-refrescar" title="Ver sesiones anteriores"><span data-icon="refresh"></span></button>
+  </div>
+  <p class="kicker" style="margin:-.1rem 0 .6rem;opacity:.65">Elige otra clase aquí para descargar su evidencia; los botones de arriba (QR, pulso, encuesta) siempre son de la sesión que está abierta ahora.</p>
   <div class="row" style="gap:.4rem;margin:0 0 .7rem">
     <select class="ev-in" id="sel-participante" style="flex:1"><option value="">Elegir participante…</option></select>
     <button class="btn ghost small" id="btn-evidencia-uno">Descargar</button>

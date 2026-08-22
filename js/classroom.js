@@ -64,10 +64,10 @@
   }
 
   const PULSE = [
-    { key: 'A', label: 'Es clara la información' },
+    { key: 'A', label: 'Me tensó' },
     { key: 'B', label: 'Tengo dudas' },
     { key: 'C', label: 'Lo tengo claro' },
-    { key: 'D', label: 'Me desagrada' }
+    { key: 'D', label: 'No lo esperaba' }
   ];
 
   /* Pulso rápido: para las escenas que NO tienen una decisión formal (video, teoría,
@@ -120,20 +120,57 @@
   }
 
   async function downloadGroupEvidence() {
-    if (!room) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
-    w.Evidencia && w.Evidencia.downloadGroup(room, API);
+    const r = effectiveRoom();
+    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
+    w.Evidencia && w.Evidencia.downloadGroup(r, API);
   }
 
   async function downloadAllEvidence() {
-    if (!room) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
-    w.Evidencia && w.Evidencia.downloadAllIndividual(room, API);
+    const r = effectiveRoom();
+    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
+    w.Evidencia && w.Evidencia.downloadAllIndividual(r, API);
   }
 
   async function downloadOneEvidence() {
-    if (!room) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
+    const r = effectiveRoom();
+    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
     const sel = document.getElementById('sel-participante');
     if (!sel || !sel.value) { w.toast && w.toast('Elige un participante de la lista.', 'bad'); return; }
-    w.Evidencia && w.Evidencia.downloadOneIndividual(room, API, sel.value);
+    w.Evidencia && w.Evidencia.downloadOneIndividual(r, API, sel.value);
+  }
+
+  /* -------- sesiones anteriores --------
+     Deja al facilitador recuperar la evidencia de una clase pasada sin tener
+     que recordar el código de sala. No afecta el QR ni la votación en vivo,
+     que siempre usan la sala abierta ahora mismo (variable `room`). */
+  function effectiveRoom() {
+    const sel = document.getElementById('sel-sesion');
+    return (sel && sel.value) || room;
+  }
+
+  async function loadSessions() {
+    const sel = document.getElementById('sel-sesion');
+    if (!sel) return;
+    try {
+      const r = await fetch(API + '/sessions');
+      if (!r.ok) throw 0;
+      const j = await r.json();
+      const opts = ['<option value="">Sesión actual</option>'].concat(
+        (j.sessions || []).map(s => {
+          const d = s.createdAt ? new Date(s.createdAt).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }) : '';
+          const who = s.groupName || s.facilitator || 'sin nombre';
+          return '<option value="' + s.code + '">' + s.code + ' · ' + d + ' · ' + who + ' (' + s.attendees + ')</option>';
+        })
+      );
+      sel.innerHTML = opts.join('');
+    } catch (e) { w.toast && w.toast('No se pudo cargar la lista de sesiones.', 'bad'); }
+  }
+
+  async function onSessionPicked() {
+    const r = effectiveRoom();
+    if (!r) return;
+    const roster = w.Evidencia && await w.Evidencia.listAttendees(r, API);
+    if (roster) syncParticipantList(roster);
   }
 
   /* -------- Google Sheets --------
@@ -149,10 +186,11 @@
     w.toast && w.toast(url.trim() ? 'URL de Google Sheets guardada.' : 'URL de Google Sheets borrada.', 'good');
   }
   function sendSheets() {
-    if (!room) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
+    const r = effectiveRoom();
+    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
     const url = localStorage.getItem(SHEETS_KEY);
     if (!url) { configSheets(); return; }
-    w.Evidencia && w.Evidencia.sendToSheets(room, API, url);
+    w.Evidencia && w.Evidencia.sendToSheets(r, API, url);
   }
 
   function startPolling() {
@@ -184,7 +222,8 @@
   function renderTally(p) {
     const box = document.getElementById('vote-results');
     if (!box) return;
-    syncParticipantList(p && p.roster);
+    const selSesion = document.getElementById('sel-sesion');
+    if (!selSesion || !selSesion.value) syncParticipantList(p && p.roster);
     if (!p || !p.options || !p.options.length) { box.innerHTML = '<p class="kicker">Esta diapositiva no tiene votación abierta.</p>'; return; }
     const total = p.total || 0;
     if (total !== lastTotal) { lastTotal = total; w.Audio3D && total > 0 && w.Audio3D.tick(); }
@@ -239,17 +278,16 @@
     lastTotal = -1;
   }
 
-  /* Pulso rápido automático: se abre solo en las escenas que no tienen ni
-     votación formal (choices) ni su propio widget interactivo (build, ej.
-     inspección 3D). Así el celular del participante siempre tiene algo con
-     qué interactuar, sin que el facilitador tenga que acordarse de presionar
-     el botón en cada escena narrativa. No fuerza a abrir el panel lateral:
-     solo publica la pregunta; si el panel ya está abierto, refresca el tablero. */
-  async function autoPulse(slide) {
+  /* Pregunta de tema, específica de la escena (no el pulso genérico). Se define en
+     content.js con slide.pulse = { question, options }, solo en las escenas donde
+     de verdad aporta — no en todas por inercia. Reutiliza el mismo mecanismo de
+     votación abierta que el pulso manual, pero con una pregunta real del tema. */
+  async function openScenePulse(slide) {
+    if (!room || !slide.pulse) return;
     try {
       await fetch(API + '/session/' + room + '/poll', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideId: slide.id, question: '¿Cómo vas con esto?', options: PULSE })
+        body: JSON.stringify({ slideId: slide.id, question: slide.pulse.question, options: slide.pulse.options })
       });
     } catch (e) {}
     lastTotal = -1;
@@ -260,7 +298,7 @@
     currentSlide = slide;
     if (!room) return;
     if (slide.vote && slide.choices) { openPoll(slide); return; }
-    if (!slide.build) { autoPulse(slide); return; }
+    if (slide.pulse) { openScenePulse(slide); return; }
     clearPoll();
     if (open) { stopPolling(); renderTally(null); }
   }
@@ -280,8 +318,13 @@
       document.getElementById('room-code').textContent = c;
       showQr('votacion');
       onSlide(currentSlide);
+      loadSessions();
     } else stopPolling();
   }
+
+  document.addEventListener('change', e => {
+    if (e.target.id === 'sel-sesion') onSessionPicked();
+  });
 
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-apply]');
@@ -291,6 +334,7 @@
     if (e.target.closest('#btn-encuesta-final')) openSatisfaction();
     if (e.target.closest('#btn-qr-votacion')) showQr('votacion');
     if (e.target.closest('#btn-qr-taller')) showQr('taller');
+    if (e.target.closest('#btn-sesiones-refrescar')) loadSessions();
     if (e.target.closest('#btn-evidencia-grupal')) downloadGroupEvidence();
     if (e.target.closest('#btn-evidencia-todos')) downloadAllEvidence();
     if (e.target.closest('#btn-evidencia-uno')) downloadOneEvidence();
