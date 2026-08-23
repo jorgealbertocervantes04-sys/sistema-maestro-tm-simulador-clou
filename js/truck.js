@@ -1,5 +1,5 @@
 /* ============================================================
-   TRACTOCAMIÓN DOBLEMENTE ARTICULADO (FULL) — geometría procedural
+   TRACTOCAMIÓN DOBLE REMOLQUE (FULL) — geometría procedural
    Se comparte entre el fondo cinemático y el escáner forense.
    Unidades ≈ metros. El morro apunta hacia +Z.
    ============================================================ */
@@ -18,6 +18,8 @@
 
     const body = new T.MeshStandardMaterial({ color: 0x1B3350, metalness: 0.78, roughness: 0.3 });
     const bodyDark = new T.MeshStandardMaterial({ color: 0x0E1B2E, metalness: 0.65, roughness: 0.48 });
+    const cabinMat = new T.MeshStandardMaterial({ color: 0xFB6500, metalness: 0.55, roughness: 0.35 });
+    const trailerMat = new T.MeshStandardMaterial({ color: 0xF2F2F2, metalness: 0.35, roughness: 0.42 });
     const chrome = new T.MeshStandardMaterial({ color: 0xC3D8E6, metalness: 1.0, roughness: 0.14 });
     const rubber = new T.MeshStandardMaterial({ color: 0x14171E, metalness: 0.15, roughness: 0.9 });
     const glass = new T.MeshStandardMaterial({ color: 0x0B2230, metalness: 0.9, roughness: 0.1, transparent: true, opacity: 0.62 });
@@ -90,17 +92,17 @@
     slab(2.3, 1.18, 0.16, 0, 1.72, 7.16, bodyDark);
     for (let i = 0; i < 5; i++) slab(2.06, 0.07, 0.06, 0, 1.28 + i * 0.22, 7.26, chrome, false);
     // cofre
-    slab(2.46, 1.28, 1.9, 0, 1.85, 6.15, body);
-    slab(2.3, 0.34, 1.5, 0, 2.6, 6.3, body);
+    slab(2.46, 1.28, 1.9, 0, 1.85, 6.15, cabinMat);
+    slab(2.3, 0.34, 1.5, 0, 2.6, 6.3, cabinMat);
     // cabina + dormitorio
-    slab(2.52, 2.26, 2.35, 0, 2.35, 4.1, body);
-    slab(2.52, 2.05, 1.9, 0, 2.3, 2.05, body);
+    slab(2.52, 2.26, 2.35, 0, 2.35, 4.1, cabinMat);
+    slab(2.52, 2.05, 1.9, 0, 2.3, 2.05, cabinMat);
     // parabrisas y ventanas
     slab(2.16, 1.0, 0.1, 0, 2.92, 5.28, glass, false);
     slab(0.08, 0.86, 1.3, 1.27, 2.7, 4.2, glass, false);
     slab(0.08, 0.86, 1.3, -1.27, 2.7, 4.2, glass, false);
-    // techo aerodinámico (deflector)
-    slab(2.4, 0.5, 3.9, 0, 3.68, 3.2, body);
+    // techo aerodinámico
+    slab(2.4, 0.5, 3.9, 0, 3.68, 3.2, cabinMat);
     // faros
     lamp(0.5, 0.26, 0.1, 0.92, 1.62, 7.24, 0xFFF3D0, 1.6);
     lamp(0.5, 0.26, 0.1, -0.92, 1.62, 7.24, 0xFFF3D0, 1.6);
@@ -130,20 +132,18 @@
     }
 
     // ejes del tractor
-    axle(6.0, 1.22, false, 0.56); // direccional
-    axle(1.55, 1.18, true, 0.54); // motriz 1
-    axle(0.28, 1.18, true, 0.54); // motriz 2
-
-
+    axle(6.0, 1.22, false, 0.56);   // direccional
+    axle(1.55, 1.18, true, 0.54);   // motriz 1
+    axle(0.28, 1.18, true, 0.54);   // motriz 2
 
     // quinta rueda
     const fw = slab(1.9, 0.16, 1.5, 0, 1.24, 0.72, chrome);
     const kp = new T.Mesh(new T.CylinderGeometry(0.13, 0.13, 0.3, 10), chrome);
     kp.position.set(0, 1.4, 0.72); root.add(kp);
 
-    /* ================= SEMI-REMOLQUE (1) ================= */
+    /* ================= CAJA 1 ================= */
     function boxTrailer(zc, len) {
-      slab(2.56, 2.9, len, 0, 2.95, zc, body);
+      slab(2.56, 2.9, len, 0, 2.95, zc, trailerMat);
       // costillas
       if (detail) {
         const n = Math.floor(len / 1.35);
@@ -165,18 +165,18 @@
     // tren de aterrizaje
     [0.85, -0.85].forEach(x => slab(0.16, 1.1, 0.16, x, 0.85, -1.6, bodyDark, false));
 
-    /* ================= CONVERTIDOR ================= */
+    /* ================= DOLLY ================= */
     slab(0.14, 0.2, 2.3, 0.7, 1.02, -13.4, bodyDark);
     slab(0.14, 0.2, 2.3, -0.7, 1.02, -13.4, bodyDark);
     const lanza = new T.Mesh(new T.CylinderGeometry(0.11, 0.11, 1.6, 8), chrome);
     lanza.rotation.x = Math.PI / 2; lanza.position.set(0, 1.05, -12.55); root.add(lanza);
     const fw2 = slab(1.6, 0.14, 1.3, 0, 1.28, -13.9, chrome);
     axle(-14.05, 1.18, true, 0.54);
-    // mangueras neumáticas del convertidor
+    // mangueras neumáticas del dolly
     const hose = new T.Mesh(new T.TorusGeometry(0.34, 0.045, 6, 18, Math.PI * 1.2), new T.MeshStandardMaterial({ color: 0x1a2c3a, roughness: .9 }));
     hose.position.set(0.42, 1.62, -12.8); hose.rotation.set(0, 0.4, 0.6); root.add(hose);
 
-    /* ================= REMOLQUE (2) ================= */
+    /* ================= CAJA 2 ================= */
     boxTrailer(-20.2, 11.4);
     axle(-24.5, 1.2, true, 0.54);
     axle(-25.8, 1.2, true, 0.54);
@@ -207,9 +207,16 @@
     return { group: root, wheels, neonMats, lightMats, anchors };
   }
 
-  /* ---- piso técnico: rejilla + dashes de carretera ---- */
+  /* ---- piso técnico: carretera sólida negra + rejilla + dashes ---- */
   function buildGround(neon) {
     const g = new T.Group();
+
+    const roadMat = new T.MeshBasicMaterial({ color: 0x000000 });
+    const road = new T.Mesh(new T.PlaneGeometry(260, 400), roadMat);
+    road.rotation.x = -Math.PI / 2;
+    road.position.y = -0.03;
+    g.add(road);
+
     const grid = new T.GridHelper(220, 88, neon, 0x0C1C2A);
     grid.material.transparent = true; grid.material.opacity = 0.16;
     g.add(grid);
@@ -221,7 +228,7 @@
       d.position.set(i % 2 ? 5.6 : -5.6, 0.01, -110 + i * 7);
       g.add(d); dashes.push(d);
     }
-    g.userData = { dashes, grid };
+    g.userData = { dashes, grid, road };
     return g;
   }
 
