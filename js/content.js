@@ -3,9 +3,7 @@
    ============================================================ */
 (function (w) {
   const I = w.svgIcon;
-  function money(n) {
-    return (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US');
-  }
+  const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US');
 
   const media = (file, label, poster, caption) => `
     <div class="media" data-media>
@@ -71,13 +69,13 @@
                onerror="this.closest('.cover-bg').classList.add('cover-bg-missing')">
           <div class="cover-bg-tint"></div>
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
-            <div class="kicker">Jorge Osuna&middot; Instructores Operativos</div>
+            <div class="kicker">Sistema Maestro TM &middot; Mentores Operativos</div>
             <h1 class="hero glow-cyan" style="margin-top:.9rem">Formando el Trayecto del Instructor</h1>
-            <p class="lede">Te vamos a contar una historia real. Un camión tuvo un accidente grave. Primero vamos a investigar juntos, paso a paso, qu&eacute; pas&oacute; y qui&eacute;n pudo haberlo evitado &mdash;.
-            Despu&eacute;s te pondras en su lugar.</p>
+            <p class="lede">Te vamos a contar una historia real. Un camión tuvo un accidente grave. Primero vamos a investigar juntos, paso a paso, qu&eacute; pas&oacute; y qui&eacute;n pudo haberlo evitado &mdash;como hace un detective.
+            Despu&eacute;s te vas a poner en los zapatos de esa persona: vas a manejar la unidad, revisarla pieza por pieza, y dar una clase de verdad a un operador real.</p>
             <div class="grid-3" style="margin-top:1.5rem">
-              <div class="stat"><h4>El problema &middot; La Historia</h4><div class="v c-amber num">92 d&iacute;as</div></div>
-              <div class="stat"><h4>Cambio de pensamiento &middot; Tu Turno</h4><div class="v c-cyan num">$80,000</div></div>
+              <div class="stat"><h4>Parte 1 &middot; La Historia</h4><div class="v c-amber num">92 d&iacute;as</div></div>
+              <div class="stat"><h4>Parte 2 &middot; Tu Turno</h4><div class="v c-cyan num">$80,000</div></div>
               <div class="stat"><h4>Finales posibles</h4><div class="v num">6</div></div>
             </div>
             <p class="lede" style="margin-top:1.3rem;font-size:.9rem;opacity:.7">&larr; &rarr; o barra espaciadora para avanzar. <strong>I</strong> ver el mapa &middot; <strong>N</strong> notas &middot; <strong>V</strong> votaci&oacute;n &middot; <strong>R</strong> regresar.</p>
@@ -85,28 +83,28 @@
         </div>`
     },
 
-    /* ============ El POBLEMA· LA HISTORIA ============ */
+    /* ============ FASE 1 · LÍNEA DE VIDA ============ */
     {
-      title: 'El problema &middot; La Historia', id: '', chapter: 'La historia', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
+      title: 'Parte 1 · La Historia', id: 'fase-1', chapter: 'Línea de Vida', cam: 'lowfront', mood: 'warn', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-amber accent-orange">
           <div class="pn c-amber">01</div>
           <div class="pt">La Historia</div>
-          <p class="lede" style="margin-top:1.1rem">Antes de empezar, solo vas a mirar y escuchar. Vamos a mostrarte un accidente , una llamada , y noventa y dos d&iacute;as de historia que vamos a regresar como pel&iacute;cula hasta el momento exacto donde esto se pudo haber evitado
+          <p class="lede" style="margin-top:1.1rem">Antes de empezar, solo vas a mirar y escuchar. Vamos a mostrarte un accidente real, una llamada real, y noventa y dos d&iacute;as de historia que vamos a regresar como pel&iacute;cula hasta el momento exacto donde esto se pudo haber evitado
           <strong class="c-amber">&mdash;y a la persona que estaba ah&iacute;</strong>.</p>
           <div class="steps">
             <span class="on c-amber">1 · Conoce la historia</span>
-            <span>2 · click para retroceder</span>
+            <span>2 · Regresamos el tiempo</span>
             <span>3 · Encontramos el error</span>
           </div>
           ${pregunta('¿Alguna vez viste algo en el trabajo que te pareció peligroso, pero nadie dijo nada? Guarda esa idea, la vamos a usar más adelante.')}
-          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Esta primera parte ponte en los zapatos de todos los implicados en la historia . Parte 2.</p>
+          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Esta primera parte no se califica. Solo se vive. Las decisiones y los puntos empiezan en la Parte 2.</p>
         </div>`,
-      note: 'Baja la luz del aula antes de avanzar. Di solo esto: "lo que van a ver pasó, y alguien pudo haber echo algo para evitarlo". Nada más.'
+      note: 'Baja la luz del aula antes de avanzar. Di solo esto: "lo que van a ver pasó, y alguien firmó para que pasara". Nada más.'
     },
 
     {
-      id: 'Elborras', chapter: 'La Historia', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'elborras', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Un camión, una madrugada, las 3:14 a.m.</div>
@@ -117,7 +115,7 @@
     },
 
     {
-      id: 'siniestro', chapter: 'La Historia', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
+      id: 'siniestro', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'impact',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Un camión, una madrugada, las 3:14 a.m.</div>
@@ -129,7 +127,7 @@
     },
 
     {
-      id: 'La llamada', chapter: 'La Historia', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
+      id: 'llamada', chapter: 'Línea de Vida', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-red pad w-lg mx" style="text-align:center">
           <div class="kicker c-red">Esa misma madrugada</div>
@@ -142,7 +140,7 @@
     },
 
     {
-      id: 'La familia', chapter: 'La Historia', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
+      id: 'la-familia', chapter: 'Línea de Vida', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx" style="border-color:rgba(255,196,0,.28)">
           <div class="kicker c-amber">Lo que ningún reporte cuenta</div>
@@ -155,7 +153,7 @@
             <div class="fam-c"><div class="n">Emiliano</div><div class="r">Hijo · 7 años</div></div>
             <div class="fam-c"><div class="n">Renata</div><div class="r">Hija · 4 años</div></div>
           </div>
-          <p class="fam-note">En este curso te vamos a medir con números y con pesos.
+          <p class="fam-note">En este curso te vamos a medir con números y con pesos, porque es el idioma que todos en la empresa entienden.
           Pero lo que acabas de ver no cabe en ningún número: <strong class="c-amber">no hay dinero que lo repare</strong>.</p>
         </div>`,
       onEnter: () => { w.Scene3D.pulseLights(0xFFC400); },
@@ -163,35 +161,35 @@
     },
 
     {
-      id: 'poll-causa', chapter: 'La Historia', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
+      id: 'poll-causa', chapter: 'Línea de Vida', cam: 'wide', mood: 'warn', speed: 0, anim: 'enter',
       vote: true, question: '¿Cuál creen que fue el verdadero error que llevó a este accidente?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
-          <div class="kicker c-orange">Piensa como el experto que eres</div>
+          <div class="kicker c-orange">Piensen como detectives</div>
           <h2 class="title" style="margin-top:.5rem">¿Cuál fue el error que llevó a esto?</h2>
-          <p class="lede">Ya revisamos el camión: no era una falla mecánica, Aunque se descubrio habian fallas sin reportar. Arnulfo tenia algunos reportes de mal comportamiento.</p>
+          <p class="lede">Ya revisamos el camión: no era una falla mecánica, todo estaba en regla. Arnulfo tampoco tenía ningún reporte de mal comportamiento antes de esa noche.</p>
         </div>`,
       choices: [
         { key: 'A', label: 'Una falla del camión que nadie pudo prever', hint: 'Mala suerte, nada se pudo hacer', tone: 'bad', cost: 12000,
           verdict: 'Ya revisamos el camión: no era una falla mecánica. Culpar a la mala suerte es la forma más cara de no aprender nada: cierra la investigación antes de encontrar la verdadera causa.' },
         { key: 'B', label: 'Arnulfo se confió de más en el camino', hint: 'Bajó la guardia', tone: 'mid', cost: 5000, xp: 30,
           verdict: 'Eso es un síntoma, no la causa. Confiarse de más no nace en el camino: nace cuando, en el patio, nadie corrige el primer descuido pequeño.' },
-        { key: 'C', label: 'Alguien firmó su aprobación sin revisar bien lo que se debe de revisar, por prisa?', tone: 'good', xp: 120, flag: 'diagnosticoCorrecto',
-          hint: 'La revisión se omitio y alguien se dio cuenta',
-          verdict: 'Vamos a descubrirlo juntos, paso a paso. Toda la cadena de errores empieza en cómo se le dio el seguiumiento a Arnulfo, y hoy tu experiencia como instructor nos va a ayudar a reconstruirla.' }
+        { key: 'C', label: 'Alguien firmó su aprobación sin revisar bien, con prisa', tone: 'good', xp: 120, flag: 'diagnosticoCorrecto',
+          hint: 'Nadie comprobó de verdad que él supiera manejar',
+          verdict: 'Vamos a descubrirlo juntos, paso a paso. Toda la cadena de errores empieza en cómo se formó a Arnulfo, y hoy tu experiencia como instructor nos va a ayudar a reconstruirla. Hoy vas a estar del otro lado de esa firma.' }
       ],
-      note: 'Si el grupo elige A o B, no los corrijas de inmediato: pregunta "¿y qué tuvo que pasar antes para que eso fuera posible?"'
+      note: 'Si el grupo elige A o B, no los corrijas de inmediato: pregunta "¿y qué tuvo que pasar antes para que eso fuera posible?".'
     },
 
     {
-      id: 'El tiempo en la empresa', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'enter',
+      id: 'linea-vida', chapter: 'Línea de Vida', cam: 'crash', mood: 'danger', speed: 0.2, anim: 'enter',
       build: 'lifeline',
       html: () => '',
       note: 'No avances tú. Pide a un participante distinto que presione "Retroceder" en cada paso y que lea la tarjeta en voz alta. Después de cada nodo pregunta: ¿quién en esta sala ocupa ese puesto?'
     },
 
     {
-      id: 'veredicto-de trayectoria', chapter: 'La Historia', cam: 'wide', mood: 'warn', speed: 0, anim: 'left',
+      id: 'veredicto-linea', chapter: 'Línea de Vida', cam: 'wide', mood: 'warn', speed: 0, anim: 'left',
       html: (S) => {
         const ok = !!S.flags.diagnosticoCorrecto;
         return `
@@ -204,7 +202,7 @@
             : 'El grupo apuntó al camino, y el camino solo terminó lo que el patio ya había autorizado. No es un error de ustedes: es algo que le pasa a toda la industria, y por eso el curso empieza justo aquí.'}</p>
           <div class="grid-3" style="margin:1.6rem 0">
             <div class="stat"><h4>Días de aviso</h4><div class="v num c-amber">92</div></div>
-            <div class="stat"><h4>Momentos donde detectar el riesgo</h4><div class="v num c-amber">6</div></div>
+            <div class="stat"><h4>Momentos donde se pudo parar</h4><div class="v num c-amber">6</div></div>
             <div class="stat"><h4>Personas que pudieron detenerlo</h4><div class="v num c-red">5</div></div>
           </div>
           <p class="fam-note">Ningún accidente grave nace de un solo error. Nace de varios avisos que nadie atendió, y de una firma que los volvió "aprobados".
@@ -215,11 +213,11 @@
     },
 
     {
-      id: 'el-culpable', chapter: 'La Historia', cam: 'lowfront', mood: 'danger', speed: 0, anim: 'enter',
+      id: 'el-culpable', chapter: 'Línea de Vida', cam: 'lowfront', mood: 'danger', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel accent-red pad w-md mx brackets c-red">
           <div class="kicker c-red">92 días antes del accidente · 7:12 a.m. · aquí empezó todo</div>
-          <h2 class="title glow-red" style="margin:.4rem 0 1.1rem">Aquí Empezó Todo</h2>
+          <h2 class="title glow-red" style="margin:.5rem 0 1.5rem">Aquí Empezó Todo</h2>
           <div class="doc">
             <div class="doc-h">
               <b>Examen de manejo de Arnulfo</b>
@@ -228,79 +226,76 @@
             <div class="doc-rows">
               <div class="doc-row"><span>Operador evaluado</span><b>Arnulfo "el Borras" Peña</b></div>
               <div class="doc-row"><span>Tipo de camión autorizado</span><b>Doble remolque completo</b></div>
-              <div class="doc-row bad"><span>Cuánto duró el examen</span><b>20 minutos</b></div>
+              <div class="doc-row bad"><span>Cuánto duró el examen</span><b>4 minutos</b></div>
               <div class="doc-row bad"><span>¿Se probó manejando de verdad?</span><b>No</b></div>
               <div class="doc-row bad"><span>¿Se revisaron los frenos de aire?</span><b>No, se saltó ese paso</b></div>
               <div class="doc-row"><span>Resultado del examen</span><b>Aprobado</b></div>
             </div>
             <div class="doc-sig">
               <div class="lbl">Firma de quien lo aprobó</div>
-              <svg class="sig-svg" viewBox="0 0 240 86" aria-label="Firma manuscrita(instructor a cargo TM)">
+              <svg class="sig-svg" viewBox="0 0 340 96" aria-label="Firma manuscrita">
                 <path d="M14 70 C34 22, 52 16, 58 40 C64 64, 48 78, 44 62 C40 46, 62 30, 82 52 C96 68, 108 56, 112 38 C116 20, 130 22, 132 44 C134 64, 148 66, 158 48 C168 30, 184 28, 188 50 C192 70, 208 72, 220 52 C232 32, 252 30, 258 52 C263 70, 278 66, 292 44 C300 31, 312 30, 322 40"/>
                 <path d="M96 82 C142 74, 214 72, 286 78"/>
               </svg>
               <div class="doc-line">Instructor responsable de aprobarlo</div>
             </div>
-            <div class="doc-stamp">Aquí no deberia estar tu firma</div>
+            <div class="doc-stamp">Aquí se rompió la cadena</div>
           </div>
-          ${media('videos/el-culpable.mp4', 'Reconstrucción de la validación de 20 minutos')}
-          <p class="lede" style="margin-top:1.6rem;font-size:clamp(1.05rem,1.9vw,1.35rem)">
+          <p class="lede" style="margin-top:1.8rem;font-size:clamp(1.05rem,1.9vw,1.35rem)">
             El verdadero responsable no iba manejando esa noche. El verdadero responsable <strong class="c-red">firmó</strong>, noventa y dos días antes,
             en un patio tranquilo, con prisa y sin mala intención.
           </p>
-          ${pregunta('¿Cuántos exámenes o revisiones han firmado ustedes esta semana? ¿Cuántos de esos duraron veinte minutos en alguna de sus partes?')}
+          ${pregunta('¿Cuántos exámenes o revisiones han firmado ustedes esta semana? ¿Cuántos de esos duraron más de cuatro minutos?')}
         </div>`,
       onEnter: (ctx) => { w.Scene3D.impact(0.5); w.Audio3D && w.Audio3D.hit(); },
-      note: 'Deja que la firma se dibuje completa antes de hablar. Cuando caiga el sello, haz la pregunta de la pantalla en voz alta y deja que respondan con confianza, sin juzgarlos.'
+      note: 'Deja que la firma se dibuje completa antes de hablar. Cuando caiga el sello, haz la pregunta de la pantalla en voz alta y deja que respondan con confianza, sin juzgarlos. El video de esta reconstrucción ("el-culpable.mp4") ya no se usa aquí para que la escena respire; puedes mostrarlo aparte si lo necesitas para otro fin.'
     },
-   
     {
-      id: 'la-formula-1', chapter: 'La Hstoria', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
+      id: 'la-formula-1', chapter: 'Línea de Vida', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan" style="text-align:center">
-          <div class="kicker">Antes de que tú firmes</div>
+          <div class="kicker">Antes de que tú empieces a firmar</div>
           <h2 class="title" style="margin-top:.5rem">El Equipo Que Nunca Se Salta un Paso</h2>
           ${media('videos/la-formula-1.mp4', 'Un pit stop de Fórmula 1: menos de dos segundos, cero improvisación')}
-          <p class="lede" style="opacity:.8">Al igual que cuando te casas o firmas un papel importante, tu firma en este caso te puede convertir en el culpable</p>
+          <p class="lede" style="margin-top:1.6rem">Mira a un equipo de mecánicos de carreras: veinte personas mueven un auto de 800 kilos en menos de dos segundos. Nadie se salta un paso "porque ya lo ha hecho mil veces". Seguir el proceso no los hace lentos: es justo lo que los hace capaces de hacerlo tan rápido y tan bien.</p>
+          <p class="lede" style="opacity:.8;margin-top:.9rem">Eso es lo que vas a firmar en la Parte 2. No es puro papeleo. Es la diferencia entre que algo salga bien o que alguien salga lastimado.</p>
         </div>`,
       note: 'Puente entre la Parte 1 y la Parte 2. El grupo acaba de ver el costo de saltarse el proceso; ahora les muestras qué se ve cuando el proceso sí se respeta bajo presión real, antes de que ellos mismos empiecen a firmar.'
     },
-   
     {
-      title: ' · Ahora firmas tú', id: 'fase-2', chapter: 'Patio', cam: 'lowfront', mood: 'safe', speed: 0, anim: 'enter',
+      title: 'Ahora Firmas Tú', id: 'fase-2', chapter: 'Patio', cam: 'lowfront', mood: 'safe', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx phase brackets c-cyan accent-cyan">
           <div class="pn c-cyan">02</div>
-          <div class="pt">Ahora firmas tú</div>
-          <p class="lede" style="margin-top:1.1rem">Retrocedemos los noventa y dos días completos. Mismo patio, misma unidad, misma presión de despacho,
-          mismo operador vivo esperando tu dictamen. La diferencia es que esta vez
-          <strong class="c-cyan">el expediente lo escribes tú</strong>.</p>
+          <div class="pt">Ahora Firmas Tú</div>
+          <p class="lede" style="margin-top:1.1rem">Vamos a regresar esos noventa y dos días completos. Mismo patio, mismo camión, la misma prisa de siempre, el mismo operador esperando tu palabra.
+          La diferencia es que esta vez <strong class="c-cyan">tú tomas las decisiones</strong>.</p>
           <div class="grid-3" style="margin-top:1.8rem">
-            <div class="stat"><h4>Presupuesto de ruta</h4><div class="v c-cyan num">$80,000</div></div>
-            <div class="stat"><h4>Decisiones críticas</h4><div class="v num">13</div></div>
-            <div class="stat"><h4>Desenlaces posibles</h4><div class="v num">6</div></div>
+            <div class="stat"><h4>Dinero disponible</h4><div class="v c-cyan num">$80,000</div></div>
+            <div class="stat"><h4>Decisiones importantes</h4><div class="v num">13</div></div>
+            <div class="stat"><h4>Finales posibles</h4><div class="v num">6</div></div>
           </div>
           <div class="steps">
-            <span>1 · Auditoría forense</span><span>2 · Cinco estaciones</span><span>3 · Ruta y desenlace</span><span>4 · Dictamen</span>
+            <span>1 · Revisa el camión</span><span>2 · Cinco pruebas</span><span>3 · La ruta y su final</span><span>4 · Tu resultado</span>
           </div>
-          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Desde aquí cada decisión cuesta dinero, cambia el estado físico de la unidad y queda registrada en tu dictamen individual.</p>
+          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Desde aquí, cada decisión cuesta dinero de verdad, cambia el estado del camión, y queda anotada en tu resultado final.</p>
         </div>`,
       onEnter: () => { w.Scene3D.pulseLights(0xFB6500); },
-      note: 'Aquí cambia la energía del aula. Sube la luz, pide que se sienten derechos. Frase de entrada: "la Fase 1 fue de alguien más; la Fase 2 es de ustedes".'
+      note: 'Aquí cambia la energía del aula. Sube la luz, pide que se sienten derechos. Frase de entrada: "la primera parte fue de alguien más; esta parte es de ustedes".'
     },
 
-    /* ============  (INICIO DE LA CADENA) ============ */
+    /* ============ REVISIÓN DEL CAMIÓN (INICIO DE LA CADENA) ============ */
     {
       id: 'patio-brief', chapter: 'Patio', cam: 'top', mood: 'warn', speed: 0, anim: 'enter',
       html: (S) => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan" style="text-align:center">
           <div style="width:56px;height:56px;color:var(--cyan);margin:0 auto .9rem">${I('scan')}</div>
-          <div class="kicker">05:40 h · Patio de maniobras · Antes de que todo ocurra</div>
-          <h2 class="title glow-cyan" style="margin-top:.6rem">Auditoría Forense de Patio</h2>
-          <p class="lede">El Full está cargado y el operador espera la liberación. Tienes el escáner 3D y <strong>tres fallas ocultas</strong> que localizar.</p>
-          <p class="lede"><strong class="c-amber">Esta es la decisión que determina todo lo demás.</strong> Lo que liberes aquí viajará contigo 640 kilómetros.</p>
-          <button class="btn" data-act="forensic" style="margin-top:1.2rem">${I('scan')} Iniciar escáner 3D holográfico</button>
-          <p class="lede ${S.forensicDone ? '' : 'hidden'}" id="forensic-done" style="margin-top:1rem;color:var(--green)">Auditoría registrada. Continúa con → para revisar el dossier.</p>
+          <div class="kicker">5:40 de la mañana · Patio · Antes de que todo ocurra</div>
+          <h2 class="title glow-cyan" style="margin-top:.6rem">Revisa el Camión Antes de Dejarlo Salir</h2>
+          <p class="lede">El camión ya está cargado y el operador está esperando la luz verde. Tienes un escáner 3D y hay <strong>tres fallas escondidas</strong> por encontrar.</p>
+          <p class="lede"><strong class="c-amber">Esta es la decisión que arrastra todo lo demás.</strong> Lo que dejes pasar aquí viaja contigo los 640 kilómetros de la ruta.</p>
+          <button class="btn" data-act="forensic" style="margin-top:1.2rem">${I('scan')} Abrir el escáner 3D</button>
+          <p class="lede ${S.forensicDone ? '' : 'hidden'}" id="forensic-done" style="margin-top:1rem;color:var(--green)">Revisión registrada. Avanza con → para ver el resumen.</p>
         </div>`,
       note: 'Entrega el control a un participante distinto para cada hallazgo. Pide que argumente en voz alta antes de decidir.'
     },
@@ -308,24 +303,24 @@
     {
       id: 'dossier', chapter: 'Patio', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       html: (S) => {
-        const map = { tires: ['Presión de llantas', 'gauge'], brakes: ['Frenos de aire (dolly)', 'brake'], kingpin: ['Quinta rueda / perno rey', 'link'] };
+        const map = { tires: ['Presión de las llantas', 'gauge'], brakes: ['Frenos de aire', 'brake'], kingpin: ['Enganche del remolque', 'link'] };
         const rows = Object.keys(map).map(k => {
           const st = S.truck[k];
           const c = st === 'ok' ? 'c-green' : st === 'fault' ? 'c-red' : 'c-dim';
-          const txt = st === 'ok' ? 'CORREGIDO EN TALLER' : st === 'fault' ? 'LIBERADO CON FALLA' : 'NO AUDITADO';
+          const txt = st === 'ok' ? 'CORREGIDO' : st === 'fault' ? 'SE DEJÓ PASAR ASÍ' : 'NO SE REVISÓ';
           return `<div class="dossier-row"><span>${map[k][0]}</span><b class="${c}">${txt}</b></div>`;
         }).join('');
         const faults = w.State.partsFaulty().length;
         const auditada = Object.keys(map).some(k => S.truck[k] !== 'pending');
         const verdict = !auditada
-          ? '<span class="c-amber">La unidad sale sin auditoría documentada. No sabes qué llevas: cada anomalía no vista viaja contigo 640 km.</span>'
+          ? '<span class="c-amber">El camión sale sin que nadie lo haya revisado a fondo. No sabes qué le pasa: cualquier cosa que no viste, viaja contigo los 640 km.</span>'
           : faults === 0
-          ? '<span class="c-green">La unidad sale del patio en condición íntegra. Has cortado la cadena causal en su origen.</span>'
-          : `<span class="c-red">La unidad sale con ${faults} falla${faults > 1 ? 's' : ''} activa${faults > 1 ? 's' : ''}. Estas fallas no desaparecen: esperan el kilómetro adecuado para cobrarse.</span>`;
+          ? '<span class="c-green">El camión sale en buenas condiciones. Cortaste el problema desde su origen.</span>'
+          : `<span class="c-red">El camión sale con ${faults} falla${faults > 1 ? 's' : ''} sin corregir. Esa falla no desaparece: solo espera el momento justo para aparecer.</span>`;
         return `
         <div class="panel pad w-md mx">
-          <div class="kicker">Dossier de despacho · Estado real de la unidad</div>
-          <h2 class="title" style="margin-top:.5rem">Lo que sale a la carretera</h2>
+          <div class="kicker">Antes de que salga a la carretera</div>
+          <h2 class="title" style="margin-top:.5rem">Así Sale el Camión</h2>
           <div class="dossier" style="margin:1.2rem 0">${rows}</div>
           <p class="lede">${verdict}</p>
         </div>`;
@@ -335,344 +330,346 @@
 
     /* ============ ESTACIÓN 1 ============ */
     {
-      title: 'Recorrido de la unidad', id: 'explorador', chapter: 'Patio', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
+      title: 'Conoce el Camión de Memoria', id: 'explorador', chapter: 'Patio', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       build: 'parts',
-      notes: 'Deja que el grupo elija por dónde empezar. Cuando alguien salte una parte, no lo corrijas: pregúntale al final qué se le fue. La unidad completa son 18 puntos y el recorrido se acredita solo cuando los ve todos.'
+      notes: 'Deja que el grupo elija por dónde empezar. Cuando alguien salte una parte, no lo corrijas: pregúntale al final qué se le fue. El camión completo son 18 puntos y solo se acredita cuando los ve todos.'
     },
 
     {
-      title: 'Evidencia de patio', id: 'evidencia-patio', chapter: 'Patio', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left',
+      id: 'evidencia-patio', chapter: 'Patio', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left',
+      pulse: { question: '¿Cuántas veces esta semana te dijeron algo como "hazme el favor, ya vamos tarde"?', options: [
+        { key: 'A', label: 'Ninguna vez' }, { key: 'B', label: 'Una o dos veces' }, { key: 'C', label: 'Varias veces' }, { key: 'D', label: 'Prácticamente todos los días' }
+      ] },
       html: () => `
         <div class="panel accent-orange pad w-lg mx" style="text-align:center">
-          <div class="kicker c-orange">Evidencia de audio · Interacción real bajo presión</div>
-          <h2 class="title" style="margin-top:.5rem">"Hazme el favor, ya vamos tarde"</h2>
+          <div class="kicker c-orange">Grabación real · Así presiona la prisa en el patio</div>
+          <h2 class="title" style="margin-top:.5rem">"Hazme el Favor, Ya Vamos Tarde"</h2>
           ${media('videos/evidencia-patio.mp4', 'Interacción operador–instructor en patio')}
+          ${pregunta('¿Cuántas veces esta semana te dijeron algo parecido? Ya te lo estamos preguntando en tu celular.')}
         </div>`,
-      note: 'Pregunta: ¿cuántas veces esta semana escucharon esa frase exacta? Ahí vive el riesgo.'
+      note: 'La pregunta ya se manda directo al celular de cada quien como votación real, no hace falta que la leas en voz alta si no quieres — pero ayuda mucho verla contestada en vivo frente al grupo.'
     },
 
     /* ============ MARCO ============ */
     {
-      title: 'Competencias del instructor', id: 'competencias', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
+      id: 'competencias', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan">
-          <div class="kicker">Perfil del instructor </div>
-          <h2 class="title" style="margin-top:.5rem">No eres un firmante de papeles</h2>
-          <p class="lede">Un instructor certificado no transmite datos: <strong class="c-cyan">audita condiciones físico-mecánicas, regula el estrés operativo y sostiene el criterio bajo presión comercial.</strong></p>
+          <div class="kicker">Quién es de verdad un instructor</div>
+          <h2 class="title" style="margin-top:.5rem">No Eres Solo Quien Firma los Papeles</h2>
+          <p class="lede">Un instructor de verdad no solo explica cosas: <strong class="c-cyan">revisa que el camión esté bien de verdad, ayuda a que el operador no traiga tanta presión encima, y se mantiene firme aunque cueste dinero o tiempo.</strong></p>
           <div class="grid-3" style="margin-top:1.6rem">
-            <div class="stat"><h4>Auditor técnico</h4><p class="lede" style="font-size:.95rem;margin:0">Verifica lo que el operador afirma. La palabra no sustituye a la medición.</p></div>
-            <div class="stat"><h4>Regulador humano</h4><p class="lede" style="font-size:.95rem;margin:0">Absorbe la presión de despacho para que no llegue al volante.</p></div>
-            <div class="stat"><h4>Última muralla</h4><p class="lede" style="font-size:.95rem;margin:0">Es el único con autoridad para detener una operación en marcha.</p></div>
+            <div class="stat"><h4>El que revisa de verdad</h4><p class="lede" style="font-size:.95rem;margin:0">Comprueba lo que el operador dice. Que te digan "está bien" no es lo mismo que verlo tú mismo.</p></div>
+            <div class="stat"><h4>El que baja la presión</h4><p class="lede" style="font-size:.95rem;margin:0">Se encarga de que la prisa de la empresa no le llegue al operador cuando va manejando.</p></div>
+            <div class="stat"><h4>El último que puede decir "no"</h4><p class="lede" style="font-size:.95rem;margin:0">Es quien tiene la autoridad de detener algo que ya estaba en marcha.</p></div>
           </div>
         </div>`
     },
 
-    /* ============ MARCO · METODOLOGÍA UDAT ============ */
+    /* ============ MARCO · CUATRO COSAS QUE NUNCA SE DEBEN APAGAR ============ */
     {
-      id: 'UDAT', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
+      id: 'udat', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-cyan pad w-lg mx brackets">
-          <div class="kicker c-cyan">Metodología UDAT · marco de formación</div>
-          <h2 class="title">Cuatro competencias, no cuatro temas</h2>
-          <p class="lede" style="margin-bottom:.4rem">Un operador no falla por no saber. Falla porque una de estas cuatro dimensiones estaba apagada en el momento exacto. La taxonomía <strong class="c-cyan">PIEL</strong> te da el lenguaje para nombrarlo.</p>
+          <div class="kicker c-cyan">El tablero de un buen operador</div>
+          <h2 class="title">Cuatro Cosas Que Nunca Deben Apagarse</h2>
+          <p class="lede" style="margin-bottom:.4rem">Cuando un operador comete un error, casi nunca es porque "no sabía". Es porque, justo en ese momento, algo en él se apagó. Hay 4 cosas que siempre deben estar encendidas, como los focos de un tablero.</p>
           <p class="lede" style="opacity:.72;font-size:.9rem;margin-bottom:1.1rem">Toca cada letra para abrirla.</p>
           <div class="rv-set c4" data-set="piel">
             <div class="rv" style="--rvc:var(--cyan)">
               <div class="rv-let">P</div>
-              <div class="rv-t">Pensar</div>
-              <div class="rv-s">Anticipar riesgos</div>
+              <div class="rv-t">Pensar antes</div>
+              <div class="rv-s">Anticipar el riesgo</div>
               <div class="rv-body">
-                <p>Calcular antes de que sea urgente: distancia de frenado, ventana de descanso, clima en el kilómetro 300.</p>
-                <p><em>Se enseña</em> obligando a decir el número en voz alta, no la intención.</p>
+                <p>Calcular con tiempo, antes de que sea urgente: cuánto le queda de combustible, cuándo necesita parar a descansar, cómo va a estar el clima más adelante.</p>
+                <p><em>Se enseña</em> pidiéndole que diga el número exacto en voz alta, no solo "voy bien".</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
             <div class="rv" style="--rvc:var(--amber)">
               <div class="rv-let">I</div>
-              <div class="rv-t">Interactuar</div>
-              <div class="rv-s">Observar para actuar</div>
+              <div class="rv-t">Poner atención</div>
+              <div class="rv-s">Ver para poder reaccionar</div>
               <div class="rv-body">
-                <p>Leer el entorno y a las personas: el auto que titubea, el despachador que presiona, el compañero que oculta una falla.</p>
-                <p><em>Se enseña</em> pidiendo interpretación, no descripción: "¿qué va a hacer ese carro?".</p>
+                <p>Fijarse en lo que pasa alrededor: el carro que se mueve raro, el que le está presionando por radio, el compañero que esconde una falla.</p>
+                <p><em>Se enseña</em> preguntando "¿qué crees que va a hacer ese carro?", no solo "¿qué ves?".</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
             <div class="rv" style="--rvc:var(--orange)">
               <div class="rv-let">E</div>
-              <div class="rv-t">Ejecutar</div>
-              <div class="rv-s">Dominar procesos</div>
+              <div class="rv-t">Hacerlo bien</div>
+              <div class="rv-s">Dominar la maniobra</div>
               <div class="rv-body">
-                <p>La maniobra técnica hecha bien bajo carga: tirón de prueba, descenso con motor, acoplamiento verificado.</p>
-                <p><em>Se enseña</em> con las manos del operador, nunca con las tuyas.</p>
+                <p>La maniobra hecha bien aunque nadie esté viendo: el tirón de prueba, bajar usando el motor, comprobar que el enganche quedó firme.</p>
+                <p><em>Se enseña</em> con las manos del operador, nunca haciéndolo tú por él.</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
             <div class="rv" style="--rvc:var(--green)">
               <div class="rv-let">L</div>
-              <div class="rv-t">Liderar</div>
-              <div class="rv-s">Decidir con profesionalismo</div>
+              <div class="rv-t">Saber decir "no"</div>
+              <div class="rv-s">Sostener la decisión correcta</div>
               <div class="rv-body">
-                <p>Sostener la decisión correcta cuando cuesta dinero, tiempo o incomodidad frente a un superior.</p>
-                <p><em>Se enseña</em> respaldando públicamente al que se detuvo.</p>
+                <p>Mantener la decisión correcta aunque cueste dinero, tiempo, o quedar mal con un jefe.</p>
+                <p><em>Se enseña</em> respaldando en público al operador que se detuvo a tiempo.</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
           </div>
-          <p class="lede" style="margin-top:1.2rem;font-size:.92rem;opacity:.8">El folio VC-0912 no falló en <strong>E</strong>: el Borras sabía operar. Falló en <strong class="c-green">L</strong>, y nadie se lo había enseñado nunca.</p>
+          <p class="lede" style="margin-top:1.2rem;font-size:.92rem;opacity:.8">Arnulfo no falló en "Hacerlo bien": él sí sabía manejar. Falló en <strong class="c-green">saber decir "no"</strong>, y nadie se lo había enseñado nunca.</p>
         </div>`,
-      notes: 'No expliques las cuatro letras: haz que el grupo las abra. Al cerrar, pregunta en cuál de las cuatro falló el caso de la Fase 1 y deja que discutan. La respuesta es L.'
+      notes: 'No expliques las cuatro letras: haz que el grupo las abra. Al cerrar, pregunta en cuál de las cuatro falló el caso de la Parte 1 y deja que discutan. La respuesta es "saber decir no".'
     },
-   
     {
-      title: 'Taxonomía PIEL aplicada', id: 'piel-aplicado', chapter: 'Marco', cam: 'hood', mood: 'warn', speed: 0.4, anim: 'enter',
+      title: 'Practica reconocerlas', id: 'piel-aplicado', chapter: 'Marco', cam: 'hood', mood: 'warn', speed: 0.4, anim: 'enter',
       build: 'piel',
-      notes: 'Ejercicio de lenguaje común. Si el instructor no sabe nombrar la competencia, su retroalimentación se queda en "hazlo bien". Insiste: la clasificación correcta es la que permite diseñar el ejercicio de refuerzo.'
+      notes: 'Ejercicio de lenguaje común. Si el instructor no sabe reconocer cuál de las 4 falló, su corrección se queda en "hazlo bien" y no cambia nada. Insiste: reconocerla bien es lo que te permite diseñar el ejercicio correcto para reforzarla.'
     },
-   
     {
-      id: 'Andragogia', chapter: 'Marco', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
+      id: 'andragogia', chapter: 'Marco', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
       html: () => `
         <div class="panel pad w-sm mx" style="text-align:center">
           <div style="width:56px;height:56px;color:var(--cyan);margin:0 auto 1rem">${I('brain')}</div>
-          <h2 class="title">¿Cómo aprende un adulto?</h2>
-          <p class="lede">El adulto rechaza la teoría abstracta. Necesita <strong class="c-cyan">relevancia inmediata, experimentación guiada y consecuencia visible.</strong></p>
-          <p class="lede" style="opacity:.8">Por eso a partir de aquí no hay diapositivas que leer: hay una unidad que auditar, un operador que acompañar y un presupuesto que puedes destruir.</p>
+          <h2 class="title">¿Cómo Aprende un Adulto?</h2>
+          <p class="lede">Un adulto no aprende con teoría abstracta. Necesita <strong class="c-cyan">algo que le sirva ya, poder practicarlo con guía, y ver la consecuencia con sus propios ojos.</strong></p>
+          <p class="lede" style="opacity:.8">Por eso a partir de aquí ya no hay más diapositivas que leer: hay un camión que revisar, un operador que acompañar, y un presupuesto que puedes gastar de más.</p>
         </div>`,
       note: 'Aquí cambia el contrato con el grupo: de espectadores a operadores. Dilo explícitamente.'
     },
+
+    /* ============ FASE 2 · SIMULADOR ============ */
 
     /* ============ MARCO · LOGRAR EL CAMBIO REAL ============ */
     {
       id: 'cambio-real', chapter: 'Marco', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-cyan pad w-lg mx brackets">
-          <div class="kicker c-cyan">Cómo se logra un cambio que dura</div>
-          <h2 class="title">Informar no cambia a nadie</h2>
-          <p class="lede" style="margin-bottom:.4rem">Un operador no modifica una conducta porque le dijeron que estaba mal. La modifica cuando se juntan tres condiciones. Si falta una, la conducta regresa en dos semanas.</p>
-          <p class="lede" style="opacity:.72;font-size:.9rem;margin-bottom:1.1rem">Toca cada condición.</p>
+          <div class="kicker c-cyan">Cómo se logra un cambio que sí dura</div>
+          <h2 class="title">Solo Explicarle No Cambia a Nadie</h2>
+          <p class="lede" style="margin-bottom:.4rem">Un operador no cambia una costumbre solo porque le dijeron que estaba mal. Cambia cuando se juntan tres cosas. Si falta una, la costumbre regresa en dos semanas.</p>
+          <p class="lede" style="opacity:.72;font-size:.9rem;margin-bottom:1.1rem">Toca cada una.</p>
           <div class="rv-set c3" data-set="cambio">
             <div class="rv" style="--rvc:var(--cyan)">
               <div class="rv-let">01</div>
-              <div class="rv-t">Motivación interna</div>
-              <div class="rv-s">Que le importe a él</div>
+              <div class="rv-t">Que a él le importe</div>
+              <div class="rv-s">No que te importe a ti</div>
               <div class="rv-body">
                 <p>El operador tiene que encontrar su propia razón. La tuya no le sirve. La de la empresa, menos.</p>
-                <p><em>Se activa</em> preguntando por lo que sí valora: su casa, sus hijos, su licencia, su nombre en el patio.</p>
+                <p><em>Se logra</em> preguntándole por lo que sí le importa a él: su casa, sus hijos, su licencia, su nombre en el patio.</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
             <div class="rv" style="--rvc:var(--amber)">
               <div class="rv-let">02</div>
-              <div class="rv-t">Avance progresivo</div>
-              <div class="rv-s">Un escalón a la vez</div>
+              <div class="rv-t">Un paso a la vez</div>
+              <div class="rv-s">No todo junto</div>
               <div class="rv-body">
-                <p>Nadie cambia doce hábitos el lunes. Se elige uno, se practica hasta que deja de costar, y hasta entonces sigue el siguiente.</p>
-                <p><em>Se activa</em> definiendo un solo compromiso medible por semana.</p>
+                <p>Nadie cambia doce costumbres el lunes. Se elige una, se practica hasta que ya no cuesta trabajo, y hasta entonces se sigue con la siguiente.</p>
+                <p><em>Se logra</em> acordando un solo compromiso, medible, por semana.</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
             <div class="rv" style="--rvc:var(--green)">
               <div class="rv-let">03</div>
-              <div class="rv-t">Soporte activo</div>
-              <div class="rv-s">Que no esté solo</div>
+              <div class="rv-t">Que no esté solo</div>
+              <div class="rv-s">Acompañamiento real</div>
               <div class="rv-body">
-                <p>El hábito nuevo es frágil. Si nadie lo acompaña las primeras semanas, la presión del patio lo borra.</p>
-                <p><em>Se activa</em> con seguimiento en fechas fijas, no con la promesa de estar disponible.</p>
+                <p>La costumbre nueva es frágil. Si nadie le pregunta cómo le va las primeras semanas, la prisa del patio se la borra.</p>
+                <p><em>Se logra</em> con seguimiento en fechas fijas, no con la promesa de "cualquier cosa me buscas".</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
           </div>
         </div>`,
-      notes: 'Pregunta directa al grupo: de las tres, ¿cuál es la que su empresa nunca da? Casi siempre responden soporte activo. Ese es el hallazgo del bloque.'
+      notes: 'Pregunta directa al grupo: de las tres, ¿cuál es la que su empresa nunca da? Casi siempre responden "acompañamiento real". Ese es el hallazgo del bloque.'
     },
-    
     {
-      title: 'Ciclo del aprendizaje real', id: 'ciclo', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'enter',
+      title: 'Cómo se aprende de verdad', id: 'ciclo', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'enter',
       build: 'ciclo',
-      notes: 'Este orden no es negociable. La mayoría de los instructores empieza en simulación y termina en conexión, y por eso el operador practica sin saber para qué.'
+      notes: 'Este orden no es negociable. La mayoría de los instructores empieza practicando la maniobra y termina explicando el porqué, y por eso el operador practica sin saber para qué.'
     },
-    
+    /* ============ ESTACIÓN 1 ============ */
     {
-      title: 'Retroalimentación', id: 'Retroalimentacion', chapter: 'Estación 2', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
-      html: () => `
-        <div class="panel accent-green pad w-lg mx brackets">
-          <div class="kicker c-green">Herramientas del instructor</div>
-          <h2 class="title">Retroalimentar sin romper el vínculo</h2>
-          ${media('videos/retro-pablo-lelluvia.mp4', 'Pablo Lelluvia retroalimenta a un operador con actitud defensiva, sin perder el vínculo')}
-          <p class="lede" style="margin-bottom:.4rem">Antes de pararte frente a un operador con malos hábitos necesitas dos secuencias. No son consejos: son un orden que no se puede invertir.</p>
-          <p class="lede" style="opacity:.72;font-size:.9rem;margin-bottom:1rem">Toca cada paso.</p>
-          <div class="rv-s" style="margin-bottom:.5rem">Retroalimentación efectiva</div>
-          <div class="rv-set c3" data-set="retro">
-            <div class="rv" style="--rvc:var(--green)">
-              <div class="rv-let">1</div>
-              <div class="rv-t">Empieza por lo que sostiene</div>
-              <div class="rv-s">Reconocimiento real</div>
-              <div class="rv-body">
-                <p>Nombra un acierto verificable suyo. No es cortesía: baja la defensa para que lo siguiente entre.</p>
-                <p><em>Trampa:</em> el elogio genérico ("vas bien") se lee como preámbulo de regaño y produce el efecto contrario.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--cyan)">
-              <div class="rv-let">2</div>
-              <div class="rv-t">Sé específico con datos</div>
-              <div class="rv-s">Hechos, no adjetivos</div>
-              <div class="rv-body">
-                <p>"El martes saliste con 78 psi en el eje 3" se puede discutir con evidencia. "Eres descuidado" solo se puede pelear.</p>
-                <p><em>Regla:</em> fecha, dato, consecuencia. En ese orden.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--amber)">
-              <div class="rv-let">3</div>
-              <div class="rv-t">Cierra con plan de acción</div>
-              <div class="rv-s">Qué, cómo y cuándo</div>
-              <div class="rv-body">
-                <p>Una conversación sin acuerdo verificable es desahogo. Define la conducta, la forma de comprobarla y la fecha.</p>
-                <p><em>Y que lo diga él.</em> El compromiso que verbaliza el operador se cumple; el que impones se negocia.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-          </div>
-          <div class="rv-s" style="margin:1.2rem 0 .5rem">Persuadir con empatía · cuando hay resistencia</div>
-          <div class="rv-set c3" data-set="empatia">
-            <div class="rv" style="--rvc:var(--cyan)">
-              <div class="rv-let">1</div>
-              <div class="rv-t">Escucha activamente</div>
-              <div class="rv-s">Primero su versión</div>
-              <div class="rv-body">
-                <p>Deja que explique por qué lo hace así. Casi siempre hay una razón operativa real detrás del mal hábito.</p>
-                <p><em>Si no la conoces</em>, tu corrección ataca un síntoma y el hábito regresa el lunes.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--green)">
-              <div class="rv-let">2</div>
-              <div class="rv-t">El cambio es protección</div>
-              <div class="rv-s">No es castigo</div>
-              <div class="rv-body">
-                <p>Enmarca la norma como lo que le cuida la licencia, el patrimonio y el regreso a casa. No como lo que la empresa exige.</p>
-                <p><em>Frase útil:</em> "esto no es para que no te multen, es para que no lo pagues tú".</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--orange)">
-              <div class="rv-let">3</div>
-              <div class="rv-t">Construye ganar-ganar</div>
-              <div class="rv-s">Beneficio mutuo explícito</div>
-              <div class="rv-body">
-                <p>Que quede claro qué gana él: menos desgaste, menos reportes, bono íntegro, menos tiempo en retén.</p>
-                <p><em>Si solo gana la empresa</em>, cumple mientras lo ves.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-          </div>
-        </div>`,
-      notes: 'Estas seis piezas son el kit que van a usar en la micro-clase de la siguiente escena. Pide que anoten las dos secuencias antes de avanzar: se les van a olvidar en cuanto tengan al operador enfrente.'
-    },
- 
-    {
-      id: 'Micro-Clase', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
-      html: () => `
-        <div class="panel accent-amber pad w-lg mx brackets c-amber">
-          <div class="kicker c-amber">Estación 2 · Factor humano</div>
-          <h2 class="title">Saber no es enseñar</h2>
-          <p class="lede">Acabas de recorrer los 18 puntos de la unidad y sabes exactamente qué se revisa en cada uno.
-          Eso te vuelve un buen técnico. No te vuelve todavía un instructor.</p>
-          <p class="lede">El folio VC-0912 no lo firmó alguien que ignorara el procedimiento. Lo firmó alguien que lo sabía
-          <strong class="c-red">y no logró transferirlo</strong>. La diferencia entre esas dos cosas es lo que se evalúa a continuación.</p>
-          <div class="grid-3" style="margin-top:1.6rem">
-            <div class="stat"><h4>Operadores disponibles</h4><div class="v c-cyan num">3</div></div>
-            <div class="stat"><h4>Momentos a diseñar</h4><div class="v num">4</div></div>
-            <div class="stat"><h4>Tiempo de clase</h4><div class="v c-amber num">3:00</div></div>
-          </div>
-          <p class="lede" style="margin-top:1.4rem;opacity:.75;font-size:.94rem">Se evalúa el diseño andragógico de tu intervención (60%) y lo que el grupo observa cuando la impartes de verdad (40%).</p>
-        </div>`,
-      notes: 'Aquí se cambia el chip. Hasta ahora auditaron una unidad; ahora los audita el grupo a ellos. Pide que el participante realmente se pare y hable: el ejercicio pierde todo si solo se hace mentalmente.'
-    },
-   
-    {
-      title: 'Micro-clase', id: 'microclase', chapter: 'Estación 2', cam: 'follow', mood: 'normal', speed: 0, anim: 'enter',
-      build: 'microclase',
-      notes: 'Elige un voluntario para hacer de operador. El resto del grupo marca la rúbrica en tiempo real, tú no. Al terminar, la primera pregunta es siempre para el que hizo de operador: "¿te dieron ganas de cambiar?".'
-    },
-   
-    {
-      title: 'Manejo del estrés', id: 'Control-estres', chapter: 'Estación 2', cam: 'follow', mood: 'warn', speed: 0.5, anim: 'left',
-      build: 'estres',
-      notes: 'Aquí suelen resistirse: "no quiero estresar a mi gente". Aclara que el estrés ya existe en la carretera; lo único que decides es si aparece por primera vez contigo o solo cuando ya no puedes ayudarlo.'
-    },
-   
-    {
-      id: 'pc-06', chapter: 'Estación 2', cam: 'axle', mood: 'warn', speed: 0, anim: 'right', vote: true, question: 'El Borras se va a equivocar frente al grupo: ¿qué haces?',
-      html: () => `
-        <div class="panel accent-amber pad w-md mx brackets c-amber">
-          <div class="kicker c-amber">Punto de control 06 · rol del instructor</div>
-          <h2 class="title" style="margin-top:.5rem">Se va a equivocar frente a ti</h2>
-          <p class="lede">Simulacro de acoplamiento en patio cerrado. El operador acopla y se dispone a salir <strong class="c-red">sin hacer el tirón de prueba</strong>. No hay riesgo inmediato: el patio está despejado y vas a bordo.</p>
-          <p class="lede" style="opacity:.8">Tienes tres segundos para decidir qué tipo de instructor eres.</p>
-        </div>`,
-      choices: [
-        { key: 'A', label: 'Tomar el volante y detener la unidad tú', hint: 'Corriges el riesgo de inmediato', tone: 'bad', cost: 2500, driver: { trust: -12, stress: 10 }, flag: 'intervinoFisico',
-          verdict: 'Salvaste el ejercicio y perdiste la lección. Cuando el instructor pone las manos, el operador aprende que alguien más lo va a atrapar. En carretera no hay nadie en ese asiento.' },
-        { key: 'B', label: 'Dejarlo salir y reclamarle después', hint: 'Que sienta la consecuencia completa', tone: 'mid', cost: 1500, driver: { trust: -4 }, xp: 20,
-          verdict: 'Tienes evidencia, pero la conseguiste a costa de un desacople posible en patio. La falla inducida debe degradar el escenario, no ponerlo en riesgo real.' },
-        { key: 'C', label: 'Preguntar: "¿qué te falta antes de mover?"', hint: 'Inducir la decisión sin darla', tone: 'good', cost: 0, xp: 150, driver: { trust: 14, stress: -4 }, flag: 'indujoDecision',
-          verdict: 'Correcto. La pregunta devuelve la responsabilidad al operador y deja intacto el aprendizaje. El instructor no evita el error: lo convierte en el momento donde se decide bien.' }
-      ],
-      note: 'Este es el punto donde se separa el capacitador del acompañante. Pregunta al grupo cuántos hubieran tomado el volante: casi todos. Ese reflejo es el que hay que desmontar.'
-    },
-   
-    {
-      id: 'est-1', chapter: 'Estación 1', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'La carta porte no cuadra: ¿qué decides?',
+      id: 'est-1', chapter: 'Estación 1', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'El papel no cuadra con el peso real: ¿qué decides?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
-          <div class="kicker c-orange">Estación 1 · Patio, normatividad y activos</div>
-          <h2 class="title" style="margin-top:.5rem">La Carta Porte No Cuadra</h2>
-          <p class="lede">La báscula marca <strong>28.4 t</strong>; la carta porte declara <strong>26.0 t</strong>. Despacho responde por radio: "así la mandó el cliente, no le muevas". El retén de la Guardia Nacional está a 90 km.</p>
-          ${mods(['Marco normativo SCT y Ley de Caminos', 'Inspección físico-mecánica avanzada', 'Auditoría de carga, pesos y dimensiones', 'Custodia y cuidado de activos'])}
+          <div class="kicker c-orange">Estación 1 de 5 · El papel, el peso, y lo que traes cargando</div>
+          <h2 class="title" style="margin-top:.5rem">El Papel No Cuadra</h2>
+          <p class="lede">La báscula marca <strong>28.4 toneladas</strong>; el papel de la carga dice <strong>26.0 toneladas</strong>. Por radio te dicen: "así la mandó el cliente, no le muevas". Hay un retén de la Guardia Nacional a 90 kilómetros.</p>
+          ${mods(['Las reglas que sí tienes que conocer', 'Revisar el camión a fondo, no por encima', 'Cómo pesar y medir bien una carga', 'Cuidar lo que te confían'])}
         </div>`,
       choices: [
-        { key: 'A', label: 'Salir con el documento como está', hint: 'Es responsabilidad del cliente, no tuya', tone: 'bad', cost: 9000, driver: { stress: 12, trust: -10 }, flag: 'firmoPresion',
-          verdict: 'La responsabilidad solidaria del transportista no se delega por radio. Sobrepeso no declarado: multa federal y, si hubiera siniestro, la aseguradora tiene causal de rechazo.' },
-        { key: 'B', label: 'Corregir el documento sin volver a pesar', hint: 'Ajustar el número y avanzar', tone: 'mid', cost: 3000, driver: { stress: 5 }, xp: 20,
-          verdict: 'Resuelves el papel, no el hecho. Si el peso real difiere del corregido, falsificaste un documento oficial en lugar de cometer un error administrativo.' },
-        { key: 'C', label: 'Re-pesar, documentar y escalar al cliente', hint: 'Cuesta tiempo, protege a todos', tone: 'good', cost: 1200, xp: 140, driver: { trust: 10, stress: -5 },
-          verdict: 'Correcto. Perdiste 40 minutos y $1,200 de estadía. Evitaste una multa federal, una causal de rechazo de seguro y le enseñaste al operador dónde está la línea.' }
+        { key: 'A', label: 'Salir con el papel tal como está', hint: 'Es problema del cliente, no tuyo', tone: 'bad', cost: 9000, driver: { stress: 12, trust: -10 }, flag: 'firmoPresion',
+          verdict: 'Que te lo digan por radio no te quita la responsabilidad: si algo pasa, tú también respondes. Sobrepeso no declarado: multa federal, y si hay un accidente, el seguro puede negarse a pagar.' },
+        { key: 'B', label: 'Corregir el papel sin volver a pesar', hint: 'Cambiar el número y avanzar', tone: 'mid', cost: 3000, driver: { stress: 5 }, xp: 20,
+          verdict: 'Arreglas el papel, no el hecho. Si el peso real es distinto al que anotaste, ya no es un error: es un documento oficial alterado.' },
+        { key: 'C', label: 'Volver a pesar, dejarlo por escrito, y avisarle al cliente', hint: 'Cuesta tiempo, pero protege a todos', tone: 'good', cost: 1200, xp: 140, driver: { trust: 10, stress: -5 },
+          verdict: 'Correcto. Perdiste 40 minutos y $1,200 de espera. A cambio evitaste una multa federal, que el seguro se negara a pagar, y le enseñaste al operador dónde está el límite.' }
       ],
-      note: 'Estación 1 cubre 4 módulos normativos. Si eligen C, subraya que la decisión correcta SÍ tuvo costo: el liderazgo no es gratis, es barato.'
+      note: 'Estación 1 cubre 4 temas normativos. Si eligen C, subraya que la decisión correcta SÍ tuvo un costo: hacer lo correcto no es gratis, pero sí es barato comparado con lo otro.'
     },
 
     {
       id: 'f1', chapter: 'Estación 1', cam: 'axle', mood: 'normal', speed: 0.3, anim: 'right',
       html: () => `
         <div class="panel accent-cyan pad w-lg mx" style="text-align:center">
-          <div class="kicker">Referencia de estándar</div>
-          <h2 class="title" style="margin-top:.5rem">Velocidad Con Proceso</h2>
-          <p class="lede">En Fórmula 1 nadie improvisa por ir tarde. Van rápido <strong class="c-cyan">porque</strong> el proceso es inviolable, no a pesar de él.</p>
-          ${media('videos/f1.mp4', 'Sincronía de pits como estándar de proceso')}
-        </div>`
+          <div class="kicker">Una pausa para pensarlo</div>
+          <h2 class="title" style="margin-top:.5rem">¿Y Si Nadie Se Hubiera Dado Cuenta?</h2>
+          <p class="lede">Nadie iba a saber que el papel no cuadraba con el peso real. El retén estaba lejos. El cliente ya lo había mandado así. Nadie te lo iba a reclamar si lo dejabas pasar.</p>
+          ${pregunta('¿Cuántas veces han dejado pasar algo así, sabiendo que "probablemente" nadie se iba a dar cuenta? ¿Qué fue lo que los hizo decidir así?')}
+        </div>`,
+      pulse: { question: '¿Qué tan seguido dejas pasar algo pensando "de todos modos nadie se va a dar cuenta"?', options: [
+        { key: 'A', label: 'Casi nunca' }, { key: 'B', label: 'De vez en cuando' }, { key: 'C', label: 'Más seguido de lo que quisiera' }
+      ] }
     },
 
     /* ============ ESTACIÓN 2 ============ */
     {
-      id: 'est-2', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'El operador no durmió: ¿lo dejas salir a ruta?',
+      id: 'est-2', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'El operador no durmió: ¿lo dejas salir a la ruta?',
       html: () => `
         <div class="panel pad w-md mx">
-          <div class="kicker c-cyan">Estación 2 · Factor humano</div>
+          <div class="kicker c-cyan">Estación 2 de 5 · Lo que le pasa por dentro al operador</div>
           <h2 class="title" style="margin-top:.5rem">El Operador Que No Durmió</h2>
-          <p class="lede">Tres meses de antigüedad. Llega evasivo, con los ojos irritados; afirma que descansó ocho horas. Su prueba de reacción salió en rango rojo y su compañero comenta que anduvo de mudanza toda la noche. Cuando le preguntas, se pone a la defensiva delante de tres compañeros.</p>
-          ${mods(['Psicología del operador de quinta rueda', 'Inteligencia emocional del capacitador', 'Manejo de objeciones y resistencia', 'Comunicación asertiva operativa', 'Prevención de adicciones y salud ocupacional'])}
+          <p class="lede">Lleva tres meses trabajando contigo. Llega esquivo, con los ojos rojos; dice que sí durmió sus ocho horas. Su prueba de reacción salió mal, y un compañero comenta que se pasó la noche haciendo una mudanza. Cuando le preguntas, se pone a la defensiva frente a otros tres compañeros.</p>
+          ${mods(['Entender por qué actúan así los operadores', 'Mantener la calma y saber leer el momento', 'Qué hacer cuando alguien se pone a la defensiva', 'Hablar claro sin generar pleito', 'Detectar cuando algo más serio está pasando'])}
         </div>`,
       choices: [
-        { key: 'A', label: 'Sancionarlo ahí mismo, frente a todos', hint: 'Que sirva de ejemplo', tone: 'bad', driver: { trust: -28, stress: 22 }, cost: 0,
-          verdict: 'Ganaste obediencia y perdiste información. A partir de hoy este operador te va a ocultar exactamente lo que necesitas saber para protegerlo.' },
-        { key: 'B', label: 'Anotarlo en bitácora y dejarlo salir', hint: 'Queda documentado', tone: 'mid', driver: { fatigue: 18, trust: -6 },
-          verdict: 'La bitácora te protege legalmente a ti, no protege al operador ni a la unidad. Documentar un riesgo sin mitigarlo es administrarlo, no gestionarlo.' },
-        { key: 'C', label: 'Entrevista 1:1, escucha activa, decisión conjunta', hint: 'Apartarlo del grupo y preguntar de verdad', tone: 'good', xp: 150, driver: { trust: 22, stress: -12, fatigue: -6 },
-          verdict: 'Correcto. Al sacarlo del escenario público desactivaste la defensa. Reconoció el desvelo y aceptó salir dos horas después. Eso es andragogía aplicada bajo presión.' }
+        { key: 'A', label: 'Regañarlo ahí mismo, frente a todos', hint: 'Que sirva de ejemplo para los demás', tone: 'bad', driver: { trust: -28, stress: 22 }, cost: 0,
+          verdict: 'Conseguiste que te obedezca, pero perdiste que te cuente la verdad. Desde hoy, este operador te va a esconder exactamente lo que necesitas saber para poder ayudarlo.' },
+        { key: 'B', label: 'Anotarlo en la bitácora y dejarlo salir', hint: 'Al menos queda registrado', tone: 'mid', driver: { fatigue: 18, trust: -6 },
+          verdict: 'La bitácora te cubre a ti legalmente. No protege al operador, ni al camión. Anotar un riesgo sin resolverlo es solo dejarlo por escrito, no evitarlo.' },
+        { key: 'C', label: 'Hablar con él a solas, escucharlo de verdad, y decidir juntos', hint: 'Apartarlo del grupo y preguntarle en serio', tone: 'good', xp: 150, driver: { trust: 22, stress: -12, fatigue: -6 },
+          verdict: 'Correcto. Al sacarlo de enfrente de sus compañeros, dejó de tener que defenderse. Aceptó que no había dormido y accedió a salir dos horas después. Así se maneja esto bajo presión.' }
       ],
-      note: 'Momento clave del curso. Pregunta al grupo: ¿por qué el operador mintió? Respuesta: porque decir la verdad le costaba el viaje.'
+      note: 'Momento clave del curso. Pregunta al grupo: ¿por qué creen que el operador mintió? Respuesta: porque decir la verdad le iba a costar el viaje, y el viaje es lo que le paga la quincena.'
+    },
+
+    {
+      id: 'retro-empatia', chapter: 'Estación 2', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
+      html: () => `
+        <div class="panel accent-green pad w-lg mx brackets">
+          <div class="kicker c-green">Herramientas del instructor</div>
+          <h2 class="title">Corregir Sin Romper la Confianza</h2>
+          ${media('videos/retro-pablo-lelluvia.mp4', 'Pablo Lelluvia corrige a un operador a la defensiva, sin perder su confianza')}
+          <p class="lede" style="margin-bottom:.4rem">Antes de pararte frente a un operador con malas costumbres, necesitas seguir un orden. No son consejos sueltos: es una secuencia que no se puede saltar.</p>
+          <p class="lede" style="opacity:.72;font-size:.9rem;margin-bottom:1rem">Toca cada paso.</p>
+          <div class="rv-s" style="margin-bottom:.5rem">Cómo corregir sin que se cierre</div>
+          <div class="rv-set c3" data-set="retro">
+            <div class="rv" style="--rvc:var(--green)">
+              <div class="rv-let">1</div>
+              <div class="rv-t">Empieza por algo bueno, real</div>
+              <div class="rv-s">Que sea cierto, no un cumplido</div>
+              <div class="rv-body">
+                <p>Menciona algo que sí hizo bien y que puedas comprobar. No es por cortesía: es lo que le baja la guardia para poder escuchar lo demás.</p>
+                <p><em>Cuidado:</em> el cumplido genérico ("vas bien") se siente como el anuncio de un regaño, y logra el efecto contrario.</p>
+              </div>
+              <div class="rv-hint">Ver</div>
+            </div>
+            <div class="rv" style="--rvc:var(--cyan)">
+              <div class="rv-let">2</div>
+              <div class="rv-t">Sé claro y con datos</div>
+              <div class="rv-s">Hechos, no calificativos</div>
+              <div class="rv-body">
+                <p>"El martes saliste con la llanta del eje 3 baja de presión" se puede platicar. "Eres descuidado" solo genera pleito.</p>
+                <p><em>Orden:</em> primero la fecha, después el hecho, y al final qué pudo pasar.</p>
+              </div>
+              <div class="rv-hint">Ver</div>
+            </div>
+            <div class="rv" style="--rvc:var(--amber)">
+              <div class="rv-let">3</div>
+              <div class="rv-t">Termina con un plan</div>
+              <div class="rv-s">Qué, cómo y cuándo</div>
+              <div class="rv-body">
+                <p>Una plática sin un acuerdo concreto es solo desahogo. Define qué va a hacer distinto, cómo lo vas a comprobar, y para cuándo.</p>
+                <p><em>Y que lo diga él,</em> no tú. El compromiso que dice el propio operador se cumple; el que se le impone, se negocia.</p>
+              </div>
+              <div class="rv-hint">Ver</div>
+            </div>
+          </div>
+          <div class="rv-s" style="margin:1.2rem 0 .5rem">Cuando se pone a la defensiva</div>
+          <div class="rv-set c3" data-set="empatia">
+            <div class="rv" style="--rvc:var(--cyan)">
+              <div class="rv-let">1</div>
+              <div class="rv-t">Escúchalo primero</div>
+              <div class="rv-s">Antes de hablar tú</div>
+              <div class="rv-body">
+                <p>Déjalo explicar por qué lo hace así. Casi siempre hay una razón real de trabajo detrás de la mala costumbre.</p>
+                <p><em>Si no la conoces,</em> vas a corregir el síntoma, y la costumbre regresa el lunes.</p>
+              </div>
+              <div class="rv-hint">Ver</div>
+            </div>
+            <div class="rv" style="--rvc:var(--green)">
+              <div class="rv-let">2</div>
+              <div class="rv-t">Es para cuidarlo, no para castigarlo</div>
+              <div class="rv-s">Cambia cómo se lo dices</div>
+              <div class="rv-body">
+                <p>Explícale que la regla existe para cuidar su licencia, su patrimonio, y que llegue bien a su casa. No para que la empresa quede bien.</p>
+                <p><em>Frase que funciona:</em> "esto no es para que no te multen, es para que no lo pagues tú".</p>
+              </div>
+              <div class="rv-hint">Ver</div>
+            </div>
+            <div class="rv" style="--rvc:var(--orange)">
+              <div class="rv-let">3</div>
+              <div class="rv-t">Que gane algo, no solo la empresa</div>
+              <div class="rv-s">Beneficio claro para él</div>
+              <div class="rv-body">
+                <p>Que le quede claro qué gana él con hacerlo bien: menos desgaste, menos reportes, su bono completo, menos tiempo parado en retenes.</p>
+                <p><em>Si solo gana la empresa,</em> él va a cumplir nada más cuando lo estés viendo.</p>
+              </div>
+              <div class="rv-hint">Ver</div>
+            </div>
+          </div>
+        </div>`,
+      notes: 'Estas seis piezas son el kit que van a usar en la micro-clase de la siguiente escena. Pide que anoten los dos órdenes antes de avanzar: se les va a olvidar en cuanto tengan al operador enfrente.'
+    },
+    {
+      id: 'micro-brief', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
+      html: () => `
+        <div class="panel accent-amber pad w-lg mx brackets c-amber">
+          <div class="kicker c-amber">Estación 2 · Lo que le pasa por dentro al operador</div>
+          <h2 class="title">Saber No Es lo Mismo Que Enseñar</h2>
+          <p class="lede">Ya recorriste los 18 puntos del camión y sabes exactamente qué se revisa en cada uno.
+          Eso te hace un buen técnico. Todavía no te hace instructor.</p>
+          <p class="lede">Quien firmó el examen de Arnulfo en 4 minutos no era alguien que no supiera el procedimiento. Era alguien que lo sabía
+          <strong class="c-red">y no logró transmitírselo</strong>. Esa diferencia es justo lo que se pone a prueba ahora.</p>
+          <div class="grid-3" style="margin-top:1.6rem">
+            <div class="stat"><h4>Operadores disponibles</h4><div class="v c-cyan num">3</div></div>
+            <div class="stat"><h4>Momentos a preparar</h4><div class="v num">4</div></div>
+            <div class="stat"><h4>Tiempo de la clase</h4><div class="v c-amber num">3:00</div></div>
+          </div>
+          <p class="lede" style="margin-top:1.4rem;opacity:.75;font-size:.94rem">Se evalúa cómo preparaste tu clase (60%) y lo que el grupo observa cuando la das de verdad frente a ellos (40%).</p>
+        </div>`,
+      notes: 'Aquí se cambia el chip. Hasta ahora revisaron un camión; ahora los va a revisar el grupo a ellos. Pide que el participante realmente se pare y hable: el ejercicio pierde todo su valor si solo se hace mentalmente.'
+    },
+    {
+      title: 'Da tu primera clase', id: 'microclase', chapter: 'Estación 2', cam: 'follow', mood: 'normal', speed: 0, anim: 'enter',
+      build: 'microclase',
+      notes: 'Elige un voluntario para hacer de operador. El resto del grupo marca la rúbrica en tiempo real, tú no. Al terminar, la primera pregunta es siempre para el que hizo de operador: "¿te dieron ganas de cambiar?".'
+    },
+    {
+      title: 'Practica bajo presión', id: 'ing-estres', chapter: 'Estación 2', cam: 'follow', mood: 'warn', speed: 0.5, anim: 'left',
+      build: 'estres',
+      notes: 'Aquí suelen resistirse: "no quiero estresar a mi gente". Aclara que el estrés ya existe en la carretera; lo único que se decide aquí es si aparece por primera vez contigo, o solo cuando ya no puedas ayudarlo.'
+    },
+    {
+      id: 'pc-06', chapter: 'Estación 2', cam: 'axle', mood: 'warn', speed: 0, anim: 'right', vote: true, question: 'Se va a equivocar frente al grupo: ¿qué haces?',
+      html: () => `
+        <div class="panel accent-amber pad w-md mx brackets c-amber">
+          <div class="kicker c-amber">Punto de control 06 · qué tipo de instructor eres</div>
+          <h2 class="title" style="margin-top:.5rem">Se Va a Equivocar Frente a Ti</h2>
+          <p class="lede">Ensayo de enganche en un patio cerrado. El operador engancha y va a arrancar <strong class="c-red">sin hacer el tirón de prueba</strong>. No hay riesgo inmediato: el patio está despejado y vas subido con él.</p>
+          <p class="lede" style="opacity:.8">Tienes tres segundos para decidir qué tipo de instructor eres.</p>
+        </div>`,
+      choices: [
+        { key: 'A', label: 'Tomar tú el volante y detener el camión', hint: 'Corriges el riesgo de inmediato', tone: 'bad', cost: 2500, driver: { trust: -12, stress: 10 }, flag: 'intervinoFisico',
+          verdict: 'Salvaste el ejercicio y perdiste la lección. Cuando el instructor toma el control, el operador aprende que alguien más lo va a atrapar si se equivoca. En la carretera, ahí no va nadie más.' },
+        { key: 'B', label: 'Dejarlo salir así y reclamarle después', hint: 'Que sienta la consecuencia completa', tone: 'mid', cost: 1500, driver: { trust: -4 }, xp: 20,
+          verdict: 'Tienes la prueba de lo que hizo mal, pero la conseguiste arriesgando un posible accidente en el patio. El error se debe dejar ver, no dejar que pase de verdad.' },
+        { key: 'C', label: 'Preguntarle: "¿qué te falta antes de moverte?"', hint: 'Que él mismo se dé cuenta', tone: 'good', cost: 0, xp: 150, driver: { trust: 14, stress: -4 }, flag: 'indujoDecision',
+          verdict: 'Correcto. La pregunta le regresa la responsabilidad al operador y no arruina el aprendizaje. El instructor no evita el error: lo convierte en el momento donde se aprende a decidir bien.' }
+      ],
+      note: 'Este es el punto donde se separa al instructor real del que solo acompaña. Pregunta al grupo cuántos hubieran tomado el volante: casi todos. Ese reflejo es el que hay que quitarles.'
     },
 
     /* ============ RUTA ============ */
@@ -789,26 +786,6 @@
       note: 'Dato duro para el grupo: el arreglo en efectivo cuesta más que el deducible en la mayoría de las pólizas. Lo barato es reportar.'
     },
 
-    /* ============ ESTACIÓN 5 ============ */
-    {
-      id: 'est-5', chapter: 'Estación 5', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left', vote: true, question: 'Veinte minutos que valen la ruta: ¿qué decides?',
-      html: () => `
-        <div class="panel accent-cyan pad w-md mx">
-          <div class="kicker">Estación 5 de 5 · Cierre formativo</div>
-          <h2 class="title" style="margin-top:.5rem">Veinte Minutos Que Valen una vida</h2>
-          <p class="lede">Unidad descargada. Tienes veinte minutos con el operador antes de su descanso. Es la única ventana real de aprendizaje del viaje completo.</p>
-          ${mods(['Andragogía: el ciclo de Kolb en cabina', 'Metodología de retroalimentación activa', 'Liderazgo de cero tolerancia', 'Evaluación por competencias CONOCER', 'Trascendencia y bienestar familiar'])}
-        </div>`,
-      choices: [
-        { key: 'A', label: 'Entregarle el reporte de faltas por escrito', hint: 'Firmado de enterado y a descansar', tone: 'bad', driver: { trust: -16 },
-          verdict: 'Un documento no es retroalimentación. Cerraste el expediente y dejaste la experiencia sin procesar: el ciclo de Kolb quedó incompleto en la etapa de observación.' },
-        { key: 'B', label: 'Felicitarlo en general para no desmotivarlo', hint: 'Llegamos, es lo que importa', tone: 'mid', xp: 40, driver: { trust: 6 },
-          verdict: 'El elogio inespecífico no modifica conducta. Se siente bien hoy y no cambia nada mañana.' },
-        { key: 'C', label: 'Ciclo completo: qué pasó, qué sentiste, qué harías distinto, compromiso escrito', hint: 'Kolb aplicado en 20 minutos', tone: 'good', xp: 190, driver: { trust: 26, stress: -12 },
-          verdict: 'Correcto. Experiencia concreta → observación reflexiva → conceptualización → experimentación activa. El compromiso escrito y firmado por él, no por ti, es lo que convierte el viaje en competencia.' }
-      ]
-    },
-
     /* ============ DESENLACES RAMIFICADOS ============ */
     {
       id: 'fin-desacople', chapter: 'Desenlace', cam: 'crash', mood: 'danger', speed: 0, anim: 'impact',
@@ -822,7 +799,6 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(260000, 'Desacople catastrófico del semirremolque', 'bad'); ctx.damage(1); w.Scene3D.impact(1.8); ctx.engine(false); }
     },
-    
     {
       id: 'fin-descenso', chapter: 'Desenlace', cam: 'crash', mood: 'danger', speed: 0, anim: 'impact',
       when: (S) => w.State.ending() === 'descenso',
@@ -835,7 +811,6 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(180000, 'Colapso en descenso por frenos y fatiga', 'bad'); ctx.damage(1); w.Scene3D.impact(1.6); ctx.engine(false); }
     },
-    
     {
       id: 'fin-microsueno', chapter: 'Desenlace', cam: 'crash', mood: 'danger', speed: 0, anim: 'impact',
       when: (S) => w.State.ending() === 'microsueno',
@@ -849,7 +824,6 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(95000, 'Salida de camino por microsueño', 'bad'); ctx.damage(1); w.Scene3D.impact(1.5); ctx.engine(false); }
     },
-    
     {
       id: 'fin-incidente', chapter: 'Desenlace', cam: 'rear', mood: 'warn', speed: 0.3, anim: 'impact',
       when: (S) => w.State.ending() === 'incidente',
@@ -862,7 +836,6 @@
         </div>`,
       onEnter: (ctx) => { w.State.charge(38000, 'Incidente en maniobra de andén', 'bad'); ctx.damage(0.7); ctx.engine(false); }
     },
-    
     {
       id: 'fin-utilidad', chapter: 'Desenlace', cam: 'rear', mood: 'warn', speed: 0.2, anim: 'enter',
       when: (S) => w.State.ending() === 'utilidad',
@@ -871,11 +844,10 @@
           <div class="kicker c-orange">Km 640 · Desenlace</div>
           <h2 class="title" style="margin-top:.5rem">Llegaste, Pero Sin Utilidad</h2>
           <p class="lede">Sin siniestro y sin lesionados: eso ya es un logro. Pero de los $80,000 proyectados quedan <strong class="c-amber num">${money(S.budget)}</strong>. El viaje se hizo por cumplir, no por rentabilidad.</p>
-          <p class="lede" style="opacity:.8">Una flota que opera así sobrevive el mes, pero no sobrevive el año.</p>
+          <p class="lede" style="opacity:.8">Una flota que opera así sobrevive el mes y no sobrevive el año.</p>
         </div>`,
       onEnter: (ctx) => { ctx.engine(false); }
     },
-    
     {
       id: 'fin-seguro', chapter: 'Desenlace', cam: 'rear', mood: 'safe', speed: 0.2, anim: 'enter',
       when: (S) => w.State.ending() === 'seguro',
@@ -894,13 +866,30 @@
     /* ============ ESTACIÓN 5 · MEDICIÓN Y ROLES ============ */
 
     {
-      title: 'Mentoría correctiva', id: 'telemetria', chapter: 'Estación 5', cam: 'follow', mood: 'warn', speed: 0.3, anim: 'left',
+      id: 'est-5', chapter: 'Cierre Formativo', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left', vote: true, question: 'Veinte minutos que valen la ruta: ¿qué decides?',
+      html: () => `
+        <div class="panel accent-cyan pad w-md mx">
+          <div class="kicker">El viaje ya terminó · Cierre formativo</div>
+          <h2 class="title" style="margin-top:.5rem">Veinte Minutos Que Valen la Ruta</h2>
+          <p class="lede">El viaje ya terminó, haya salido bien o mal. Tienes veinte minutos con el operador antes de que se vaya a descansar. Es la única ventana real de aprendizaje de todo lo que acaba de pasar.</p>
+          ${mods(['El ciclo de aprendizaje de Kolb, explicado simple', 'Cómo dar retroalimentación que sí cambia conducta', 'Liderazgo de cero tolerancia', 'Evaluación por competencias', 'Trascendencia y bienestar familiar'])}
+        </div>`,
+      choices: [
+        { key: 'A', label: 'Entregarle el reporte de faltas por escrito', hint: 'Firmado de enterado y a descansar', tone: 'bad', driver: { trust: -16 },
+          verdict: 'Un documento no es retroalimentación. Cerraste el expediente y dejaste la experiencia sin procesar: nadie aprendió nada de lo que acaba de pasar.' },
+        { key: 'B', label: 'Felicitarlo en general para no desmotivarlo', hint: 'Ya pasó, no hay que darle más vueltas', tone: 'mid', xp: 40, driver: { trust: 6 },
+          verdict: 'El elogio genérico no cambia nada. Se siente bien hoy y va a repetir exactamente lo mismo mañana.' },
+        { key: 'C', label: 'Platicar completo: qué pasó, qué sintió, qué haría distinto, y un compromiso por escrito', hint: 'La conversación completa, en 20 minutos', tone: 'good', xp: 190, driver: { trust: 26, stress: -12 },
+          verdict: 'Correcto. Primero lo que pasó, después cómo se sintió, luego qué aprendió, y al final un compromiso concreto. El compromiso escrito y firmado por él, no por ti, es lo que convierte el viaje en aprendizaje real.' }
+      ]
+    },
+    {
+      title: 'Mentoría correctiva', id: 'telemetria', chapter: 'Cierre Formativo', cam: 'follow', mood: 'warn', speed: 0.3, anim: 'left',
       build: 'telemetria',
       notes: 'La telemetría no acusa: abre la conversación. Si la usas como prueba en un juicio, el operador aprende a esconderse del sensor, no a manejar mejor.'
     },
-    
     {
-      id: 'roles-3', chapter: 'Estación 5', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left',
+      id: 'roles-3', chapter: 'Cierre Formativo', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left',
       html: () => `
         <div class="panel accent-cyan pad w-lg mx brackets">
           <div class="kicker c-cyan">Estación 5 · Cierre formativo</div>
@@ -939,12 +928,12 @@
               <div class="rv-hint">Ver</div>
             </div>
           </div>
-          <p class="lede" style="margin-top:1.1rem;font-size:.92rem;opacity:.82">Regla práctica: <strong>di dime tu como llegas</strong>. "Hoy vengo a evaluar" y "hoy vengo a acompañarte" producen conversaciones distintas con la misma persona.</p>
+          <p class="lede" style="margin-top:1.1rem;font-size:.92rem;opacity:.82">Regla práctica: <strong>di en voz alta con qué sombrero llegas</strong>. "Hoy vengo a evaluar" y "hoy vengo a acompañarte" producen conversaciones distintas con la misma persona.</p>
         </div>`,
       notes: 'Pregunta al grupo cuál es su sombrero por default. Casi siempre es evaluador, porque es el que la empresa premia. Ahí está el problema cultural completo.'
     },
     {
-      id: 'medicion', chapter: 'Estación 5', cam: 'top', mood: 'warn', speed: 0.2, anim: 'right',
+      id: 'medicion', chapter: 'Cierre Formativo', cam: 'top', mood: 'warn', speed: 0.2, anim: 'right',
       html: () => `
         <div class="panel accent-orange pad w-lg mx brackets">
           <div class="kicker c-orange">Medición conductual</div>
@@ -957,7 +946,7 @@
               <div class="rv-t">Resiliencia</div>
               <div class="rv-s">Bajo presión sostiene el proceso</div>
               <div class="rv-body">
-                <p><em>Evidencia:</em> con el tiempo encima ¿siguió haciendo la inspección completa o la recortó?</p>
+                <p><em>Evidencia:</em> con retraso acumulado, ¿siguió haciendo la inspección completa o la recortó?</p>
                 <p>Se observa el día malo, nunca el día tranquilo.</p>
               </div>
               <div class="rv-hint">Ver</div>
@@ -968,7 +957,7 @@
               <div class="rv-s">Reporta lo que nadie vio</div>
               <div class="rv-body">
                 <p><em>Evidencia:</em> ¿reportó el golpe menor, la fuga leve o el error propio sin que se lo detectaran?</p>
-                <p>Este indicador solo sube si al darse cuenta nunca se le da solución.</p>
+                <p>Este indicador solo sube si reportar nunca se castiga.</p>
               </div>
               <div class="rv-hint">Ver</div>
             </div>
@@ -997,9 +986,9 @@
       notes: 'Pide que agreguen una cuarta fila con la omisión más frecuente de su propio patio. Ese ejercicio convierte la tabla genérica en su tabla.'
     },
 
-    /* ============ ESTACIÓN 5 · ============ */
+    /* ============ ESTACIÓN 5 · INSTRUMENTO DE EVALUACIÓN ============ */
     {
-      id: 'eval-brief', chapter: 'Estación 5', cam: 'top', mood: 'warn', speed: 0, anim: 'right',
+      id: 'eval-brief', chapter: 'Cierre Formativo', cam: 'top', mood: 'warn', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-amber pad w-lg mx brackets c-amber">
           <div class="kicker c-amber">Estación 5 · construye tu instrumento</div>
@@ -1011,27 +1000,23 @@
         </div>`,
       notes: 'Advierte antes de empezar: en el banco hay criterios que suenan bien y son trampa. No les digas cuáles. El hallazgo tiene que ser suyo al final.'
     },
-    
     {
-      title: 'Constructor del instrumento', id: 'evconstruye', chapter: 'Estación 5', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
+      title: 'Constructor del instrumento', id: 'evconstruye', chapter: 'Cierre Formativo', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       build: 'evconstruye',
       notes: 'Dales tiempo real: 12 a 15 minutos. Recorre el salón y pregunta por qué eligieron un criterio y no otro. Insiste en que redacten al menos dos criterios propios.'
     },
-    
     {
-      title: 'Tu hoja frente a tres operadores', id: 'evaplica', chapter: 'Estación 5', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
+      title: 'Tu hoja frente a tres operadores', id: 'evaplica', chapter: 'Cierre Formativo', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
       build: 'evaplica',
       notes: 'Momento clave del bloque. Si su instrumento aprueba al Borras, no los rescates: deja que el silencio haga el trabajo antes de explicar.'
     },
-    
     {
-      title: 'Aplícalo a tu gente', id: 'evcampo', chapter: 'Estación 5', cam: 'top', mood: 'normal', speed: 0, anim: 'right',
+      title: 'Aplícalo a tu gente', id: 'evcampo', chapter: 'Cierre Formativo', cam: 'top', mood: 'normal', speed: 0, anim: 'right',
       build: 'evcampo',
       notes: 'Que escriban el nombre real de un operador de su flota. Al terminar pueden descargar la hoja y usarla el lunes. Eso convierte el curso en herramienta.'
     },
-   
     {
-      id: 'pc-07', chapter: 'Estación 5', cam: 'lowfront', mood: 'warn', speed: 0.2, anim: 'left', vote: true, question: 'El operador se detuvo: ¿cómo respondes?',
+      id: 'pc-07', chapter: 'Cierre Formativo', cam: 'lowfront', mood: 'warn', speed: 0.2, anim: 'left', vote: true, question: 'El operador se detuvo: ¿cómo respondes?',
       html: () => `
         <div class="panel accent-red pad w-md mx brackets c-red">
           <div class="kicker c-red">Punto de control 07 · liderazgo</div>
@@ -1049,9 +1034,8 @@
       ],
       note: 'Este es el punto de control más importante del curso. El folio VC-0912 se firmó porque nadie tomó la opción C ese día. Dilo así, sin suavizarlo.'
     },
-   
     {
-      id: 'indicador', chapter: 'Estación 5', cam: 'trailer', mood: 'safe', speed: 0.3, anim: 'enter',
+      id: 'indicador', chapter: 'Cierre Formativo', cam: 'trailer', mood: 'safe', speed: 0.3, anim: 'enter',
       html: () => `
         <div class="panel pad w-sm mx" style="text-align:center">
           <div class="kicker">El verdadero indicador</div>

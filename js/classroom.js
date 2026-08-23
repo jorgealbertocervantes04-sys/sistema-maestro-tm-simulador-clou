@@ -93,7 +93,7 @@
     try {
       await fetch(API + '/session/' + room + '/poll', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideId: slide.id, question: slide.question || 'Tu decisión', options })
+        body: JSON.stringify({ slideId: slide.id, question: slide.question || 'Tu decisión', options, ...slidePosition(slide) })
       });
     } catch (e) {}
     lastTotal = -1;
@@ -264,19 +264,8 @@
     return g ? g.key : null;
   }
 
-  /* Limpia la votación activa en el servidor: sin esto, el celular de los
-     participantes se queda viendo la última pregunta aunque el facilitador
-     ya haya avanzado a una escena sin decisión (video, teoría, inspección). */
-  async function clearPoll() {
-    if (!room) return;
-    try {
-      await fetch(API + '/session/' + room + '/poll', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideId: '', question: '', options: [] })
-      });
-    } catch (e) {}
-    lastTotal = -1;
-  }
+  /* (clearPoll fue reemplazada por broadcastPosition: ahora cada cambio de escena
+     avisa la posición nueva y limpia la pregunta anterior en el mismo llamado) */
 
   /* Pregunta de tema, específica de la escena (no el pulso genérico). Se define en
      content.js con slide.pulse = { question, options }, solo en las escenas donde
@@ -287,11 +276,30 @@
     try {
       await fetch(API + '/session/' + room + '/poll', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideId: slide.id, question: slide.pulse.question, options: slide.pulse.options })
+        body: JSON.stringify({ slideId: slide.id, question: slide.pulse.question, options: slide.pulse.options, ...slidePosition(slide) })
       });
     } catch (e) {}
     lastTotal = -1;
     if (open) startPolling();
+  }
+
+  /* Aunque la escena no tenga pregunta ni pulso, igual avisamos al celular en qué
+     tema va la clase (título legible + acto), para que avance sincronizado contigo
+     sin que el participante tenga que hacer nada. Reutiliza el mismo titleOf/actOf
+     que ya usa el índice interno del facilitador, para no duplicar lógica. */
+  function slidePosition(slide) {
+    const title = (w.Deck && w.Deck.titleOf) ? w.Deck.titleOf(slide) : (slide.title || slide.id);
+    const act = (w.Deck && w.Deck.actOf) ? w.Deck.actOf(slide.chapter) : '';
+    return { slideTitle: title, chapter: slide.chapter || '', act };
+  }
+  async function broadcastPosition(slide) {
+    if (!room) return;
+    try {
+      await fetch(API + '/session/' + room + '/poll', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slideId: slide.id, question: '', options: [], ...slidePosition(slide) })
+      });
+    } catch (e) {}
   }
 
   function onSlide(slide) {
@@ -299,7 +307,7 @@
     if (!room) return;
     if (slide.vote && slide.choices) { openPoll(slide); return; }
     if (slide.pulse) { openScenePulse(slide); return; }
-    clearPoll();
+    broadcastPosition(slide);
     if (open) { stopPolling(); renderTally(null); }
   }
 

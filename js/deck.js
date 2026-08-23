@@ -329,7 +329,7 @@
     { name: 'Acto II · La reconstrucción', chapters: ['Patio'] },
     { name: 'Acto III · El marco', chapters: ['Marco', 'Estación 2', 'Estación 1'] },
     { name: 'Acto IV · La ruta en vivo', chapters: ['Ruta', 'Estación 3', 'Estación 4'] },
-    { name: 'Acto V · El desenlace', chapters: ['Desenlace', 'Estación 5'] },
+    { name: 'Acto V · El desenlace', chapters: ['Desenlace', 'Cierre Formativo'] },
     { name: 'Acto VI · El cierre', chapters: ['Cierre'] }
   ];
   function actOf(chapter) {
@@ -369,5 +369,5 @@
     return true;
   }
 
-  w.Deck = { init, render, go, jump, applyKey, current: () => currentList()[idx], index: () => idx };
+  w.Deck = { init, render, go, jump, applyKey, current: () => currentList()[idx], index: () => idx, titleOf, actOf };
 })(window);

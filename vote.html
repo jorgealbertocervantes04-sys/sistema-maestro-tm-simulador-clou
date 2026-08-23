@@ -111,16 +111,25 @@
     }
   }
 
+  function posHeader(p) {
+    if (!p || (!p.act && !p.chapter && !p.slideTitle)) return '';
+    return '<div class="kicker c-cyan" style="margin-bottom:.6rem">' + (p.act ? p.act + ' · ' : '') + (p.slideTitle || p.chapter || '') + '</div>';
+  }
+
   function draw(p) {
     if (!p || !p.options || !p.options.length) {
-      main.innerHTML = card('Esperando la siguiente decisión', 'Mantén esta pantalla abierta. Cuando el facilitador abra una votación, aparecerá aquí.');
-      lastSlide = null;
+      const sid = p ? p.slideId : null;
+      if (sid === lastSlide) return; /* mismo momento de la clase: no repintar de más */
+      lastSlide = sid;
+      main.innerHTML = '<div class="panel pad">' + posHeader(p) +
+        '<h2 class="title" style="font-size:1.15rem;margin:.2rem 0 .5rem">Vas siguiendo la clase en vivo</h2>' +
+        '<p class="lede" style="opacity:.75">Esta pantalla avanza sola conforme el facilitador avanza. Cuando toque tu turno de participar, la pregunta va a aparecer aquí sin que hagas nada.</p></div>';
       return;
     }
     if (voted[p.slideId]) return;
     if (p.slideId !== lastSlide) {
       lastSlide = p.slideId;
-      main.innerHTML = '<div class="panel pad"><div class="kicker c-cyan">Tu decisión</div>' +
+      main.innerHTML = '<div class="panel pad">' + posHeader(p) + '<div class="kicker c-cyan">Tu turno de participar</div>' +
         '<h2 class="title" style="font-size:1.3rem;margin:.4rem 0 1rem">' + (p.question || '¿Qué harías tú?') + '</h2>' +
         p.options.map(function (o) {
           return '<button class="choice" data-k="' + o.key + '"><span class="ck">' + o.key + '</span>' +
