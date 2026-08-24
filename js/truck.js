@@ -18,8 +18,8 @@
 
     const body = new T.MeshStandardMaterial({ color: 0x1B3350, metalness: 0.78, roughness: 0.3 });
     const bodyDark = new T.MeshStandardMaterial({ color: 0x0E1B2E, metalness: 0.65, roughness: 0.48 });
-    const cabinMat = new T.MeshStandardMaterial({ color: 0xFB6500, metalness: 0.55, roughness: 0.35 });
-    const trailerMat = new T.MeshStandardMaterial({ color: 0xF2F2F2, metalness: 0.35, roughness: 0.42 });
+    const cabinMat = new T.MeshStandardMaterial({ color: 0xC9440F, metalness: 0.5, roughness: 0.38 });
+    const trailerMat = new T.MeshStandardMaterial({ color: 0xF7F8F9, metalness: 0.18, roughness: 0.42 });
     const chrome = new T.MeshStandardMaterial({ color: 0xC3D8E6, metalness: 1.0, roughness: 0.14 });
     const rubber = new T.MeshStandardMaterial({ color: 0x14171E, metalness: 0.15, roughness: 0.9 });
     const glass = new T.MeshStandardMaterial({ color: 0x0B2230, metalness: 0.9, roughness: 0.1, transparent: true, opacity: 0.62 });
