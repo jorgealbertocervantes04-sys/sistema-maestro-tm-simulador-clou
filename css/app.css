@@ -11,12 +11,12 @@
 
   --cyan: #FB6500;
   --red: #FF003C;
-  --orange: #FF6D00;
+  --orange: #c45908;
   --green: #00FF66;
   --amber: #F6A334;
   --yellow: #F0C813;
 
-  --ink: #F2F7FA;
+  --ink: #b8c7cf;
   --ink-2: #A9BFD0;
   --ink-3: #7E96AA; /* subido de #63788C: 3.45:1 → 5.1:1 de contraste sobre --void (AA) */
   --ink-1: var(--ink);
@@ -480,7 +480,7 @@ ul.mini li { font-size: var(--t-sm); color: var(--ink-2); line-height: 1.5; marg
 .cl-head h3 { font-size: 1.1rem; margin-top: .25rem; }
 .cl-head h3 b { color: var(--cyan); letter-spacing: .12em; }
 .qr-box { width: 190px; height: 190px; margin: 0 auto 1rem; padding: 9px; border-radius: 10px;
-  background: #fff; display: grid; place-items: center; }
+  background: #b7b0b0; display: grid; place-items: center; }
 .qr-box svg { display: block; }
 #vote-results { margin-top: 1.2rem; display: grid; gap: .55rem; }
 .vote-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .3rem; }
@@ -701,7 +701,7 @@ button.chip:hover { border-color: var(--cyan); color: var(--cyan); }
 
 /* ---- documento firmado (el origen) ---- */
 .doc {
-  background: #F4F1EA; color: #1A1A18; border-radius: 6px;
+  background: #e9e1d0; color: #1A1A18; border-radius: 6px;
   padding: clamp(1.3rem, 3vw, 2.2rem); position: relative; overflow: hidden;
   box-shadow: 0 40px 90px rgba(0,0,0,.7); font-family: var(--font-body);
   transform: rotate(-.35deg);
@@ -867,7 +867,7 @@ body.phase1 .rail-mid { flex: 0 1 auto; min-width: 0; }
   background: linear-gradient(180deg, rgba(11, 35, 65,.94) 0%, rgba(11, 35, 65,.86) 60%, rgba(11, 35, 65,.7) 100%); }
 .mc-intro { text-align: center; max-width: 78ch; margin: 0 auto 1.5rem; }
 .mc-h { font-size: clamp(1.5rem, 3.2vw, 2.6rem); margin: .3rem 0 .7rem; }
-.mc-h2 { font-family: var(--font-display); font-size: 1.1rem; margin: .2rem 0 .9rem; color: #fff; }
+.mc-h2 { font-family: var(--font-display); font-size: 1.1rem; margin: .2rem 0 .9rem; color: #bab2b2; }
 .mc-cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 1rem; }
 .mc-case { text-align: left; background: rgba(7,13,29,.86); border: 1px solid var(--line); border-radius: var(--r-md);
   padding: 1.1rem; cursor: pointer; color: var(--ink); transition: all .22s var(--ease); display: flex; flex-direction: column; gap: .35rem; }
@@ -898,10 +898,10 @@ body.phase1 .rail-mid { flex: 0 1 auto; min-width: 0; }
 .mc-opts { display: grid; gap: .45rem; }
 .mc-opt { display: flex; gap: .55rem; align-items: flex-start; text-align: left; background: rgba(255,255,255,.025); border: 1px solid var(--line);
   border-radius: 8px; padding: .6rem .7rem; color: var(--ink-2); font: 500 .855rem/1.42 var(--font-body); cursor: pointer; transition: all .18s var(--ease); }
-.mc-opt:not(:disabled):hover { border-color: rgba(251, 101, 0,.45); color: var(--ink); background: rgba(251, 101, 0,.05); }
+.mc-opt:not(:disabled):hover { border-color: rgba(164, 163, 163, 0.45); color: var(--ink); background: rgba(251, 101, 0,.05); }
 .mc-opt:disabled { cursor: default; opacity: .48; }
 .mc-opt.chosen { opacity: 1; }
-.mc-opt.chosen.good { border-color: var(--green); background: rgba(0,255,102,.09); color: #fff; }
+.mc-opt.chosen.good { border-color: var(--green); background: rgba(0,255,102,.09); color: #a5a1a1; }
 .mc-opt.chosen.bad { border-color: var(--red); background: rgba(255,0,60,.09); color: #fff; }
 .mc-opt.chosen.mid { border-color: var(--amber); background: rgba(255,196,0,.08); color: #fff; }
 .mc-dot { width: 14px; height: 14px; flex: 0 0 14px; margin-top: .18rem; }
@@ -1423,7 +1423,7 @@ body.phase1 .rail-mid { flex: 0 1 auto; min-width: 0; }
 .ins-li{display:flex;align-items:center;gap:.45rem;width:100%;text-align:left;cursor:pointer;
   padding:.34rem .4rem;border-radius:7px;background:transparent;border:0;
   border-left:2px solid var(--lc,rgba(255,255,255,.14));color:var(--ink-2);transition:.14s}
-.ins-li:hover{background:rgba(251, 101, 0,.1);color:#fff}
+.ins-li:hover{background:rgba(251, 101, 0,.1);color:#dbd4d4}
 .ins-li i{font-style:normal;font-family:var(--f-title);font-size:.6rem;color:var(--lc,var(--cyan));
   flex:0 0 15px;text-align:right}
 .ins-li span{flex:1;font-size:.8rem;line-height:1.25}
