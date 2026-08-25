@@ -35,11 +35,6 @@
       <h2 class="title" style="font-size:1.4rem">Conectando con la sala…</h2>
     </div>
   </main>
-  <div id="v-taller-link" style="display:none;margin-top:1rem">
-    <a href="#" id="ir-al-taller" class="btn wide">Ir a mi taller individual →</a>
-    <a href="#" id="ir-al-simulador" class="btn wide ghost" style="margin-top:.6rem">Explorar el simulador completo, a mi ritmo →</a>
-  </div>
-  <p id="v-sim-help" style="display:none;font-size:.8rem;color:var(--ink-3);text-align:center;margin:.6rem 0 0">Puedes explorarlo cuantas veces quieras, a tu propio paso. Lo que decidas ahí es solo para ti, no afecta la votación del grupo.</p>
   <footer class="kicker">Tu voto es anónimo. Solo se muestra el porcentaje del grupo.</footer>
 </div>
 
@@ -87,9 +82,8 @@
       const j = await r.json();
       attendeeId = j.attendeeId;
       sessionStorage.setItem(storeKey, attendeeId);
-      showTallerLink();
       tick();
-      setInterval(tick, 1000);
+      setInterval(tick, 2000);
     } catch (e) {
       main.innerHTML = card('No se pudo registrar', 'Verifica tu conexión e intenta de nuevo.') +
         '<button class="btn wide" id="retry" style="margin-top:.8rem">Reintentar</button>';
@@ -111,25 +105,16 @@
     }
   }
 
-  function posHeader(p) {
-    if (!p || (!p.act && !p.chapter && !p.slideTitle)) return '';
-    return '<div class="kicker c-cyan" style="margin-bottom:.6rem">' + (p.act ? p.act + ' · ' : '') + (p.slideTitle || p.chapter || '') + '</div>';
-  }
-
   function draw(p) {
     if (!p || !p.options || !p.options.length) {
-      const sid = p ? p.slideId : null;
-      if (sid === lastSlide) return; /* mismo momento de la clase: no repintar de más */
-      lastSlide = sid;
-      main.innerHTML = '<div class="panel pad">' + posHeader(p) +
-        '<h2 class="title" style="font-size:1.15rem;margin:.2rem 0 .5rem">Vas siguiendo la clase en vivo</h2>' +
-        '<p class="lede" style="opacity:.75">Esta pantalla avanza sola conforme el facilitador avanza. Cuando toque tu turno de participar, la pregunta va a aparecer aquí sin que hagas nada.</p></div>';
+      main.innerHTML = card('Esperando la siguiente decisión', 'Mantén esta pantalla abierta. Cuando el facilitador abra una votación, aparecerá aquí.');
+      lastSlide = null;
       return;
     }
     if (voted[p.slideId]) return;
     if (p.slideId !== lastSlide) {
       lastSlide = p.slideId;
-      main.innerHTML = '<div class="panel pad">' + posHeader(p) + '<div class="kicker c-cyan">Tu turno de participar</div>' +
+      main.innerHTML = '<div class="panel pad"><div class="kicker c-cyan">Tu decisión</div>' +
         '<h2 class="title" style="font-size:1.3rem;margin:.4rem 0 1rem">' + (p.question || '¿Qué harías tú?') + '</h2>' +
         p.options.map(function (o) {
           return '<button class="choice" data-k="' + o.key + '"><span class="ck">' + o.key + '</span>' +
@@ -204,23 +189,9 @@
     });
   }
 
-  /* ---------------- taller individual + simulador libre: mismo QR, mismo attendeeId ---------------- */
-  function showTallerLink() {
-    if (!room) return;
-    const box = document.getElementById('v-taller-link');
-    const a = document.getElementById('ir-al-taller');
-    const sim = document.getElementById('ir-al-simulador');
-    const simHelp = document.getElementById('v-sim-help');
-    if (!box || !a) return;
-    a.href = 'taller.html?room=' + room;
-    if (sim) sim.href = 'index.html' + (room && attendeeId ? '?room=' + room + '&participante=' + attendeeId : '');
-    if (simHelp) simHelp.style.display = 'block';
-    box.style.display = 'block';
-  }
-
   /* ---------------- arranque ---------------- */
   attendeeId = sessionStorage.getItem(storeKey);
-  if (attendeeId) { showTallerLink(); tick(); setInterval(tick, 1000); }
+  if (attendeeId) { tick(); setInterval(tick, 2000); }
   else askName();
 })();
 </script>

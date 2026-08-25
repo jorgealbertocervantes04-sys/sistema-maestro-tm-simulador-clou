@@ -61,7 +61,7 @@
     camera = new T.PerspectiveCamera(42, w.innerWidth / w.innerHeight, 0.1, 600);
     setPreset('opening', 0);
 
-    ambient = new T.AmbientLight(0x3E5A78, 1.25); scene.add(ambient);
+    ambient = new T.AmbientLight(0x2C4A68, 0.9); scene.add(ambient);
     scene.add(new T.HemisphereLight(0x4E7FA6, 0x050A14, 0.45));
     keyLight = new T.DirectionalLight(0x8FD8FF, 1.25);
     keyLight.position.set(-18, 22, 14); scene.add(keyLight);

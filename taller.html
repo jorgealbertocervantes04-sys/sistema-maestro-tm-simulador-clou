@@ -6,11 +6,7 @@
 <title>Taller individual · Formando el Trayecto del Instructor</title>
 <link rel="stylesheet" href="css/app.css">
 <style>
-  body.taller-page {
-    min-height: 100vh; padding: 1.2rem 1rem 4rem;
-    overflow: auto; -webkit-overflow-scrolling: touch;
-    background: radial-gradient(ellipse at 50% 0%, #061024 0%, #0B2341 65%);
-  }
+  body.taller-page { min-height: 100vh; padding: 1.2rem 1rem 4rem; }
   .tl-wrap { max-width: 720px; margin: 0 auto; }
   .tl-head { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem; }
   .tl-step { margin-bottom: 1.4rem; }
@@ -36,7 +32,6 @@
     </span>
     <div><div class="kicker">Taller individual</div><div class="kicker c-cyan" id="room">Sala —</div></div>
   </div>
-  <a href="#" id="ir-a-votar" class="kicker" style="display:none;text-decoration:underline;margin:-.6rem 0 1rem">← Volver a la votación en vivo</a>
 
   <div id="v-gate"></div>
 
@@ -54,8 +49,8 @@
       <div id="paso-3"></div>
     </div>
     <div class="panel pad tl-submit" id="tl-final">
-      <p class="lede" id="tl-final-msg">Completa al menos uno de los tres pasos de arriba para poder enviar tu avance.</p>
-      <button class="btn wide" id="tl-send" disabled>Enviar mi avance al facilitador</button>
+      <p class="lede" id="tl-final-msg">Completa los tres pasos de arriba para poder enviar tus resultados.</p>
+      <button class="btn wide" id="tl-send" disabled>Enviar mis resultados al facilitador</button>
     </div>
   </div>
 </div>
@@ -82,7 +77,7 @@
   document.getElementById('room').textContent = 'Sala ' + (room || '—');
   const storeKey = 'tm_attendee_' + room;
   let attendeeId = sessionStorage.getItem(storeKey);
-  let sentAtN = 0;
+  let sent = false;
 
   function gateCard(t, s) {
     return '<div class="panel pad"><h2 class="title" style="font-size:1.3rem">' + t + '</h2><p class="lede">' + s + '</p></div>';
@@ -144,23 +139,23 @@
     const n = [d1, d2, d3].filter(Boolean).length;
     const btn = document.getElementById('tl-send');
     const msg = document.getElementById('tl-final-msg');
+    if (sent) return;
     if (n === 3) {
-      msg.innerHTML = 'Los tres pasos están completos. ' + (n === sentAtN ? 'Ya se enviaron.' : 'Ya puedes enviar tus resultados.');
-    } else if (n > 0) {
-      msg.textContent = 'Vas ' + n + ' de 3 pasos. Puedes enviar tu avance ahora mismo; no hace falta terminar todo para que quede guardado.' + (n === sentAtN ? ' Ya se envió este avance.' : '');
+      btn.disabled = false;
+      msg.innerHTML = 'Los tres pasos están completos. Ya puedes enviar tus resultados.';
     } else {
-      msg.textContent = 'Completa al menos uno de los tres pasos de arriba para poder enviar tu avance.';
+      btn.disabled = true;
+      msg.textContent = 'Vas ' + n + ' de 3 pasos completos. Termina los que faltan arriba.';
     }
-    btn.disabled = n === 0 || n === sentAtN;
-    btn.textContent = sentAtN > 0 ? 'Actualizar mi envío al facilitador' : 'Enviar mi avance al facilitador';
   }
 
   async function sendResults() {
+    if (sent) return;
+    sent = true;
     const btn = document.getElementById('tl-send');
-    const S = window.State.get();
-    const n = [S.flags.instrumentoHecho, S.flags.evalAplicada, S.flags.microclaseHecha].filter(Boolean).length;
     btn.disabled = true;
     btn.textContent = 'Enviando…';
+    const S = window.State.get();
     try {
       await fetch(API + '/session/' + room + '/taller', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -169,25 +164,15 @@
           instrumentoPts: S.instrumento ? S.instrumento.pts : null,
           instrumentoCriterios: S.instrumento ? S.instrumento.total : null,
           evalAciertos: S.flags.evalAciertos ?? null,
-          microclasePct: S.flags.microclasePct ?? null,
-          instrumentoDetalle: S.instrumento || null,
-          evaluadosDetalle: S.evaluados || null,
-          microclaseDetalle: (window.Microclase && window.Microclase.getDetalle) ? window.Microclase.getDetalle() : null
+          microclasePct: S.flags.microclasePct ?? null
         })
       });
-      sentAtN = n;
-      window.toast('Tu avance quedó guardado con el facilitador.', 'good');
+      document.getElementById('tl-final').innerHTML = '<h2 class="title" style="font-size:1.2rem">¡Listo!</h2><p class="lede">Tus resultados ya quedaron con el facilitador.</p>';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e) {
-      window.toast('No se pudo enviar. Revisa tu conexión e intenta de nuevo.', 'bad');
+      window.toast('No se pudo enviar. Intenta de nuevo.', 'bad');
+      sent = false; btn.disabled = false; btn.textContent = 'Enviar mis resultados al facilitador';
     }
-    checkDone();
-  }
-
-  if (room) {
-    const back = document.getElementById('ir-a-votar');
-    back.style.display = 'block';
-    back.href = 'vote.html?room=' + room;
   }
 
   if (!room) {
