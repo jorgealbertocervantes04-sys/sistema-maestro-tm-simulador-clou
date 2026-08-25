@@ -24,8 +24,8 @@
       skipWarn: 'La falla queda activa y viajará 640 km contigo.'
     },
     {
-      id: 'brakes', anchor: 'brakes', label: 'Convertidor · sistema neumático', dy: -6,
-      title: 'Fuga de aire en manguera de servicio del Convertidor',
+      id: 'brakes', anchor: 'brakes', label: 'Dolly · sistema neumático', dy: -6,
+      title: 'Fuga de aire en manguera de servicio del dolly',
       evidence: [
         ['Caída de presión', '18 psi en 3 min con motor apagado'],
         ['Ubicación', 'Acoplamiento glad-hand del dolly'],

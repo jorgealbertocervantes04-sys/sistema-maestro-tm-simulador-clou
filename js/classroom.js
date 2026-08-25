@@ -20,22 +20,14 @@
     } catch (e) { return null; }
   }
 
-  /* location.pathname SIEMPRE empieza con "/", así que recortar ahí es seguro.
-     Recortar location.href directamente es lo que causaba el bug: si el
-     facilitador abría el sitio sin la barra final (https://dominio.vercel.app,
-     sin "/"), el QR terminaba apuntando a "https://vote.html?room=..." —
-     un dominio inexistente que el celular no podía resolver (pantalla en blanco). */
-  function baseUrl() {
-    const path = location.pathname.replace(/[^/]*$/, '');
-    return location.origin + path;
-  }
-
   function voteUrl() {
-    return baseUrl() + 'vote.html?room=' + room;
+    const base = location.href.replace(/[^/]*$/, '');
+    return base + 'vote.html?room=' + room;
   }
 
   function tallerUrl() {
-    return baseUrl() + 'taller.html?room=' + room;
+    const base = location.href.replace(/[^/]*$/, '');
+    return base + 'taller.html?room=' + room;
   }
 
   let qrMode = 'votacion';
@@ -93,7 +85,7 @@
     try {
       await fetch(API + '/session/' + room + '/poll', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideId: slide.id, question: slide.question || 'Tu decisión', options, ...slidePosition(slide) })
+        body: JSON.stringify({ slideId: slide.id, question: slide.question || 'Tu decisión', options })
       });
     } catch (e) {}
     lastTotal = -1;
@@ -120,82 +112,25 @@
   }
 
   async function downloadGroupEvidence() {
-    const r = effectiveRoom();
-    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
-    w.Evidencia && w.Evidencia.downloadGroup(r, API);
+    if (!room) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
+    w.Evidencia && w.Evidencia.downloadGroup(room, API);
   }
 
   async function downloadAllEvidence() {
-    const r = effectiveRoom();
-    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
-    w.Evidencia && w.Evidencia.downloadAllIndividual(r, API);
+    if (!room) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
+    w.Evidencia && w.Evidencia.downloadAllIndividual(room, API);
   }
 
   async function downloadOneEvidence() {
-    const r = effectiveRoom();
-    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
+    if (!room) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
     const sel = document.getElementById('sel-participante');
     if (!sel || !sel.value) { w.toast && w.toast('Elige un participante de la lista.', 'bad'); return; }
-    w.Evidencia && w.Evidencia.downloadOneIndividual(r, API, sel.value);
-  }
-
-  /* -------- sesiones anteriores --------
-     Deja al facilitador recuperar la evidencia de una clase pasada sin tener
-     que recordar el código de sala. No afecta el QR ni la votación en vivo,
-     que siempre usan la sala abierta ahora mismo (variable `room`). */
-  function effectiveRoom() {
-    const sel = document.getElementById('sel-sesion');
-    return (sel && sel.value) || room;
-  }
-
-  async function loadSessions() {
-    const sel = document.getElementById('sel-sesion');
-    if (!sel) return;
-    try {
-      const r = await fetch(API + '/sessions');
-      if (!r.ok) throw 0;
-      const j = await r.json();
-      const opts = ['<option value="">Sesión actual</option>'].concat(
-        (j.sessions || []).map(s => {
-          const d = s.createdAt ? new Date(s.createdAt).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }) : '';
-          const who = s.groupName || s.facilitator || 'sin nombre';
-          return '<option value="' + s.code + '">' + s.code + ' · ' + d + ' · ' + who + ' (' + s.attendees + ')</option>';
-        })
-      );
-      sel.innerHTML = opts.join('');
-    } catch (e) { w.toast && w.toast('No se pudo cargar la lista de sesiones.', 'bad'); }
-  }
-
-  async function onSessionPicked() {
-    const r = effectiveRoom();
-    if (!r) return;
-    const roster = w.Evidencia && await w.Evidencia.listAttendees(r, API);
-    if (roster) syncParticipantList(roster);
-  }
-
-  /* -------- Google Sheets --------
-     La URL del Apps Script Web App se guarda localmente en este navegador
-     (no en el servidor): cada facilitador la configura una sola vez. */
-  const SHEETS_KEY = 'tm_sheets_url';
-  function configSheets() {
-    const current = localStorage.getItem(SHEETS_KEY) || '';
-    const url = prompt('Pega aquí la URL de tu Google Apps Script Web App (termina en /exec):', current);
-    if (url === null) return;
-    if (url.trim()) localStorage.setItem(SHEETS_KEY, url.trim());
-    else localStorage.removeItem(SHEETS_KEY);
-    w.toast && w.toast(url.trim() ? 'URL de Google Sheets guardada.' : 'URL de Google Sheets borrada.', 'good');
-  }
-  function sendSheets() {
-    const r = effectiveRoom();
-    if (!r) { w.toast && w.toast('Abre la sala primero.', 'bad'); return; }
-    const url = localStorage.getItem(SHEETS_KEY);
-    if (!url) { configSheets(); return; }
-    w.Evidencia && w.Evidencia.sendToSheets(r, API, url);
+    w.Evidencia && w.Evidencia.downloadOneIndividual(room, API, sel.value);
   }
 
   function startPolling() {
     stopPolling();
-    timer = setInterval(refresh, 1000);
+    timer = setInterval(refresh, 1600);
     refresh();
   }
   function stopPolling() { if (timer) clearInterval(timer); timer = null; }
@@ -222,8 +157,7 @@
   function renderTally(p) {
     const box = document.getElementById('vote-results');
     if (!box) return;
-    const selSesion = document.getElementById('sel-sesion');
-    if (!selSesion || !selSesion.value) syncParticipantList(p && p.roster);
+    syncParticipantList(p && p.roster);
     if (!p || !p.options || !p.options.length) { box.innerHTML = '<p class="kicker">Esta diapositiva no tiene votación abierta.</p>'; return; }
     const total = p.total || 0;
     if (total !== lastTotal) { lastTotal = total; w.Audio3D && total > 0 && w.Audio3D.tick(); }
@@ -264,51 +198,28 @@
     return g ? g.key : null;
   }
 
-  /* (clearPoll fue reemplazada por broadcastPosition: ahora cada cambio de escena
-     avisa la posición nueva y limpia la pregunta anterior en el mismo llamado) */
-
-  /* Pregunta de tema, específica de la escena (no el pulso genérico). Se define en
-     content.js con slide.pulse = { question, options }, solo en las escenas donde
-     de verdad aporta — no en todas por inercia. Reutiliza el mismo mecanismo de
-     votación abierta que el pulso manual, pero con una pregunta real del tema. */
-  async function openScenePulse(slide) {
-    if (!room || !slide.pulse) return;
-    try {
-      await fetch(API + '/session/' + room + '/poll', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideId: slide.id, question: slide.pulse.question, options: slide.pulse.options, ...slidePosition(slide) })
-      });
-    } catch (e) {}
-    lastTotal = -1;
-    if (open) startPolling();
-  }
-
-  /* Aunque la escena no tenga pregunta ni pulso, igual avisamos al celular en qué
-     tema va la clase (título legible + acto), para que avance sincronizado contigo
-     sin que el participante tenga que hacer nada. Reutiliza el mismo titleOf/actOf
-     que ya usa el índice interno del facilitador, para no duplicar lógica. */
-  function slidePosition(slide) {
-    const title = (w.Deck && w.Deck.titleOf) ? w.Deck.titleOf(slide) : (slide.title || slide.id);
-    const act = (w.Deck && w.Deck.actOf) ? w.Deck.actOf(slide.chapter) : '';
-    return { slideTitle: title, chapter: slide.chapter || '', act };
-  }
-  async function broadcastPosition(slide) {
+  /* Limpia la votación activa en el servidor: sin esto, el celular de los
+     participantes se queda viendo la última pregunta aunque el facilitador
+     ya haya avanzado a una escena sin decisión (video, teoría, inspección). */
+  async function clearPoll() {
     if (!room) return;
     try {
       await fetch(API + '/session/' + room + '/poll', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideId: slide.id, question: '', options: [], ...slidePosition(slide) })
+        body: JSON.stringify({ slideId: '', question: '', options: [] })
       });
     } catch (e) {}
+    lastTotal = -1;
   }
 
   function onSlide(slide) {
     currentSlide = slide;
     if (!room) return;
-    if (slide.vote && slide.choices) { openPoll(slide); return; }
-    if (slide.pulse) { openScenePulse(slide); return; }
-    broadcastPosition(slide);
-    if (open) { stopPolling(); renderTally(null); }
+    if (slide.vote && slide.choices) openPoll(slide);
+    else {
+      clearPoll();
+      if (open) { stopPolling(); renderTally(null); }
+    }
   }
 
   async function toggle() {
@@ -326,13 +237,8 @@
       document.getElementById('room-code').textContent = c;
       showQr('votacion');
       onSlide(currentSlide);
-      loadSessions();
     } else stopPolling();
   }
-
-  document.addEventListener('change', e => {
-    if (e.target.id === 'sel-sesion') onSessionPicked();
-  });
 
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-apply]');
@@ -342,12 +248,9 @@
     if (e.target.closest('#btn-encuesta-final')) openSatisfaction();
     if (e.target.closest('#btn-qr-votacion')) showQr('votacion');
     if (e.target.closest('#btn-qr-taller')) showQr('taller');
-    if (e.target.closest('#btn-sesiones-refrescar')) loadSessions();
     if (e.target.closest('#btn-evidencia-grupal')) downloadGroupEvidence();
     if (e.target.closest('#btn-evidencia-todos')) downloadAllEvidence();
     if (e.target.closest('#btn-evidencia-uno')) downloadOneEvidence();
-    if (e.target.closest('#btn-sheets')) sendSheets();
-    if (e.target.closest('#btn-sheets-config')) configSheets();
   });
 
   w.Classroom = { toggle, onSlide, isOpen: () => open, roomCode: () => room, showQr };

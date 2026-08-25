@@ -32,7 +32,7 @@
 
   /* Retro personalizada: cruza cada voto del asistente con el tono (bueno/medio/riesgo)
      de la opción que eligió en esa escena, para explicar qué se detectó y por qué. */
-  function buildPersonalFeedback(attendee, votes, satisfaction, slidesById, tallerRows) {
+  function buildPersonalFeedback(attendee, votes, satisfaction, slidesById) {
     const mine = votes.filter(v => v.attendee_id === attendee.id);
     const tally = { good: 0, mid: 0, bad: 0 };
     const risky = [];
@@ -46,8 +46,7 @@
       }
     });
     const sat = satisfaction.find(s => s.attendee_id === attendee.id);
-    const taller = (tallerRows || []).find(t => t.attendee_id === attendee.id) || null;
-    return { totalVotes: mine.length, tally, risky, satisfaction: sat || null, taller };
+    return { totalVotes: mine.length, tally, risky, satisfaction: sat || null };
   }
 
   /* -------- helpers comunes de maquetado del PDF -------- */
@@ -134,33 +133,6 @@
         comments.forEach(c => doc.splitTextToSize('· ' + c.comment, W - 2 * M).forEach(l => ctx.row(l)));
       }
     }
-    ctx.y += 6;
-
-    const taller = data.taller || [];
-    ctx.h2('Taller individual (' + taller.length + ' de ' + data.attendance.length + ' completaron los 3 pasos)');
-    if (!taller.length) ctx.row('Nadie ha enviado sus resultados del taller todavía.');
-    else {
-      const nameById = {}; data.attendance.forEach(a => nameById[a.id] = a.name);
-      const p = k => avg(taller.map(t => ({ ratings: { v: t[k] } })), 'v');
-      ctx.row('Calidad de instrumento (promedio): ' + (p('instrumento_pts') || '—') + ' / 100');
-      ctx.row('Aciertos calificando operadores (promedio): ' + (p('eval_aciertos') || '—'));
-      ctx.row('Desempeño de micro-clase (promedio): ' + (p('microclase_pct') || '—') + '%');
-      ctx.y += 6;
-      taller.forEach(t => ctx.row((nameById[t.attendee_id] || '—') + '  ·  instrumento ' + (t.instrumento_pts ?? '—') + '/100  ·  aciertos ' + (t.eval_aciertos ?? '—') + '  ·  micro-clase ' + (t.microclase_pct ?? '—') + '%'));
-    }
-    ctx.y += 6;
-
-    const nameById2 = {}; data.attendance.forEach(a => nameById2[a.id] = a.name);
-    const simulador = taller.filter(t => t.simulador_ending);
-    ctx.h2('Simulador completo, por su cuenta (' + simulador.length + ' de ' + data.attendance.length + ' lo terminaron)');
-    if (!simulador.length) ctx.row('Nadie ha terminado el recorrido libre del simulador todavía.');
-    else {
-      const ENDING_ES = { desacople: 'Desacople del remolque', descenso: 'Colapso de frenos en descenso', microsueno: 'Microsueño al volante', incidente: 'Incidente en ruta', utilidad: 'Llegó, pero gastó de más', seguro: 'Llegó seguro y a tiempo' };
-      const conteo = {}; simulador.forEach(t => { conteo[t.simulador_ending] = (conteo[t.simulador_ending] || 0) + 1; });
-      Object.keys(conteo).forEach(k => ctx.row((ENDING_ES[k] || k) + ': ' + conteo[k] + ' participante(s)'));
-      ctx.y += 6;
-      simulador.forEach(t => ctx.row((nameById2[t.attendee_id] || '—') + '  ·  ' + (t.simulador_grado || '—') + '  ·  riesgo ' + (t.simulador_riesgo ?? '—') + '%  ·  ' + (ENDING_ES[t.simulador_ending] || t.simulador_ending)));
-    }
     return doc;
   }
 
@@ -176,7 +148,7 @@
     ctx.row('Asistencia registrada: ' + new Date(attendee.joined_at).toLocaleString('es-MX'));
     ctx.y += 10;
 
-    const fb = buildPersonalFeedback(attendee, data.votes, data.satisfaction, slidesById, data.taller);
+    const fb = buildPersonalFeedback(attendee, data.votes, data.satisfaction, slidesById);
     ctx.h2('Decisiones tomadas en la sesión');
     if (!fb.totalVotes) {
       ctx.row('No se registraron votos de este participante en esta sesión.');
@@ -201,72 +173,6 @@
       const r = fb.satisfaction.ratings || {};
       Object.keys(r).forEach(k => ctx.row(k + ': ' + r[k] + ' / 5'));
       if (fb.satisfaction.comment) doc.splitTextToSize('Comentario: "' + fb.satisfaction.comment + '"', W - 2 * M).forEach(l => ctx.row(l));
-    }
-    ctx.y += 10;
-
-    /* --- taller individual: instrumento propio, operadores evaluados, micro-clase --- */
-    const t = fb.taller;
-    ctx.h2('Taller individual');
-    if (!t) {
-      ctx.row('No envió resultados del taller individual en esta sesión.');
-    } else {
-      const inst = t.instrumento_detalle;
-      if (inst) {
-        ctx.row('Instrumento de evaluación: ' + (inst.total || t.instrumento_criterios || 0) + ' criterios en ' + (inst.cats || 0) + ' categorías, ' + (inst.criticos || 0) + ' críticos. Calidad: ' + (inst.pts ?? t.instrumento_pts ?? '—') + '/100.');
-        if (inst.trampas && inst.trampas.length) {
-          ctx.row('Incluyó criterios-trampa (premian conductas de riesgo):', 12);
-          inst.trampas.forEach(tr => doc.splitTextToSize('· ' + tr, W - 2 * M - 10).forEach(l => ctx.row(l, 13)));
-        }
-      } else if (t.instrumento_pts != null) {
-        ctx.row('Instrumento: ' + t.instrumento_criterios + ' criterios · calidad ' + t.instrumento_pts + '/100.');
-      } else {
-        ctx.row('No construyó el instrumento de evaluación.');
-      }
-      ctx.y += 4;
-
-      const evs = t.evaluados_detalle;
-      if (evs && evs.length) {
-        ctx.row('Operadores calificados con su propio instrumento (aciertos: ' + (t.eval_aciertos ?? '—') + '):', 12);
-        evs.forEach(o => {
-          const dif = Math.abs((o.real || 0) - (o.calif || 0));
-          ctx.row('· ' + o.nombre + '  —  desempeño real ' + o.real + '%  ·  su calificación ' + o.calif + '%' + (dif <= 10 ? '  (consistente)' : dif <= 22 ? '  (revisar criterio)' : '  (brecha significativa)'), 13);
-        });
-      }
-      ctx.y += 4;
-
-      const mc = t.microclase_detalle;
-      if (mc) {
-        ctx.row('Micro-clase impartida a ' + (mc.operador || 'un operador') + ': desempeño ' + (mc.pct ?? t.microclase_pct ?? '—') + '%.');
-        (mc.pasos || []).forEach(p => {
-          if (!p.eleccion) return;
-          doc.splitTextToSize('· ' + p.momento + ': "' + p.eleccion + '"' + (p.valor === 3 ? ' — correcto' : p.valor === 0 ? ' — a corregir' : ' — parcial'), W - 2 * M - 10).forEach(l => ctx.row(l, 13));
-        });
-      } else if (t.microclase_pct != null) {
-        ctx.row('Micro-clase: desempeño ' + t.microclase_pct + '%.');
-      }
-    }
-    ctx.y += 10;
-
-    /* --- recorrido libre del simulador completo, hecho por su cuenta desde el celular --- */
-    ctx.h2('Simulador completo (a su propio ritmo)');
-    if (!t || !t.simulador_ending) {
-      ctx.row('No terminó el recorrido libre del simulador en esta sesión.');
-    } else {
-      const ENDING_ES = { desacople: 'Desacople del remolque', descenso: 'Colapso de frenos en descenso', microsueno: 'Microsueño al volante', incidente: 'Incidente en ruta', utilidad: 'Llegó, pero gastó de más', seguro: 'Llegó seguro y a tiempo' };
-      ctx.row('Resultado: ' + (t.simulador_grado || '—') + '   ·   Desenlace: ' + (ENDING_ES[t.simulador_ending] || t.simulador_ending) + '   ·   Índice de riesgo: ' + (t.simulador_riesgo ?? '—') + '%');
-      const sd = t.simulador_detalle;
-      if (sd) {
-        ctx.y += 4;
-        if (sd.strengths && sd.strengths.length) {
-          ctx.row('Fortalezas demostradas:', 12);
-          sd.strengths.forEach(x => doc.splitTextToSize('· ' + x, W - 2 * M - 10).forEach(l => ctx.row(l, 13)));
-        }
-        ctx.y += 4;
-        if (sd.gaps && sd.gaps.length) {
-          ctx.row('Áreas de mejora detectadas:', 12);
-          sd.gaps.forEach(x => doc.splitTextToSize('· ' + x, W - 2 * M - 10).forEach(l => ctx.row(l, 13)));
-        }
-      }
     }
     return doc;
   }
@@ -310,49 +216,5 @@
     return data ? data.attendance : [];
   }
 
-  /* -------- exportar a Google Sheets vía Apps Script Web App --------
-     Se manda como text/plain (no application/json) a propósito: así el navegador
-     no dispara un preflight OPTIONS, que Apps Script no siempre resuelve bien.
-     El script de Google recibe el texto y hace JSON.parse él mismo. */
-  function buildSheetsRows(data, slidesById) {
-    const tallerById = {}; (data.taller || []).forEach(t => tallerById[t.attendee_id] = t);
-    return data.attendance.map(a => {
-      const fb = buildPersonalFeedback(a, data.votes, data.satisfaction, slidesById, data.taller);
-      const t = tallerById[a.id] || {};
-      const sat = fb.satisfaction ? fb.satisfaction.ratings || {} : {};
-      const satAvg = Object.keys(sat).length ? (Object.values(sat).reduce((x, y) => x + y, 0) / Object.keys(sat).length).toFixed(1) : '';
-      return {
-        name: a.name, joinedAt: a.joined_at,
-        votesGood: fb.tally.good, votesMid: fb.tally.mid, votesBad: fb.tally.bad, votesTotal: fb.totalVotes,
-        satisfactionAvg: satAvg, satisfactionComment: fb.satisfaction ? (fb.satisfaction.comment || '') : '',
-        instrumentoPts: t.instrumento_pts ?? '', instrumentoCriterios: t.instrumento_criterios ?? '',
-        instrumentoCriticos: t.instrumento_detalle ? t.instrumento_detalle.criticos : '',
-        instrumentoTrampas: t.instrumento_detalle && t.instrumento_detalle.trampas ? t.instrumento_detalle.trampas.length : '',
-        evalAciertos: t.eval_aciertos ?? '', microclasePct: t.microclase_pct ?? '',
-        microclaseOperador: t.microclase_detalle ? t.microclase_detalle.operador : '',
-        simuladorEnding: t.simulador_ending || '', simuladorGrado: t.simulador_grado || '', simuladorRiesgo: t.simulador_riesgo ?? '',
-        instrumentoDetalle: t.instrumento_detalle || null, evaluadosDetalle: t.evaluados_detalle || null, microclaseDetalle: t.microclase_detalle || null, simuladorDetalle: t.simulador_detalle || null
-      };
-    });
-  }
-
-  async function sendToSheets(room, api, sheetsUrl) {
-    if (!sheetsUrl) { w.toast && w.toast('Configura primero la URL de Google Sheets.', 'bad'); return; }
-    const data = await withReport(room, api);
-    if (!data) return;
-    const rows = buildSheetsRows(data, slideIndex());
-    try {
-      const r = await fetch(sheetsUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ session: data.session, rows })
-      });
-      if (!r.ok) throw 0;
-      w.toast && w.toast('Evidencia enviada a Google Sheets (' + rows.length + ' participantes).', 'good');
-    } catch (e) {
-      w.toast && w.toast('No se pudo enviar a Google Sheets. Revisa la URL del script.', 'bad');
-    }
-  }
-
-  w.Evidencia = { downloadGroup, downloadAllIndividual, downloadOneIndividual, listAttendees, sendToSheets };
+  w.Evidencia = { downloadGroup, downloadAllIndividual, downloadOneIndividual, listAttendees };
 })(window);

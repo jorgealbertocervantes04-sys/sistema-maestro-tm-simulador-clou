@@ -13,7 +13,7 @@
 
   function loop() {
     const el = document.getElementById('p-timer');
-    if (el) { el.textContent = fmt(elapsed()); el.classList.toggle('paused', paused); }
+    if (el) el.textContent = fmt(elapsed());
   }
 
   function toggle() {

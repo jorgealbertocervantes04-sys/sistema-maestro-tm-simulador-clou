@@ -36,10 +36,10 @@
   };
 
   const MOODS = {
-    normal: { neon: 0xFB6500, fog: 0x6B7078, key: 0x8FD8FF, rim: 0xFB6500, bloom: 0.7 },
-    danger: { neon: 0xFF003C, fog: 0x746164, key: 0xFFA8BC, rim: 0xFF003C, bloom: 0.95 },
-    warn:   { neon: 0xFF6D00, fog: 0x746A5C, key: 0xE8CBAE, rim: 0xFF6D00, bloom: 0.78 },
-    safe:   { neon: 0x00FF66, fog: 0x647469, key: 0xC4FFDE, rim: 0x00FF66, bloom: 0.72 }
+    normal: { neon: 0xFB6500, fog: 0x03060F, key: 0x8FD8FF, rim: 0xFB6500, bloom: 0.7 },
+    danger: { neon: 0xFF003C, fog: 0x0C0308, key: 0xFFA8BC, rim: 0xFF003C, bloom: 0.95 },
+    warn:   { neon: 0xFF6D00, fog: 0x0A0602, key: 0xE8CBAE, rim: 0xFF6D00, bloom: 0.78 },
+    safe:   { neon: 0x00FF66, fog: 0x020A06, key: 0xC4FFDE, rim: 0x00FF66, bloom: 0.72 }
   };
 
   let keyLight, rimA, rimB, ambient, fillLight;
@@ -56,8 +56,7 @@
     renderer.toneMappingExposure = 1.08;
 
     scene = new T.Scene();
-    scene.background = new T.Color(0x6B7078);
-    scene.fog = new T.FogExp2(0x6B7078, 0.0085);
+    scene.fog = new T.FogExp2(0x03060F, 0.0138);
 
     camera = new T.PerspectiveCamera(42, w.innerWidth / w.innerHeight, 0.1, 600);
     setPreset('opening', 0);

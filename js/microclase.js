@@ -312,23 +312,5 @@
       </div>`;
   }
 
-  /* Detalle completo para evidencia: qué eligió en cada momento y qué marcó
-     de la rúbrica de ejecución, para el PDF y para la fila en Sheets. */
-  function getDetalle() {
-    if (!done) return null;
-    return {
-      operador: sel ? sel.n : null,
-      clave: sel ? sel.clave : null,
-      pct: Math.round(((diseno() / 12) * 0.6 + (ejec() / 6) * 0.4) * 100),
-      pasos: STEPS.map((s, i) => ({
-        momento: s.t,
-        eleccion: picks[i] !== undefined ? s.opts[picks[i]].t : null,
-        valor: picks[i] !== undefined ? s.opts[picks[i]].v : null,
-        feedback: picks[i] !== undefined ? s.opts[picks[i]].f : null
-      })),
-      rubrica: RUBRICA.map((r, i) => ({ item: r, cumplido: !!marks['r' + i] }))
-    };
-  }
-
-  w.Microclase = { mount, pct: () => (done ? Math.round(((diseno() / 12) * 0.6 + (ejec() / 6) * 0.4) * 100) : null), done: () => done, getDetalle };
+  w.Microclase = { mount, pct: () => (done ? Math.round(((diseno() / 12) * 0.6 + (ejec() / 6) * 0.4) * 100) : null), done: () => done };
 })(window);
