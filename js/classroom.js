@@ -11,7 +11,7 @@
     try {
       const r = await fetch(API + '/session', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ facilitator: w.State.get().facilitator || null })
+        body: JSON.stringify({ facilitator: w.State.get().nombre || null })
       });
       if (!r.ok) throw 0;
       const j = await r.json();
@@ -36,9 +36,26 @@
     document.getElementById('btn-qr-votacion').classList.toggle('on', mode === 'votacion');
     document.getElementById('btn-qr-taller').classList.toggle('on', mode === 'taller');
     document.getElementById('qr-caption').textContent = mode === 'taller'
-      ? 'Cada participante escanea y arma su propia evaluación y su propia micro-clase, a su ritmo.'
+      ? 'El instructor escanea este código y entra a SU sesión de evaluación (taller individual). Si su celular no abre con el QR, que escriba la dirección y el código de sala que se muestran abajo.'
       : 'Los participantes escanean el código y votan desde su celular.';
-    if (room) drawQR(mode === 'taller' ? tallerUrl() : voteUrl());
+    if (room) {
+      const url = mode === 'taller' ? tallerUrl() : voteUrl();
+      drawQR(url);
+      renderJoinInfo();
+      const lnk = document.getElementById('lnk-taller');
+      if (lnk) lnk.href = url;
+    }
+  }
+
+  /* Info de acceso manual a la sesión: URL + código de sala, por si el QR
+     no escanea bien en pantalla o el equipo del instructor lo bloquea. */
+  function renderJoinInfo() {
+    const cap = document.getElementById('qr-caption');
+    if (!cap || !room) return;
+    const url = qrMode === 'taller' ? tallerUrl() : voteUrl();
+    cap.innerHTML = cap.textContent +
+      '<br><span class="join-url">' + url + '</span>' +
+      '<br>Código de sala: <b class="num join-code">' + room + '</b>';
   }
 
   function drawQR(url) {

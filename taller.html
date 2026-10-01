@@ -175,8 +175,27 @@
     }
   }
 
+  function joinUrl() {
+    const base = location.href.replace(/[^/]*$/, '');
+    return base + 'taller.html';
+  }
+
   if (!room) {
-    document.getElementById('v-gate').innerHTML = gateCard('Falta el código de sala', 'Escanea de nuevo el código QR del facilitador.');
+    document.getElementById('v-gate').innerHTML =
+      '<div class="panel pad">' +
+        '<h2 class="title" style="font-size:1.3rem">Falta el código de sala</h2>' +
+        '<p class="lede">Escanea de nuevo el código QR «Sesión del instructor» que muestra el facilitador en pantalla, o escribe la dirección con el código que te dicta:</p>' +
+        '<p style="margin:.8rem 0"><code class="join-url">' + joinUrl() + '?room=XXXXXX</code></p>' +
+        '<div style="display:flex;flex-direction:column;gap:.7rem;max-width:340px">' +
+          '<input class="ev-in" id="room-in" placeholder="Código de sala (ej. K7Q2M)" maxlength="10" style="text-transform:uppercase">' +
+          '<button class="btn wide" id="room-go">Entrar a mi sesión</button>' +
+        '</div>' +
+      '</div>';
+    document.getElementById('room-go').addEventListener('click', () => {
+      const v = document.getElementById('room-in').value.trim().toUpperCase();
+      if (!v) return window.toast('Escribe el código de sala.', 'mid');
+      location.href = 'taller.html?room=' + encodeURIComponent(v);
+    });
   } else if (attendeeId) {
     startWork();
   } else {
