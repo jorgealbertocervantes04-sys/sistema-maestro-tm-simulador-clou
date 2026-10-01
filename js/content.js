@@ -176,6 +176,7 @@
         <div class="panel accent-red pad w-md mx brackets c-red">
           <div class="kicker c-red">T–92 días · 07:12 h · origen de la cadena causal</div>
           <h2 class="title glow-red" style="margin:.5rem 0 1.3rem">El Origen</h2>
+          <p class="lede" style="margin-bottom:1.1rem">Un candidato a operador, una validación de 4 minutos y una firma que autorizó todo lo que vino después. Antes de auditar tu propia decisión, mira cómo se ve una firma sin evidencia.</p>
           <div class="doc">
             <div class="doc-h">
               <b>Validación de competencias del operador</b>
@@ -211,7 +212,7 @@
 
     /* ============ AUDITORÍA FORENSE (INICIO DE LA CADENA) ============ */
     {
-      id: 'patio-brief', chapter: 'Patio', cam: 'top', mood: 'warn', speed: 0, anim: 'enter',
+      id: 'patio-brief', chapter: 'Bloque A · Decidir si opera', cam: 'top', mood: 'warn', speed: 0, anim: 'enter',
       html: (S) => `
         <div class="panel accent-cyan pad w-md mx brackets c-cyan" style="text-align:center">
           <div style="width:56px;height:56px;color:var(--cyan);margin:0 auto .9rem">${I('scan')}</div>
@@ -225,15 +226,105 @@
       note: 'Entrega el control a un participante distinto para cada hallazgo. Pide que argumente en voz alta antes de decidir.'
     },
 
+    /* ============ BLOQUE A · EL CANDIDATO: DECIDIR SI OPERA ============ */
+    {
+      id: 'candidato-brief', chapter: 'Bloque A · Decidir si opera', cam: 'cabin', mood: 'warn', speed: 0, anim: 'enter', vote: true,
+      question: 'Tiene 2 horas para reportarse en la caseta. Tu firma es la única barrera: ¿qué haces?',
+      html: () => `
+        <div class="panel accent-orange pad w-md mx brackets">
+          <div class="kicker c-orange">Evaluación de ingreso · candidato nuevo · hoy</div>
+          <h2 class="title" style="margin-top:.5rem">El Candidato: Kevin "el Kevín" Sandoval</h2>
+          ${media('videos/llamada.mp4', 'Llamada del candidato la noche anterior: llegó tarde a la entrevista y promete cumplir todo')}
+          <div class="dossier" style="margin:1rem 0">
+            <div class="dossier-row"><span>Experiencia declarada</span><b>4 años Full · 2 empresas (una sin referencias)</b></div>
+            <div class="dossier-row"><span>Licencia SCT</span><b>Vigente · próxima revisión en 3 meses</b></div>
+            <div class="dossier-row"><span>Entrevista</span><b class="c-amber">Llegó 25 min tarde; respondió por teléfono durante toda la sesión</b></div>
+            <div class="dossier-row"><span>Prueba de conocimiento</span><b class="c-green">92/100 — la más alta del mes</b></div>
+            <div class="dossier-row"><span>Su frase de cierre</span><b class="c-red">"Con tal de que me den la unidad, yo le juro que no lo voy a botar"</b></div>
+          </div>
+          <p class="lede">Recibiste su expediente con señales que jalan en direcciones opuestas: papel impecable, conducta de riesgo verificable y una promesa verbal como único compromiso. El patio espera unidad libre y Recursos Humanos urge el cierre de vacante.</p>
+          <p class="lede"><strong class="c-orange">Antes de elegir, escribe tu razón en una línea: eso es lo que se evalúa, no la letra.</strong></p>
+          ${mods(['Evaluación de ingreso de operadores', 'Detección de perfiles de riesgo', 'Peso de la firma del instructor'])}
+        </div>`,
+      choices: [
+        { key: 'A', label: 'Firmar la validación: el examen dice que sabe', hint: 'Papel completo, sin práctica en unidad', tone: 'bad', cost: 6000, driver: { trust: -8 }, flag: 'firmaSinEvidencia',
+          verdict: 'Registraste un número de examen, no una competencia. Validaste sin observarlo operar: es la misma hoja VC-0912, folio distinto. Si falla, tu firma —no su examen— autorizó la salida.' },
+        { key: 'B', label: 'Rechazarlo: la actitud no me cuadra', hint: 'Corte limpio, sin evaluar nada', tone: 'mid', cost: 2000, xp: 30, flag: 'rechazoSinEvidencia',
+          verdict: 'Tu instinto puede tener razón, pero no deja evidencia ni aprendizaje: rechazaste por impresión, no por criterio documentado. Hoy perdiste un operador posible y mañana repetirás el error con alguien que sí servía.' },
+        { key: 'C', label: 'Evaluarlo en patio antes de firmar: maniobra, acople y descargo honesto', hint: 'Cuesta tu tiempo; decide con hechos', tone: 'good', xp: 170, driver: { trust: 8 }, flag: 'evaluoEnVivo',
+          verdict: 'Correcto. Pusiste la evidencia antes que el papel y que la corazonada: una maniobra observada vale más que 92 puntos de examen. Lo que detectes en los próximos diez minutos define si entra o no —y queda firmado con fundamento.' }
+      ],
+      note: 'Pregunta al grupo antes de votar: ¿cuántas validaciones firma tu empresa al mes sin ver operar al candidato? Anota el número: esa es la exposición real de la firma.'
+    },
+
+    {
+      id: 'maniobras-candidato', chapter: 'Bloque A · Decidir si opera', cam: 'axle', mood: 'danger', speed: 0, anim: 'enter', vote: true,
+      question: 'Terminó la prueba en patio: 2 fallas críticas ocultas bajo un desempeño impecable. ¿Qué registras y qué decides?',
+      html: () => `
+        <div class="panel accent-red pad w-md mx">
+          <div class="kicker c-red">Km cero de verdad · prueba práctica observada por ti</div>
+          <h2 class="title" style="margin-top:.5rem">La Prueba de Maniobras</h2>
+          ${media('videos/maniobra.mp4', 'Práctica de maniobras del candidato en patio cerrado')}
+          <div class="dossier" style="margin:1rem 0">
+            <div class="dossier-row"><span>Reversa en línea · 12 m</span><b class="c-green">Perfecta: 41 segundos, sin tope</b></div>
+            <div class="dossier-row"><span>Acoplamiento de quinta rueda</span><b class="c-amber">No hizo tirón de prueba · dijo "ya jaló, jefe"</b></div>
+            <div class="dossier-row"><span>Inspección pre-operativa</span><b class="c-red">Pasó por encima de la dual interior sin medirla</b></div>
+            <div class="dossier-row"><span>Círculo ciego</span><b class="c-green">Escaneó espejos completo en cada cambio</b></div>
+            <div class="dossier-row"><span>Tu pregunta de cierre</span><b class="c-amber">"¿Qué habrías hecho distinto?" → "Nada, todo me salió bien"</b></div>
+          </div>
+          <p class="lede">Maniobra brillante. Dos omisiones críticas —una mecánica, una de autodiagnóstico— y la habilidad de verse perfecto mientras las comete. En examen escrito sacó 92.</p>
+          ${mods(['Detección de actitudes de riesgo', 'Registro y evidencia de evaluación', 'Decisión de ingreso: operar o no'])}
+        </div>`,
+      choices: [
+        { key: 'A', label: 'Validarlo: la maniobra compensa el detalle', hint: 'Rara vez se ve un manejo así', tone: 'bad', cost: 15000, driver: { trust: -6 }, flag: 'validoConOmision',
+          verdict: 'Canjeaste seguridad por espectáculo. El tirón de prueba omitido viaja 640 km con cada carga; el "todo me salió bien" garantiza que nunca lo va a detectar. Acabas de admitir al tipo de operador que produce expedientes como el VC-0912.' },
+        { key: 'B', label: 'Corregir en el momento y reevaluar la misma sesión', hint: 'Le enseñas y lo vuelves a observar', tone: 'mid', xp: 60, cost: 1500, flag: 'corrigioYReevaluo',
+          verdict: 'Mejor que firmar a ciegas: le diste la oportunidad de demostrar corrección. Pero ojo —evaluar justo después de corregir mide obediencia inmediata, no hábito consolidado. Regístralo como condicional, no como competente.' },
+        { key: 'C', label: 'Probar si corrige solo: otro recorrido sin avisarle nada', hint: 'Segunda vuelta sin tu intervención', tone: 'good', xp: 180, driver: { trust: 10 }, flag: 'proboAutocorreccion',
+          verdict: 'Correcto. La segunda vuelta sin instrucciones separó al que aprende del que actúa: si repite la omisión, ya tienes evidencia de dos sesiones —eso no son impresiones, es diagnóstico. Tu hoja ahora justifica la decisión con datos observables.' }
+      ],
+      note: 'Antes de votar, pide al instructor nombrar EN VOZ ALTA qué registraría en la hoja. La calidad de lo que escribe es parte de la evaluación: evidencia clara vs. "se vio bien".'
+    },
+
+    {
+      id: 'hoja-candidato', chapter: 'Bloque A · Decidir si opera', cam: 'top', mood: 'warn', speed: 0, anim: 'left', vote: true,
+      question: 'RH exige el dictamen hoy con la firma de tu responsable de plaza. ¿Cómo llenas la hoja?',
+      html: (S) => {
+        const probo = !!S.flags.proboAutocorreccion;
+        return `
+        <div class="panel accent-cyan pad w-md mx brackets c-cyan">
+          <div class="kicker">Dictamen de ingreso · formato oficial · se archiva y audita</div>
+          <h2 class="title" style="margin-top:.5rem">Llenar la Hoja es Firmar Consecuencias</h2>
+          ${media('videos/pablo.mp4', 'Un instructor TM llena su evaluación con evidencia: qué observa, qué anota, qué firma')}
+          <div class="dossier" style="margin:1rem 0">
+            <div class="dossier-row"><span>Lo que viste</span><b>${probo ? 'Dos recorridos completos con resultado observable' : 'Un recorrido con dos omisiones y sin contraprueba'}</b></div>
+            <div class="dossier-row"><span>Lo que RH quiere leer</span><b>"Competente / No competente", una palabra y una firma</b></div>
+            <div class="dossier-row"><span>Lo que la hoja te permite escribir</span><b>Observaciones, condiciones, seguimiento y contra-evaluación</b></div>
+          </div>
+          <p class="lede">Tres formas de llenar la misma hoja. El documento es idéntico; lo que cambia es lo que protege cuando este hombre falle en la carretera.</p>
+          ${mods(['Redacción de evidencia en evaluaciones', 'Decisiones condicionales y planes de seguimiento', 'Responsabilidad solidaria de la firma'])}
+        </div>`;
+      },
+      choices: [
+        { key: 'A', label: '"Competente". Una palabra, cero evidencia', hint: 'Cierra el trámite rápido', tone: 'bad', cost: 9000, flag: 'hojaSinEvidencia',
+          verdict: 'Dejaste la hoja muda. Sin observaciones registradas, el día del incidente nadie sabrá que viste las omisiones —y la responsabilidad caerá completa sobre quien firmó sin decir qué sabía.' },
+        { key: 'B', label: '"Competente con reservas": lista tus observaciones y fecha de re-evaluación', hint: 'Evidencia + condición + seguimiento', tone: 'good', xp: 160, driver: { trust: 6 }, flag: 'hojaConEvidencia',
+          verdict: 'Correcto. Nombraste los hechos, ataste la condición y pusiste fecha. La reserva obliga a una segunda mirada dentro de 30 días y convierte tu firma en un acto con trazabilidad: si algo pasa, la hoja cuenta tu parte.' },
+        { key: 'C', label: '"No competente" con el descargo completo de las dos omisiones', hint: 'Defendible, pero cierra la puerta', tone: 'mid', cost: 2500, xp: 50, flag: 'hojaRechazo',
+          verdict: 'Documentaste con precisión —eso es profesionalismo. Pero cerrar sin condición ni seguimiento desperdicia talento detectable y le dice a RH que la evaluación es un filtro, no una herramienta de formación.' }
+      ],
+      note: 'Al terminar, compara las tres hojas en pantalla. Pregunta directa al instructor: ¿cuál de estas firmas defenderías tú en una junta legal? La respuesta suele cambiar su forma de llenar la siguiente.'
+    },
+
     /* ============ ESTACIÓN 1 ============ */
     {
-      title: 'Recorrido de la unidad', id: 'explorador', chapter: 'Patio', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
+      title: 'Recorrido de la unidad', id: 'explorador', chapter: 'Bloque A · Decidir si opera', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       build: 'parts',
       notes: 'Deja que el grupo elija por dónde empezar. Cuando alguien salte una parte, no lo corrijas: pregúntale al final qué se le fue. La unidad completa son 18 puntos y el recorrido se acredita solo cuando los ve todos.'
     },
 
     {
-      id: 'evidencia-patio', chapter: 'Patio', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left',
+      id: 'evidencia-patio', chapter: 'Bloque A · Decidir si opera', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-orange pad w-lg mx" style="text-align:center">
           <div class="kicker c-orange">Evidencia de audio · Interacción real bajo presión</div>
@@ -317,75 +408,21 @@
       notes: 'No expliques las cuatro letras: haz que el grupo las abra. Al cerrar, pregunta en cuál de las cuatro falló el caso de la Fase 1 y deja que discutan. La respuesta es L.'
     },
     {
-      title: 'Taxonomía PIEL aplicada', id: 'piel-aplicado', chapter: 'Marco', cam: 'hood', mood: 'warn', speed: 0.4, anim: 'enter',
+      title: 'Taxonomía PIEL aplicada', id: 'piel-aplicado', chapter: 'Bloque B · Cómo piensa y enseña', cam: 'hood', mood: 'warn', speed: 0.4, anim: 'enter',
       build: 'piel',
       notes: 'Ejercicio de lenguaje común. Si el instructor no sabe nombrar la competencia, su retroalimentación se queda en "hazlo bien". Insiste: la clasificación correcta es la que permite diseñar el ejercicio de refuerzo.'
     },
-    {
-      id: 'andragogia', chapter: 'Marco', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
-      html: () => `
-        <div class="panel pad w-sm mx" style="text-align:center">
-          <div style="width:56px;height:56px;color:var(--cyan);margin:0 auto 1rem">${I('brain')}</div>
-          <h2 class="title">¿Cómo aprende un adulto?</h2>
-          <p class="lede">El adulto rechaza la teoría abstracta. Necesita <strong class="c-cyan">relevancia inmediata, experimentación guiada y consecuencia visible.</strong></p>
-          <p class="lede" style="opacity:.8">Por eso a partir de aquí no hay diapositivas que leer: hay una unidad que auditar, un operador que acompañar y un presupuesto que puedes destruir.</p>
-        </div>`,
-      note: 'Aquí cambia el contrato con el grupo: de espectadores a operadores. Dilo explícitamente.'
-    },
 
-    /* ============ FASE 2 · SIMULADOR ============ */
+/* ============ BLOQUE A · DECIDIR SI OPERA (simulador + ingreso) ============ */
 
-    /* ============ MARCO · LOGRAR EL CAMBIO REAL ============ */
-    {
-      id: 'cambio-real', chapter: 'Marco', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
-      html: () => `
-        <div class="panel accent-cyan pad w-lg mx brackets">
-          <div class="kicker c-cyan">Cómo se logra un cambio que dura</div>
-          <h2 class="title">Informar no cambia a nadie</h2>
-          <p class="lede" style="margin-bottom:.4rem">Un operador no modifica una conducta porque le dijeron que estaba mal. La modifica cuando se juntan tres condiciones. Si falta una, la conducta regresa en dos semanas.</p>
-          <p class="lede" style="opacity:.72;font-size:.9rem;margin-bottom:1.1rem">Toca cada condición.</p>
-          <div class="rv-set c3" data-set="cambio">
-            <div class="rv" style="--rvc:var(--cyan)">
-              <div class="rv-let">01</div>
-              <div class="rv-t">Motivación interna</div>
-              <div class="rv-s">Que le importe a él</div>
-              <div class="rv-body">
-                <p>El operador tiene que encontrar su propia razón. La tuya no le sirve. La de la empresa, menos.</p>
-                <p><em>Se activa</em> preguntando por lo que sí valora: su casa, sus hijos, su licencia, su nombre en el patio.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--amber)">
-              <div class="rv-let">02</div>
-              <div class="rv-t">Avance progresivo</div>
-              <div class="rv-s">Un escalón a la vez</div>
-              <div class="rv-body">
-                <p>Nadie cambia doce hábitos el lunes. Se elige uno, se practica hasta que deja de costar, y hasta entonces sigue el siguiente.</p>
-                <p><em>Se activa</em> definiendo un solo compromiso medible por semana.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--green)">
-              <div class="rv-let">03</div>
-              <div class="rv-t">Soporte activo</div>
-              <div class="rv-s">Que no esté solo</div>
-              <div class="rv-body">
-                <p>El hábito nuevo es frágil. Si nadie lo acompaña las primeras semanas, la presión del patio lo borra.</p>
-                <p><em>Se activa</em> con seguimiento en fechas fijas, no con la promesa de estar disponible.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-          </div>
-        </div>`,
-      notes: 'Pregunta directa al grupo: de las tres, ¿cuál es la que su empresa nunca da? Casi siempre responden soporte activo. Ese es el hallazgo del bloque.'
-    },
-    {
+{
       title: 'Ciclo del aprendizaje real', id: 'ciclo', chapter: 'Marco', cam: 'cabin', mood: 'normal', speed: 0, anim: 'enter',
+      when: () => false,
       build: 'ciclo',
       notes: 'Este orden no es negociable. La mayoría de los instructores empieza en simulación y termina en conexión, y por eso el operador practica sin saber para qué.'
     },
     {
-      id: 'retro-empatia', chapter: 'Estación 2', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
+      id: 'retro-empatia', chapter: 'Bloque B · Cómo piensa y enseña', cam: 'wide', mood: 'normal', speed: 0, anim: 'right',
       html: () => `
         <div class="panel accent-green pad w-lg mx brackets">
           <div class="kicker c-green">Herramientas del instructor</div>
@@ -463,7 +500,7 @@
       notes: 'Estas seis piezas son el kit que van a usar en la micro-clase de la siguiente escena. Pide que anoten las dos secuencias antes de avanzar: se les van a olvidar en cuanto tengan al operador enfrente.'
     },
     {
-      id: 'micro-brief', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
+      id: 'micro-brief', chapter: 'Bloque B · Cómo piensa y enseña', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
       html: () => `
         <div class="panel accent-amber pad w-lg mx brackets c-amber">
           <div class="kicker c-amber">Estación 2 · Factor humano</div>
@@ -482,17 +519,17 @@
       notes: 'Aquí se cambia el chip. Hasta ahora auditaron una unidad; ahora los audita el grupo a ellos. Pide que el participante realmente se pare y hable: el ejercicio pierde todo si solo se hace mentalmente.'
     },
     {
-      title: 'Micro-clase en piso', id: 'microclase', chapter: 'Estación 2', cam: 'follow', mood: 'normal', speed: 0, anim: 'enter',
+      title: 'Micro-clase en piso', id: 'microclase', chapter: 'Bloque B · Cómo piensa y enseña', cam: 'follow', mood: 'normal', speed: 0, anim: 'enter',
       build: 'microclase',
       notes: 'Elige un voluntario para hacer de operador. El resto del grupo marca la rúbrica en tiempo real, tú no. Al terminar, la primera pregunta es siempre para el que hizo de operador: "¿te dieron ganas de cambiar?".'
     },
     {
-      title: 'Ingeniería del estrés', id: 'ing-estres', chapter: 'Estación 2', cam: 'follow', mood: 'warn', speed: 0.5, anim: 'left',
+      title: 'Ingeniería del estrés', id: 'ing-estres', chapter: 'Bloque B · Cómo piensa y enseña', cam: 'follow', mood: 'warn', speed: 0.5, anim: 'left',
       build: 'estres',
       notes: 'Aquí suelen resistirse: "no quiero estresar a mi gente". Aclara que el estrés ya existe en la carretera; lo único que decides es si aparece por primera vez contigo o solo cuando ya no puedes ayudarlo.'
     },
     {
-      id: 'pc-06', chapter: 'Estación 2', cam: 'axle', mood: 'warn', speed: 0, anim: 'right', vote: true, question: 'El Borras se va a equivocar frente al grupo: ¿qué haces?',
+      id: 'pc-06', chapter: 'Bloque B · Cómo piensa y enseña', cam: 'axle', mood: 'warn', speed: 0, anim: 'right', vote: true, question: 'El Borras se va a equivocar frente al grupo: ¿qué haces?',
       html: () => `
         <div class="panel accent-amber pad w-md mx brackets c-amber">
           <div class="kicker c-amber">Punto de control 06 · rol del instructor</div>
@@ -511,7 +548,7 @@
       note: 'Este es el punto donde se separa el capacitador del acompañante. Pregunta al grupo cuántos hubieran tomado el volante: casi todos. Ese reflejo es el que hay que desmontar.'
     },
     {
-      id: 'est-1', chapter: 'Estación 1', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'La carta porte no cuadra: ¿qué decides?',
+      id: 'est-1', chapter: 'Bloque A · Decidir si opera', cam: 'trailer', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'La carta porte no cuadra: ¿qué decides?',
       html: () => `
         <div class="panel accent-orange pad w-md mx">
           <div class="kicker c-orange">Estación 1 de 5 · Patio, normatividad y activos</div>
@@ -530,20 +567,9 @@
       note: 'Estación 1 cubre 4 módulos normativos. Si eligen C, subraya que la decisión correcta SÍ tuvo costo: el liderazgo no es gratis, es barato.'
     },
 
+/* ============ ESTACIÓN 2 ============ */
     {
-      id: 'f1', chapter: 'Estación 1', cam: 'axle', mood: 'normal', speed: 0.3, anim: 'right',
-      html: () => `
-        <div class="panel accent-cyan pad w-lg mx" style="text-align:center">
-          <div class="kicker">Referencia de estándar</div>
-          <h2 class="title" style="margin-top:.5rem">Velocidad Con Proceso</h2>
-          <p class="lede">En Fórmula 1 nadie improvisa por ir tarde. Van rápido <strong class="c-cyan">porque</strong> el proceso es inviolable, no a pesar de él.</p>
-          ${media('videos/f1.mp4', 'Sincronía de pits como estándar de proceso')}
-        </div>`
-    },
-
-    /* ============ ESTACIÓN 2 ============ */
-    {
-      id: 'est-2', chapter: 'Estación 2', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'El operador no durmió: ¿lo dejas salir a ruta?',
+      id: 'est-2', chapter: 'Bloque A · Decidir si opera', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left', vote: true, question: 'El operador no durmió: ¿lo dejas salir a ruta?',
       html: () => `
         <div class="panel pad w-md mx">
           <div class="kicker c-cyan">Estación 2 de 5 · Factor humano</div>
@@ -578,7 +604,7 @@
 
     /* ============ ESTACIÓN 3 · ACOMPAÑAMIENTO EN CABINA ============ */
     {
-      id: 'est-3', chapter: 'Estación 3', cam: 'lowfront', mood: 'warn', speed: 1.2, anim: 'right', vote: true,
+      id: 'est-3', chapter: 'Bloque C · Acompañar y retroalimentar', cam: 'lowfront', mood: 'warn', speed: 1.2, anim: 'right', vote: true,
       question: 'Vas de acompañante en el Full del Borras desde las 05:40 h y ya son 320 km: ¿qué decides con lo que viste?',
       html: (S) => `
         <div class="panel accent-orange pad w-md mx">
@@ -640,7 +666,7 @@
 
     /* Retén: el resultado depende de la confianza construida */
     {
-      id: 'ev-reten', chapter: 'Ruta', cam: 'hood', speed: 0.8, anim: 'enter',
+      id: 'ev-reten', chapter: 'Bloque C · Acompañar y retroalimentar', cam: 'hood', speed: 0.8, anim: 'enter',
       mood: 'warn',
       html: (S) => {
         const bien = S.driver.trust >= 55;
@@ -663,7 +689,7 @@
 
     /* ============ ESTACIÓN 4 ============ */
     {
-      id: 'est-4', chapter: 'Estación 4', cam: 'hood', mood: 'danger', speed: 0.4, anim: 'impact', vote: true, question: '"No lo reporte, yo lo arreglo": ¿aceptas?',
+      id: 'est-4', chapter: 'Bloque D · Crisis y cierre de ruta', cam: 'hood', mood: 'danger', speed: 0.4, anim: 'impact', vote: true, question: '"No lo reporte, yo lo arreglo": ¿aceptas?',
       html: () => `
         <div class="panel accent-red pad w-md mx">
           <div class="kicker c-red">Estación 4 de 5 · Crisis en carretera</div>
@@ -684,7 +710,7 @@
 
     /* ============ ESTACIÓN 5 ============ */
     {
-      id: 'est-5', chapter: 'Estación 5', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left', vote: true, question: 'Veinte minutos que valen la ruta: ¿qué decides?',
+      id: 'est-5', chapter: 'Bloque D · Crisis y cierre de ruta', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left', vote: true, question: 'Veinte minutos que valen la ruta: ¿qué decides?',
       html: () => `
         <div class="panel accent-cyan pad w-md mx">
           <div class="kicker">Estación 5 de 5 · Cierre formativo</div>
@@ -782,12 +808,13 @@
     /* ============ ESTACIÓN 5 · MEDICIÓN Y ROLES ============ */
 
     {
-      title: 'Mentoría correctiva', id: 'telemetria', chapter: 'Estación 5', cam: 'follow', mood: 'warn', speed: 0.3, anim: 'left',
+      title: 'Mentoría correctiva', id: 'telemetria', chapter: 'Bloque C · Acompañar y retroalimentar', cam: 'follow', mood: 'warn', speed: 0.3, anim: 'left',
       build: 'telemetria',
       notes: 'La telemetría no acusa: abre la conversación. Si la usas como prueba en un juicio, el operador aprende a esconderse del sensor, no a manejar mejor.'
     },
     {
       id: 'roles-3', chapter: 'Estación 5', cam: 'cabin', mood: 'normal', speed: 0.2, anim: 'left',
+      when: () => false,
       html: () => `
         <div class="panel accent-cyan pad w-lg mx brackets">
           <div class="kicker c-cyan">Estación 5 · Cierre formativo</div>
@@ -832,6 +859,7 @@
     },
     {
       id: 'medicion', chapter: 'Estación 5', cam: 'top', mood: 'warn', speed: 0.2, anim: 'right',
+      when: () => false,
       html: () => `
         <div class="panel accent-orange pad w-lg mx brackets">
           <div class="kicker c-orange">Medición conductual</div>
@@ -895,12 +923,8 @@
       build: 'evaplica',
       notes: 'Momento clave del bloque. Si su instrumento aprueba al Borras, no los rescates: deja que el silencio haga el trabajo antes de explicar.'
     },
-    {
-      title: 'Aplícalo a tu gente', id: 'evcampo', chapter: 'Estación 5', cam: 'top', mood: 'normal', speed: 0, anim: 'right',
-      build: 'evcampo',
-      notes: 'Que escriban el nombre real de un operador de su flota. Al terminar pueden descargar la hoja y usarla el lunes. Eso convierte el curso en herramienta.'
-    },
-    {
+
+{
       id: 'pc-07', chapter: 'Estación 5', cam: 'lowfront', mood: 'warn', speed: 0.2, anim: 'left', vote: true, question: 'El operador se detuvo: ¿cómo respondes?',
       html: () => `
         <div class="panel accent-red pad w-md mx brackets c-red">
@@ -919,22 +943,10 @@
       ],
       note: 'Este es el punto de control más importante del curso. El folio VC-0912 se firmó porque nadie tomó la opción C ese día. Dilo así, sin suavizarlo.'
     },
-    {
-      id: 'indicador', chapter: 'Estación 5', cam: 'trailer', mood: 'safe', speed: 0.3, anim: 'enter',
-      html: () => `
-        <div class="panel pad w-sm mx" style="text-align:center">
-          <div class="kicker">El verdadero indicador</div>
-          <h2 class="title" style="margin:.6rem 0 1rem">Tu resultado no se mide en el aula</h2>
-          <p class="lede">No lo mide la lista de asistencia, ni la calificación del examen, ni la encuesta de satisfacción del curso.</p>
-          <p class="lede" style="font-size:1.12rem;color:var(--ink)">Se mide en la decisión que ese operador toma <strong class="c-green">a las 03:40 h, en el kilómetro 210, cuando está solo</strong> y nadie va a enterarse de lo que elija.</p>
-          <p class="lede" style="opacity:.75">Todo lo que hiciste en este simulador existe para ese instante.</p>
-        </div>`,
-      notes: 'Silencio de tres segundos después de leerlo. No lo expliques.'
-    },
 
-    /* ============ CIERRE ============ */
+/* ============ CIERRE ============ */
     {
-      title: 'Curso de inducción PIEL', id: 'curso-final', chapter: 'Cierre', cam: 'cabin', mood: 'normal', speed: 0, anim: 'enter',
+      title: 'Curso de inducción PIEL', id: 'curso-final', chapter: 'Bloque B · Cómo piensa y enseña', cam: 'cabin', mood: 'normal', speed: 0, anim: 'enter',
       build: 'curso',
       notes: 'Prueba final de transferencia. Aquí demuestran si entendieron el marco o solo lo escucharon.'
     },
