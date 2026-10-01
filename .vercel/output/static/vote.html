@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Votación · Formando el Trayecto del Instructor</title>
+<link rel="stylesheet" href="css/app.css">
+<style>
+  .name-gate{display:flex;flex-direction:column;gap:.7rem}
+  .stars{display:flex;gap:.4rem;margin:.35rem 0 1rem}
+  .star{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:transparent;
+    color:var(--ink-3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem}
+  .star.on{color:var(--amber);border-color:rgba(255,196,0,.5);background:rgba(255,196,0,.09)}
+  .rate-row{margin-bottom:1rem}
+  .rate-row label{display:block;font-size:.84rem;color:var(--ink-2);margin-bottom:.3rem}
+  textarea.ev-in{resize:vertical;min-height:80px;font-family:inherit}
+</style>
+</head>
+<body class="vote-page">
+<div class="vote-wrap">
+  <header>
+    <span class="mark logo-slot">
+      <img src="assets/logo.png" alt="Logo" onerror="this.closest('.logo-slot').classList.add('missing')">
+      <svg class="mark-fallback" viewBox="0 0 60 40" aria-label="TM" fill="none">
+        <path d="M4 28h22V13H4z" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M29 28h12l7-9H29z" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="13" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="38" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
+      </svg>
+    </span>
+    <div><div class="kicker">Formando el Trayecto del Instructor</div><div class="kicker c-cyan" id="room">Sala —</div></div>
+  </header>
+  <main id="v-main">
+    <div class="panel pad">
+      <h2 class="title" style="font-size:1.4rem">Conectando con la sala…</h2>
+    </div>
+  </main>
+  <footer class="kicker">Tu voto es anónimo. Solo se muestra el porcentaje del grupo.</footer>
+</div>
+
+<script>
+(function () {
+  const API = 'https://qykubittvlwsavrhljek.supabase.co/functions/v1/tm-api';
+  const room = (new URLSearchParams(location.search).get('room') || '').toUpperCase();
+  const main = document.getElementById('v-main');
+  document.getElementById('room').textContent = 'Sala ' + (room || '—');
+  let lastSlide = null, voted = {}, attendeeId = null, satisfactionSent = false;
+
+  const storeKey = 'tm_attendee_' + room;
+
+  function card(t, s) {
+    return '<div class="panel pad"><h2 class="title" style="font-size:1.35rem">' + t + '</h2><p class="lede">' + s + '</p></div>';
+  }
+
+  /* ---------------- paso 1: nombre (registra asistencia) ---------------- */
+  function askName() {
+    main.innerHTML =
+      '<div class="panel pad">' +
+        '<div class="kicker c-cyan">Antes de empezar</div>' +
+        '<h2 class="title" style="font-size:1.3rem;margin:.4rem 0 1rem">¿Cómo te llamas?</h2>' +
+        '<p class="lede" style="margin-bottom:1rem">Es para la lista de asistencia del curso. Tu voto sigue siendo anónimo.</p>' +
+        '<div class="name-gate">' +
+          '<input class="ev-in" id="name-in" placeholder="Nombre completo" autocomplete="name">' +
+          '<button class="btn wide" id="name-go">Entrar a la sala</button>' +
+        '</div>' +
+      '</div>';
+    document.getElementById('name-go').addEventListener('click', join);
+    document.getElementById('name-in').addEventListener('keydown', e => { if (e.key === 'Enter') join(); });
+  }
+
+  async function join() {
+    const input = document.getElementById('name-in');
+    const name = (input.value || '').trim();
+    if (!name) { input.focus(); return; }
+    main.innerHTML = card('Entrando…', 'Registrando tu asistencia.');
+    try {
+      const r = await fetch(API + '/session/' + room + '/join', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      if (!r.ok) throw 0;
+      const j = await r.json();
+      attendeeId = j.attendeeId;
+      sessionStorage.setItem(storeKey, attendeeId);
+      tick();
+      setInterval(tick, 2000);
+    } catch (e) {
+      main.innerHTML = card('No se pudo registrar', 'Verifica tu conexión e intenta de nuevo.') +
+        '<button class="btn wide" id="retry" style="margin-top:.8rem">Reintentar</button>';
+      document.getElementById('retry').addEventListener('click', askName);
+    }
+  }
+
+  /* ---------------- paso 2: votación en vivo / encuesta final ---------------- */
+  async function tick() {
+    if (!room) { main.innerHTML = card('Falta el código de sala', 'Escanea de nuevo el código QR que aparece en la pantalla del facilitador.'); return; }
+    try {
+      const r = await fetch(API + '/session/' + room + '/poll');
+      if (!r.ok) throw 0;
+      const p = await r.json();
+      if (p.slideId === '__satisfaction__') drawSatisfaction();
+      else draw(p);
+    } catch (e) {
+      main.innerHTML = card('Sin conexión con la sala', 'Verifica que el facilitador tenga el modo aula abierto.');
+    }
+  }
+
+  function draw(p) {
+    if (!p || !p.options || !p.options.length) {
+      main.innerHTML = card('Esperando la siguiente decisión', 'Mantén esta pantalla abierta. Cuando el facilitador abra una votación, aparecerá aquí.');
+      lastSlide = null;
+      return;
+    }
+    if (voted[p.slideId]) return;
+    if (p.slideId !== lastSlide) {
+      lastSlide = p.slideId;
+      main.innerHTML = '<div class="panel pad"><div class="kicker c-cyan">Tu decisión</div>' +
+        '<h2 class="title" style="font-size:1.3rem;margin:.4rem 0 1rem">' + (p.question || '¿Qué harías tú?') + '</h2>' +
+        p.options.map(function (o) {
+          return '<button class="choice" data-k="' + o.key + '"><span class="ck">' + o.key + '</span>' +
+                 '<span class="ct"><b>' + o.label + '</b></span></button>';
+        }).join('') + '</div>';
+      main.querySelectorAll('[data-k]').forEach(function (b) {
+        b.addEventListener('click', function () { send(p.slideId, b.dataset.k); });
+      });
+    }
+  }
+
+  async function send(slideId, key) {
+    voted[slideId] = key;
+    main.innerHTML = card('Voto registrado', 'Elegiste la opción <b>' + key + '</b>. Los resultados del grupo se muestran en la pantalla principal.');
+    try {
+      await fetch(API + '/session/' + room + '/vote', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ attendeeId: attendeeId, slideId: slideId, option: key })
+      });
+    } catch (e) {}
+  }
+
+  /* ---------------- encuesta final de satisfacción ---------------- */
+  const CATS = [
+    ['contenido', 'El contenido del curso'],
+    ['facilitador', 'El desempeño del facilitador'],
+    ['material', 'El material y los recursos usados'],
+    ['aplicabilidad', 'Qué tan aplicable es a tu trabajo']
+  ];
+
+  function drawSatisfaction() {
+    if (satisfactionSent) return;
+    if (lastSlide === '__satisfaction__') return;
+    lastSlide = '__satisfaction__';
+    const ratings = {};
+    main.innerHTML =
+      '<div class="panel pad">' +
+        '<div class="kicker c-amber">Encuesta final</div>' +
+        '<h2 class="title" style="font-size:1.3rem;margin:.4rem 0 1rem">¿Cómo te fue en el curso?</h2>' +
+        CATS.map(function (c) {
+          return '<div class="rate-row" data-cat="' + c[0] + '">' +
+            '<label>' + c[1] + '</label>' +
+            '<div class="stars">' + [1,2,3,4,5].map(function (n) {
+              return '<button class="star" data-cat="' + c[0] + '" data-v="' + n + '">★</button>';
+            }).join('') + '</div></div>';
+        }).join('') +
+        '<div class="rate-row"><label>Comentarios (opcional)</label>' +
+        '<textarea class="ev-in" id="sat-comment" placeholder="¿Qué mejorarías?"></textarea></div>' +
+        '<button class="btn wide" id="sat-send">Enviar encuesta</button>' +
+      '</div>';
+
+    main.querySelectorAll('.star').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const cat = btn.dataset.cat, v = parseInt(btn.dataset.v, 10);
+        ratings[cat] = v;
+        main.querySelectorAll('.star[data-cat="' + cat + '"]').forEach(function (s) {
+          s.classList.toggle('on', parseInt(s.dataset.v, 10) <= v);
+        });
+      });
+    });
+    document.getElementById('sat-send').addEventListener('click', async function () {
+      const comment = document.getElementById('sat-comment').value || '';
+      main.innerHTML = card('Enviando…', '');
+      try {
+        await fetch(API + '/session/' + room + '/satisfaction', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attendeeId: attendeeId, ratings: ratings, comment: comment })
+        });
+      } catch (e) {}
+      satisfactionSent = true;
+      main.innerHTML = card('¡Gracias!', 'Tu respuesta quedó registrada. Ya puedes cerrar esta pantalla.');
+    });
+  }
+
+  /* ---------------- arranque ---------------- */
+  attendeeId = sessionStorage.getItem(storeKey);
+  if (attendeeId) { tick(); setInterval(tick, 2000); }
+  else askName();
+})();
+</script>
+</body>
+</html>
