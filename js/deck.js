@@ -226,6 +226,21 @@
           <div class="stat"><h4>Áreas a reforzar (con la evidencia en que falló)</h4><ul class="mini">${gapHtml}</ul></div>
         </div>
 
+        ${(() => {
+          const F = S.flags;
+          if (!F.detuvoCabina && !F.cedioCabina && !F.reganoCabina) return '';
+          const estado = F.detuvoCabina
+            ? '<span class="c-green">Detuvo la operación en marcha con datos en la mano y separó fatiga de conducta: el descargo se hizo en frío, con hoja de evaluación enfrente.</span>'
+            : F.reganoCabina
+            ? '<span class="c-amber">Acompañó corrigiendo todo sobre la marcha: los hechos se señalaron, pero el operador salió a defenderse, no a cambiar. La corrección en caliente funciona con una sola conducta prioritaria.</span>'
+            : '<span class="c-red">Cinco horas en el asiento del lado sin detener ninguna de las cuatro fallas observadas: el acompañamiento registró el riesgo y lo dejó pasar. El silencio del acompañante también es autorización — es el patrón exacto del folio VC-0912.</span>';
+          return `
+          <div class="dg-block">
+            <div class="kicker c-cyan">Evidencia de acompañamiento en cabina · Estación 3</div>
+            <p class="lede" style="font-size:.95rem;margin:.3rem 0 0">${estado}</p>
+          </div>`;
+        })()}
+
         <div class="grid-2" style="margin-top:1.2rem">
           <div class="stat"><h4>Utilidad materializada por sus decisiones</h4>
             <div class="v num" style="color:${S.budget < 0 ? 'var(--red)' : 'var(--green)'}">${S.spent > 0 ? '-' + money8(S.spent) : money8(0)}</div>

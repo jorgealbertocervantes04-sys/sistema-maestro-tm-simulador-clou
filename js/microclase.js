@@ -174,6 +174,21 @@
     phase = 3; paint();
   }
 
+  /* Detalle real de la micro-clase para el reporte del facilitador: qué caso
+     eligió, qué decidió en cada momento y qué marcó de la rúbrica. */
+  function detail() {
+    if (!sel) return null;
+    return {
+      caso: { id: sel.id, n: sel.n, habito: sel.habito },
+      pct: Math.round(((diseno() / 12) * 0.6 + (ejec() / 6) * 0.4) * 100),
+      momentos: STEPS.map((s, i) => {
+        const p = picks[i];
+        return { k: s.k, t: s.t, q: s.q, elegido: p !== undefined ? s.opts[p].t : null, valor: p !== undefined ? s.opts[p].v : null, feedback: p !== undefined ? s.opts[p].f : 'No respondió este momento.' };
+      }),
+      rubrica: RUBRICA.map((r, i) => ({ item: r, cumplio: !!marks['r' + i] }))
+    };
+  }
+
   /* ------------------------- render ------------------------- */
   function paint() {
     if (phase === 0) return paintCases();
@@ -312,5 +327,5 @@
       </div>`;
   }
 
-  w.Microclase = { mount, pct: () => (done ? Math.round(((diseno() / 12) * 0.6 + (ejec() / 6) * 0.4) * 100) : null), done: () => done };
+  w.Microclase = { mount, pct: () => (done ? Math.round(((diseno() / 12) * 0.6 + (ejec() / 6) * 0.4) * 100) : null), done: () => done, detail };
 })(window);

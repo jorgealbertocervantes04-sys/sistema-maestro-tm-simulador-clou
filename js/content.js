@@ -109,18 +109,6 @@
     },
 
     {
-      id: 'llamada', chapter: 'Línea de Vida', cam: 'rear', mood: 'danger', speed: 0, anim: 'right',
-      html: () => `
-        <div class="panel accent-red pad w-lg mx" style="text-align:center">
-          <div class="kicker c-red">Reporte crítico · 03:00 h</div>
-          <h2 class="title" style="margin-top:.5rem">La Llamada</h2>
-          <p class="lede">Pérdida total de la unidad. El operador tiene tres meses en la empresa.</p>
-          ${media('videos/llamada.mp4', 'Llamada de emergencia al instructor')}
-        </div>`,
-      note: 'Pregunta al grupo: ¿quién ha recibido una llamada así? Levanten la mano. Ese es el ancla emocional del curso.'
-    },
-
-    {
       id: 'la-familia', chapter: 'Línea de Vida', cam: 'top', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="panel pad w-md mx" style="border-color:rgba(255,196,0,.28)">
@@ -230,28 +218,6 @@
       onEnter: (ctx) => { w.Scene3D.impact(0.5); w.Audio3D && w.Audio3D.hit(); },
       note: 'Deja que la firma se dibuje completa antes de hablar. Cuando caiga el sello, pregunta: "¿cuántas validaciones firmaron ustedes esta semana y cuántas duraron más de cuatro minutos?".'
     },
-    {
-      title: 'Fase 2 · Ahora firmas tú', id: 'fase-2', chapter: 'Patio', cam: 'lowfront', mood: 'safe', speed: 0, anim: 'enter',
-      html: () => `
-        <div class="panel pad w-md mx phase brackets c-cyan accent-cyan">
-          <div class="pn c-cyan">02</div>
-          <div class="pt">Ahora firmas tú</div>
-          <p class="lede" style="margin-top:1.1rem">Retrocedemos los noventa y dos días completos. Mismo patio, misma unidad, misma presión de despacho,
-          mismo operador vivo esperando tu dictamen. La diferencia es que esta vez
-          <strong class="c-cyan">el expediente lo escribes tú</strong>.</p>
-          <div class="grid-3" style="margin-top:1.8rem">
-            <div class="stat"><h4>Presupuesto de ruta</h4><div class="v c-cyan num">$80,000</div></div>
-            <div class="stat"><h4>Decisiones críticas</h4><div class="v num">13</div></div>
-            <div class="stat"><h4>Desenlaces posibles</h4><div class="v num">6</div></div>
-          </div>
-          <div class="steps">
-            <span>1 · Auditoría forense</span><span>2 · Cinco estaciones</span><span>3 · Ruta y desenlace</span><span>4 · Dictamen</span>
-          </div>
-          <p class="lede" style="margin-top:1.5rem;font-size:.95rem;opacity:.68">Desde aquí cada decisión cuesta dinero, cambia el estado físico de la unidad y queda registrada en tu dictamen individual.</p>
-        </div>`,
-      onEnter: () => { w.Scene3D.pulseLights(0xFB6500); },
-      note: 'Aquí cambia la energía del aula. Sube la luz, pide que se sienten derechos. Frase de entrada: "la Fase 1 fue de alguien más; la Fase 2 es de ustedes".'
-    },
 
     /* ============ AUDITORÍA FORENSE (INICIO DE LA CADENA) ============ */
     {
@@ -267,34 +233,6 @@
           <p class="lede ${S.forensicDone ? '' : 'hidden'}" id="forensic-done" style="margin-top:1rem;color:var(--green)">Auditoría registrada. Continúa con → para revisar el dossier.</p>
         </div>`,
       note: 'Entrega el control a un participante distinto para cada hallazgo. Pide que argumente en voz alta antes de decidir.'
-    },
-
-    {
-      id: 'dossier', chapter: 'Patio', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
-      html: (S) => {
-        const map = { tires: ['Presión de llantas', 'gauge'], brakes: ['Frenos de aire (dolly)', 'brake'], kingpin: ['Quinta rueda / perno rey', 'link'] };
-        const rows = Object.keys(map).map(k => {
-          const st = S.truck[k];
-          const c = st === 'ok' ? 'c-green' : st === 'fault' ? 'c-red' : 'c-dim';
-          const txt = st === 'ok' ? 'CORREGIDO EN TALLER' : st === 'fault' ? 'LIBERADO CON FALLA' : 'NO AUDITADO';
-          return `<div class="dossier-row"><span>${map[k][0]}</span><b class="${c}">${txt}</b></div>`;
-        }).join('');
-        const faults = w.State.partsFaulty().length;
-        const auditada = Object.keys(map).some(k => S.truck[k] !== 'pending');
-        const verdict = !auditada
-          ? '<span class="c-amber">La unidad sale sin auditoría documentada. No sabes qué llevas: cada anomalía no vista viaja contigo 640 km.</span>'
-          : faults === 0
-          ? '<span class="c-green">La unidad sale del patio en condición íntegra. Has cortado la cadena causal en su origen.</span>'
-          : `<span class="c-red">La unidad sale con ${faults} falla${faults > 1 ? 's' : ''} activa${faults > 1 ? 's' : ''}. Estas fallas no desaparecen: esperan el kilómetro adecuado para cobrarse.</span>`;
-        return `
-        <div class="panel pad w-md mx">
-          <div class="kicker">Dossier de despacho · Estado real de la unidad</div>
-          <h2 class="title" style="margin-top:.5rem">Lo que sale a la carretera</h2>
-          <div class="dossier" style="margin:1.2rem 0">${rows}</div>
-          <p class="lede">${verdict}</p>
-        </div>`;
-      },
-      onEnter: (ctx, S) => { w.Scene3D.mood(w.State.partsFaulty().length ? 'danger' : 'safe'); }
     },
 
     /* ============ ESTACIÓN 1 ============ */
@@ -648,24 +586,33 @@
       onEnter: (ctx) => { ctx.engine(true); }
     },
 
-    /* ============ ESTACIÓN 3 ============ */
+    /* ============ ESTACIÓN 3 · ACOMPAÑAMIENTO EN CABINA ============ */
     {
-      id: 'est-3', chapter: 'Estación 3', cam: 'lowfront', mood: 'warn', speed: 1.2, anim: 'right', vote: true, question: 'Km 320, la telemetría habla: ¿qué haces?',
+      id: 'est-3', chapter: 'Estación 3', cam: 'lowfront', mood: 'warn', speed: 1.2, anim: 'right', vote: true,
+      question: 'Vas de acompañante en el Full del Borras desde las 05:40 h y ya son 320 km: ¿qué decides con lo que viste?',
       html: (S) => `
         <div class="panel accent-orange pad w-md mx">
-          <div class="kicker c-orange">Estación 3 de 5 · Fatiga y ritmo de ruta</div>
-          <h2 class="title" style="margin-top:.5rem">Km 320 · La Telemetría Habla</h2>
-          <p class="lede">Samsara reporta <strong>4 desviaciones de carril en 40 minutos</strong> y <strong>9 h 40 min</strong> de conducción acumulada. Faltan 260 km y el cliente exige llegada en 2 horas. Fatiga estimada del operador: <strong class="num ${S.driver.fatigue > 60 ? 'c-red' : S.driver.fatigue >= 40 ? 'c-amber' : 'c-green'}">${S.driver.fatigue}%</strong>.</p>
-          ${mods(['Control de fatiga y microsueños', 'Conducción defensiva en Fulles', 'Lectura de telemetría (Samsara / Geotab)'])}
+          <div class="kicker c-orange">Estación 3 de 5 · Acompañamiento en cabina · Km 320</div>
+          <h2 class="title" style="margin-top:.5rem">Tu registro de ruta dice esto</h2>
+          <div class="dossier" style="margin:1rem 0">
+            <div class="dossier-row"><span>06:02 h · Salida del patio</span><b class="c-red">Salió sin tirón de prueba: tú estabas viendo</b></div>
+            <div class="dossier-row"><span>Km 84 · descenso</span><b class="c-red">Bajó usando solo freno de servicio, sin freno de motor</b></div>
+            <div class="dossier-row"><span>Km 190 · tráfico denso</span><b class="c-amber">Siguió contestando el celular con manos libres</b></div>
+            <div class="dossier-row"><span>Km 305</span><b class="c-red">Se brincó el escaneo de espejos en tres cambios de carril</b></div>
+            <div class="dossier-row"><span>Km 320 · Samsara</span><b class="c-red">4 desviaciones de carril en 40 min · ${S.driver.fatigue}% de fatiga estimada</b></div>
+          </div>
+          <p class="lede">Llevas cinco horas en el asiento del lado. El cliente exige llegada en 2 horas y este operador es la referencia del patio: los nuevos manejan como él. Lo que decidas en los próximos diez minutos define quién maneja así el próximo año.</p>
+          ${mods(['Control de fatiga y microsueños', 'Conducción defensiva en Fulles', 'Lectura de telemetría (Samsara / Geotab)', 'Retroalimentación en caliente durante acompañamiento'])}
         </div>`,
       choices: [
-        { key: 'A', label: 'Que continúe, ya casi llega', hint: 'Cumplir la ventana del cliente', tone: 'bad', driver: { fatigue: 30, stress: 22 },
-          verdict: 'Cuatro desviaciones de carril en 40 minutos es la firma de un microsueño en formación. Acabas de convertir una alerta en un pronóstico.' },
-        { key: 'B', label: 'Relevo de operador en el siguiente CEDIS', hint: 'Cuesta $4,500 y 2 horas', tone: 'good', cost: 4500, xp: 160, driver: { fatigue: -38, stress: -6 },
-          verdict: 'Correcto y caro, en ese orden. $4,500 contra una unidad de $2.4 millones y una vida. La ventana del cliente se renegocia; un microsueño no.' },
-        { key: 'C', label: 'Parada obligatoria de 45 min y renegociar', hint: 'Descanso corto y llamada al cliente', tone: 'mid', cost: 2000, xp: 90, driver: { fatigue: -16, stress: -10 },
-          verdict: 'Mitigas parcialmente. 45 minutos recuperan reflejos, no horas de sueño. Aceptable si el relevo era inviable, insuficiente si solo era incómodo.' }
-      ]
+        { key: 'A', label: 'No decir nada hasta el destino para no pelear en carretera', hint: 'Lo anotas y lo trabajas al bajar', tone: 'bad', cost: 8000, driver: { stress: 12, trust: -8 }, flag: 'cedioCabina',
+          verdict: 'El silencio también educa: cinco horas a su lado sin decir nada le confirmaron que así está bien. El daño acumulado en balatas del descenso y el riesgo asumido ya están facturados; tu retroalimentación llegó tarde otra vez.' },
+        { key: 'B', label: 'Parar ahora, hacer el descargo completo y decidir en frío si sigue operando', hint: 'Frena en el área de descanso, aunque cueste la ventana de entrega', tone: 'good', cost: 4500, xp: 170, driver: { fatigue: -30, stress: -6, trust: 16 }, flag: 'detuvoCabina',
+          verdict: 'Correcto. Detuviste una operación en marcha con datos en la mano —eso es autoridad, no berrinche— y separaste el cansancio de la conducta: la parada de 45 min atiende la fatiga; el descargo atiende el hábito. Lo que sigue se decide con la hoja de evaluación enfrente, no con coraje.' },
+        { key: 'C', label: 'Corregir cada falla en el momento, sobre la marcha', hint: 'Que sienta el dedazo en cada error', tone: 'mid', cost: 1500, xp: 40, driver: { stress: 18, trust: -10 }, flag: 'reganoCabina',
+          verdict: 'Corregiste los cinco hechos y perdiste al operador: el dedazo constante en ruta lo que enseña es a esconderte las cosas, no a manejar distinto. La corrección en caliente funciona con UNA conducta prioritaria; el inventario de fallas se trabaja en el descargo, en orden y con evidencia.' }
+      ],
+      note: 'Pregunta al grupo antes de votar: ¿en cuál de las cinco fallas debiste hablar y no hablaste? Ahí está el costo real del acompañamiento pasivo.'
     },
 
     /* ============ EVENTOS CONDICIONALES DE RUTA ============ */
@@ -947,24 +894,11 @@
       notes: 'Pide que agreguen una cuarta fila con la omisión más frecuente de su propio patio. Ese ejercicio convierte la tabla genérica en su tabla.'
     },
 
-    /* ============ ESTACIÓN 5 · INSTRUMENTO DE EVALUACIÓN ============ */
-    {
-      id: 'eval-brief', chapter: 'Estación 5', cam: 'top', mood: 'warn', speed: 0, anim: 'right',
-      html: () => `
-        <div class="panel accent-amber pad w-lg mx brackets c-amber">
-          <div class="kicker c-amber">Estación 5 · construye tu instrumento</div>
-          <h2 class="title">Dime qué evalúas y te digo a quién vas a perder</h2>
-          ${media('videos/eval-brief-carlos-capillas.mp4', 'Carlos Capillas aplica su instrumento de evaluación a un operador real')}
-          <p class="lede">Todo instructor evalúa. La mayoría lo hace sin haber escrito nunca qué evalúa, y termina calificando lo que se ve desde la ventana de la oficina: puntualidad, uniforme y que no dé problemas.</p>
-          <p class="lede">Arnulfo “el Borras” Peña habría sacado calificación alta en esa hoja. Fue puntual seis años.</p>
-          <p class="lede" style="opacity:.8">Vas a construir tu propio instrumento con al menos <strong class="c-amber">60 criterios justificados</strong> en diez dominios: conducta, aspecto, técnica, inspección, normatividad, seguridad, comunicación, fatiga, custodia y criterio ético. Después vas a calificar operadores con él y vas a ver si tu hoja los distingue.</p>
-        </div>`,
-      notes: 'Advierte antes de empezar: en el banco hay criterios que suenan bien y son trampa. No les digas cuáles. El hallazgo tiene que ser suyo al final.'
-    },
+    /* ============ ESTACIÓN 5 · EVALUACIÓN DE INGRESO ============ */
     {
       title: 'Constructor del instrumento', id: 'evconstruye', chapter: 'Estación 5', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter',
       build: 'evconstruye',
-      notes: 'Dales tiempo real: 12 a 15 minutos. Recorre el salón y pregunta por qué eligieron un criterio y no otro. Insiste en que redacten al menos dos criterios propios.'
+      notes: 'Dales tiempo real: 12 a 15 minutos. Recorre el salón y pregunta por qué eligieron un criterio y no otro. Insiste en que redacten al menos dos criterios propios. Antes de empezar advierte: en el banco hay criterios que suenan bien y son trampa — no les digas cuáles; el hallazgo tiene que ser suyo.'
     },
     {
       title: 'Tu hoja frente a tres operadores', id: 'evaplica', chapter: 'Estación 5', cam: 'cabin', mood: 'warn', speed: 0, anim: 'left',
@@ -1009,51 +943,6 @@
     },
 
     /* ============ CIERRE ============ */
-
-    /* ============ CIERRE · MULTIPLICAR EL VALOR ============ */
-    {
-      id: 'multiplicador', chapter: 'Cierre', cam: 'trailer', mood: 'safe', speed: 0.3, anim: 'left',
-      html: () => `
-        <div class="panel accent-green pad w-lg mx brackets c-green">
-          <div class="kicker c-green">El efecto multiplicador del instructor</div>
-          <h2 class="title">Formas a uno, proteges a cientos</h2>
-          <p class="lede" style="margin-bottom:.4rem">Cada operador que formas bien no es un caso: es un nodo. Su conducta se propaga a la flota, a su familia y a cada persona que se cruza con esas cincuenta toneladas.</p>
-          <p class="lede" style="opacity:.72;font-size:.9rem;margin-bottom:1.1rem">Toca cada nivel de impacto.</p>
-          <div class="rv-set c3" data-set="multiplica">
-            <div class="rv" style="--rvc:var(--cyan)">
-              <div class="rv-let">$</div>
-              <div class="rv-t">Rentabilidad</div>
-              <div class="rv-s">La empresa sobrevive</div>
-              <div class="rv-body">
-                <p>Un operador formado consume menos combustible, rompe menos, no genera siniestros y conserva a los clientes.</p>
-                <p>Los $410,000 de exposición evitada de hoy son un solo viaje de un solo operador.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--amber)">
-              <div class="rv-let">◈</div>
-              <div class="rv-t">Estabilidad familiar</div>
-              <div class="rv-s">El sustento no se rompe</div>
-              <div class="rv-body">
-                <p>Detrás de cada operador hay un ingreso del que dependen tres o cuatro personas. Una incapacidad o una licencia suspendida lo corta de un día para otro.</p>
-                <p>Marisol y dos niños son la unidad de medida real de tu trabajo.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-            <div class="rv" style="--rvc:var(--green)">
-              <div class="rv-let">◎</div>
-              <div class="rv-t">Bienestar colectivo</div>
-              <div class="rv-s">Todos los que van al lado</div>
-              <div class="rv-body">
-                <p>El automovilista que rebasa, el que viene de frente, el que va detrás en la bajada. Ninguno eligió estar ahí.</p>
-                <p>Tu firma en un checklist es la única cosa que los protege y ellos nunca van a saberlo.</p>
-              </div>
-              <div class="rv-hint">Ver</div>
-            </div>
-          </div>
-        </div>`,
-      notes: 'Aquí baja el ritmo. Es el momento emocional del cierre: no lo apures y no lo adornes.'
-    },
     {
       title: 'Curso de inducción PIEL', id: 'curso-final', chapter: 'Cierre', cam: 'cabin', mood: 'normal', speed: 0, anim: 'enter',
       build: 'curso',
@@ -1065,56 +954,7 @@
       notes: 'El dinero cierra el argumento con la dirección. La seguridad no es un gasto: es la única inversión con retorno garantizado.'
     },
     { id: 'scoreboard', chapter: 'Cierre', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter', build: 'scoreboard' },
-    { id: 'dictamen', chapter: 'Cierre', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter', build: 'dictamen' },
-
-
-    {
-      id: 'espejo', chapter: 'Cierre', cam: 'lowfront', mood: 'normal', speed: 0, anim: 'enter',
-      html: () => `
-        <div class="panel accent-cyan pad w-md mx brackets" style="text-align:center">
-          <div class="kicker c-cyan">El espejo de la realidad</div>
-          <h2 class="title" style="margin:.8rem 0 1.2rem;line-height:1.25">"El operador que sale mañana<br>del patio va a manejar exactamente<br>como tú le enseñaste a manejar."</h2>
-          <p class="lede" style="opacity:.78">No como le dijiste que manejara. Como te vio hacerlo, como te vio dejarlo pasar, como te vio firmar.</p>
-          <p class="lede" style="margin-top:1.1rem;font-size:.92rem;opacity:.62">Formando el Trayecto del Instructor · Sistema Maestro TM</p>
-        </div>`,
-      notes: 'Lee la frase completa en voz alta y quédate callado cinco segundos antes de avanzar. Ese silencio es parte del diseño.'
-    },
-    {
-      id: 'reflexion', chapter: 'Cierre', cam: 'trailer', mood: 'normal', speed: 0, anim: 'right',
-      html: () => `
-        <div class="panel pad w-sm mx" style="text-align:center">
-          <div style="width:52px;height:52px;color:var(--ink-2);margin:0 auto 1rem;opacity:.55">${I('refresh')}</div>
-          <div class="kicker">Ciclo de Kolb · Experimentación activa</div>
-          <h2 class="title" style="margin-top:.6rem">La Pregunta Que Se Llevan</h2>
-          <p class="lede" style="font-size:clamp(1.15rem,2.2vw,1.7rem);font-style:italic;color:var(--ink)">"¿Cuál de las decisiones que tomé hoy en la simulación ya la tomé mal la semana pasada en mi patio real?"</p>
-          <p class="lede" style="opacity:.75">La experiencia sin reflexión es ciega. Denle nombre, fecha y unidad.</p>
-        </div>`,
-      note: 'Da 90 segundos de silencio real. Luego pide 3 respuestas en voz alta, sin comentarlas.'
-    },
-    {
-      id: 'plan', chapter: 'Cierre', cam: 'cabin', mood: 'normal', speed: 0, anim: 'left',
-      html: () => `
-        <div class="panel accent-orange pad w-md mx">
-          <div class="kicker c-orange">Compromiso institucional</div>
-          <h2 class="title" style="margin-top:.5rem">Plan de Acción · Lunes por la Mañana</h2>
-          <div class="dossier" style="margin-top:1.2rem">
-            <div class="dossier-row"><span>01 · Cero validaciones apresuradas en patio, sin excepción por presión de despacho.</span><b class="c-orange">Inmediato</b></div>
-            <div class="dossier-row"><span>02 · Auditoría semanal de telemetría: velocidad, frenado brusco y desviación de carril.</span><b class="c-orange">Semanal</b></div>
-            <div class="dossier-row"><span>03 · Conversación andragógica de 20 minutos con cada operador al cierre de ruta.</span><b class="c-orange">Por viaje</b></div>
-            <div class="dossier-row"><span>04 · Escalamiento documentado cuando despacho presione contra un criterio técnico.</span><b class="c-orange">Cada caso</b></div>
-          </div>
-        </div>`
-    },{
-      id: 'cierre', chapter: 'Cierre', cam: 'opening', mood: 'safe', speed: 0.6, anim: 'enter',
-      html: () => `
-        <div class="panel accent-green pad w-md mx brackets c-green" style="text-align:center">
-          <div style="width:60px;height:60px;color:var(--green);margin:0 auto 1rem">${I('trophy')}</div>
-          <h2 class="hero" style="color:var(--green)">Última Muralla</h2>
-          <p class="lede" style="font-size:clamp(1.05rem,1.9vw,1.45rem)">Nadie te va a agradecer el accidente que no ocurrió. Esa es exactamente la medida de tu trabajo.</p>
-          <div class="kicker c-green" style="margin-top:1.6rem">Sistema Maestro TM · Mentores Operativos</div>
-        </div>`,
-      onEnter: (ctx) => { ctx.engine(false); }
-    }];
+    { id: 'dictamen', chapter: 'Cierre', cam: 'wide', mood: 'normal', speed: 0, anim: 'enter', build: 'dictamen' }];
 
   w.CONTENT = { SLIDES, money };
 })(window);

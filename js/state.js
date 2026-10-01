@@ -26,13 +26,25 @@
     startedAt: Date.now()
   });
 
+  /* La sesión de evaluación se conserva también en localStorage: así, si el
+     instructor trabaja desde su celular en taller.html y el facilitador desde
+     index.html, cada equipo tiene respaldo propio y nada se pierde al recargar. */
+  const LS_KEY = 'tm_state_v4';
   const S = fresh();
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      const snap = JSON.parse(raw);
+      if (snap && snap.v === 4) Object.assign(S, snap);
+    }
+  } catch (e) {}
   const listeners = [];
   let saveTimer = null;
   let backendOk = null;
 
   function emit() {
     listeners.forEach(fn => { try { fn(S); } catch (e) { console.warn(e); } });
+    try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {}
     queueSave();
   }
 
@@ -46,6 +58,9 @@
     setForensicDone() { S.forensicDone = true; emit(); },
     /* ---- identificación del instructor evaluado ---- */
     setNombre(n) { S.nombre = String(n || '').trim().slice(0, 60); emit(); },
+    /* La sala a la que pertenece esta sesión de evaluación (taller.html). Se
+       guarda para poder reenviar los resultados aunque el celular recargue. */
+    setRoom(c) { S.room = String(c || '').toUpperCase().slice(0, 10); emit(); },
     setPresupuestoRef(n) {
       n = Math.max(10000, Math.min(5000000, Math.round(Number(n) || START_BUDGET)));
       S.presupuestoRef = n;
@@ -369,6 +384,10 @@
       if (S.flags.pielHecho && S.flags.pielErrores >= 3) g.push('Marco de competencias: clasificó la taxonomía PIEL con ' + S.flags.pielErrores + ' errores; confunde ejecución técnica con criterio de liderazgo.');
       if (!S.flags.estresHecho) g.push('Diseño instruccional: no diseñó el simulacro bajo presión controlada; su formación se queda en explicación de aula.');
       if (S.flags.intervinoFisico) g.push('Rol del instructor: intervino físicamente en lugar de inducir la decisión, sustituyendo al operador en el momento de aprender.');
+      if (S.flags.cedioCabina) g.push('Acompañamiento en cabina: observó cinco horas sin detener ninguna de las fallas registradas; acompañar sin intervenir autoriza la conducta del operador.');
+      if (S.flags.reganoCabina) g.push('Retroalimentación en ruta: corrigió todas las fallas sobre la marcha; el dedazo constante enseña a esconderse del instructor, no a manejar distinto.');
+      if (S.flags.cedioCabina) g.push('Acompañamiento en cabina: cinco horas de observación sin detener una sola de las cuatro fallas registradas; acompañar sin intervenir valida la conducta del operador.');
+      if (S.flags.reganoCabina) g.push('Retroalimentación en ruta: corrigió todas las fallas sobre la marcha; el dedazo constante enseña a esconderse del instructor, no a manejar distinto.');
       if (!S.flags.respaldoOperador && S.flags.firmoPresion) g.push('Liderazgo visible: no respaldó públicamente al operador que se detuvo, debilitando el estándar frente a todo el patio.');
       if (!g.length) g.push('Sin brechas críticas detectadas. Mantener el estándar y documentar el criterio aplicado como caso de referencia.');
       return g;
@@ -390,7 +409,49 @@
       return s.length ? s : ['Participación completa en el ciclo de simulación.'];
     },
 
-    reset() { Object.assign(S, fresh()); emit(); },
+    reset() { try { localStorage.removeItem(LS_KEY); } catch (e) {} Object.assign(S, fresh()); emit(); },
+
+    /* ============================================================
+       PAQUETE DE RESULTADOS DEL TALLER (taller.html → backend)
+       Es la evidencia REAL de ese instructor: su instrumento con los
+       criterios que eligió y ponderó, la calificación que su hoja dio a
+       cada operador contra el riesgo documentado, su micro-clase y el
+       estado completo del simulador. Se envía tal cual al POST /taller
+       para que el facilitador lo descargue en PDF por participante.
+       ============================================================ */
+    paquete() {
+      const F = S.flags;
+      const inst = S.instrumento || null;
+      let microclase = null;
+      if (F.microclaseHecha && w.Microclase && w.Microclase.detail) microclase = w.Microclase.detail();
+      return {
+        nombre: S.nombre || '',
+        room: S.room || null,
+        instrumentoPts: inst ? inst.pts : (F.instrumentoPts ?? null),
+        instrumentoCriterios: inst ? inst.total : null,
+        evalAciertos: F.evalAciertos ?? null,
+        microclasePct: F.microclasePct ?? null,
+        instrumentoDetalle: inst ? {
+          pts: inst.pts, total: inst.total, cats: inst.cats,
+          critIn: inst.critIn, critTot: inst.critTot, propios: inst.propios,
+          trampas: inst.trampas || [],
+          criterios: (inst.criterios || []).map(c => ({ id: c.id, cat: c.cat, n: c.n, peso: c.peso, propio: !!c.propio, trampa: !!c.trampa }))
+        } : null,
+        evaluadosDetalle: S.evaluados || null,
+        microclaseDetalle: microclase,
+        simuladorEnding: S.log.length ? State.ending() : null,
+        simuladorGrado: S.log.length ? State.diagnostico().nivel : null,
+        simuladorRiesgo: S.log.length ? State.risk() : null,
+        simuladorXp: S.xp || 0,
+        simuladorDetalle: {
+          flags: F, truck: S.truck, driver: S.driver,
+          budget: S.budget, spent: S.spent, presupuestoRef: S.presupuestoRef,
+          forensicDone: !!S.forensicDone,
+          log: (S.log || []).slice(-40),
+          diagnostico: S.log.length || Object.keys(F).length ? State.diagnostico() : null
+        }
+      };
+    },
 
     /* ---- persistencia en backend (localStorage no disponible) ---- */
     async load() {
