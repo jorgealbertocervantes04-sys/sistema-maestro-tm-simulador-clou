@@ -36,6 +36,9 @@
     function start(restoreSnap) {
       w.Audio3D.unlock();
       if (restoreSnap) { w.State.restore(restoreSnap); }
+      const nomEl = document.getElementById('in-nombre');
+      const nom = nomEl && nomEl.value.trim();
+      if (nom || !restoreSnap || !w.State.get().nombre) { if (nom) w.State.setNombre(nom); }
       bootEl.classList.add('gone');
       setTimeout(() => bootEl.remove(), 800);
       w.Deck.init();

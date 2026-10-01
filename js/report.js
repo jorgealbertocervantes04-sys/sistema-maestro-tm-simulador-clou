@@ -7,7 +7,7 @@
   function build() {
     const jsPDFctor = w.jspdf && w.jspdf.jsPDF;
     if (!jsPDFctor) { w.toast('El generador de PDF no está disponible.', 'bad'); return; }
-    const S = w.State.get(), g = w.State.grade();
+    const S = w.State.get();
     const doc = new jsPDFctor({ unit: 'pt', format: 'letter' });
     const W = doc.internal.pageSize.getWidth();
     const H = doc.internal.pageSize.getHeight();
@@ -73,22 +73,69 @@
 
     page(true);
 
-    /* --- veredicto --- */
-    const gradeColor = g.l.indexOf('ESTRATÉGICO') >= 0 ? C.green : g.l.indexOf('NO ACREDITADO') >= 0 ? C.red : C.ink;
+    /* --- veredicto / semáforo determinante --- */
+    const diag = w.State.diagnostico();
+    const g = { l: diag.nivel, d: diag.accion };
+    const gradeColor = diag.col === 'var(--green)' ? C.green : diag.col === 'var(--red)' ? C.red : diag.col === 'var(--amber)' ? C.amber : C.cyan;
     doc.setFillColor(250, 252, 253); doc.setDrawColor(...gradeColor); doc.setLineWidth(1.2);
-    doc.roundedRect(M, y, W - M * 2, 52, 5, 5, 'FD');
+    doc.roundedRect(M, y, W - M * 2, 74, 5, 5, 'FD');
     doc.setFont('helvetica', 'normal'); doc.setFontSize(7.6); doc.setTextColor(...C.dim);
-    doc.text('RESULTADO DE LA EVALUACIÓN POR COMPETENCIAS', M + 14, y + 19);
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(...gradeColor);
-    doc.text(g.l, M + 14, y + 40);
-    y += 70;
+    doc.text('SEMÁFORO OPERATIVO · ¿PUEDE LIBERAR OPERACIONES HOY?', M + 14, y + 17);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(14.5); doc.setTextColor(...gradeColor);
+    doc.text(g.l, M + 14, y + 35);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.6); doc.setTextColor(...C.ink);
+    doc.splitTextToSize(g.d, W - M * 2 - 28).slice(0, 2).forEach((l, i) => doc.text(l, M + 14, y + 50 + i * 11));
+    y += 92;
 
     kpi([
-      ['Presupuesto final', money(S.budget), S.budget < 40000 ? C.red : C.green],
-      ['Costo materializado', money(-S.spent), C.red],
-      ['XP de criterio', String(S.xp), C.ink],
-      ['Índice de riesgo', w.State.risk() + '%', (w.State.risk() > 55 ? C.red : w.State.risk() >= 35 ? C.amber : C.green)]
+      ['Índice de criterio', diag.score + '/100', gradeColor],
+      ['Hallazgos críticos', String(diag.criticas.length), diag.criticas.length ? C.red : C.green],
+      ['Brechas a reforzar', String(diag.brechas.length), diag.brechas.length ? C.amber : C.green],
+      ['Presupuesto final', money(S.budget), S.budget < 40000 ? C.red : C.green]
     ]);
+
+    /* --- hallazgos críticos sobre su firma --- */
+    h2('Hallazgos críticos que pesan sobre su firma');
+    if (diag.criticas.length) bullets(diag.criticas, C.red);
+    else bullets(['Sin hallazgos críticos: ninguna decisión de esta sesión inhabilita su firma.'], C.green);
+
+    /* --- perfil de pensamiento --- */
+    h2('Cómo piensa: perfil de decisión bajo presión');
+    diag.perfil.forEach(p => {
+      need(30);
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9.6); doc.setTextColor(...C.ink);
+      doc.text('▸ ' + p.t, M, y); y += 12.5;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...C.dim);
+      doc.splitTextToSize(p.d, W - M * 2 - 10).forEach(l => { need(13); doc.text(l, M + 10, y); y += 11.6; });
+      y += 5;
+    });
+
+    /* --- dimensiones con evidencia --- */
+    h2('Diagnóstico por dimensión (evidencia observable)');
+    diag.dims.forEach(x => {
+      need(34);
+      const colX = x.v >= 75 ? C.green : x.v >= 65 ? C.cyan : x.v >= 45 ? C.amber : C.red;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9.4); doc.setTextColor(...C.ink);
+      doc.text(doc.splitTextToSize(x.k, W - M * 2 - 70)[0], M, y);
+      doc.setTextColor(...colX);
+      doc.text(String(x.v) + '/100', W - M, y, { align: 'right' });
+      y += 6;
+      doc.setFillColor(236, 240, 244); doc.roundedRect(M, y, W - M * 2, 3.4, 1.7, 1.7, 'F');
+      doc.setFillColor(...colX); doc.roundedRect(M, y, (W - M * 2) * Math.max(2, x.v) / 100, 3.4, 1.7, 1.7, 'F');
+      y += 8;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8.4); doc.setTextColor(...C.dim);
+      doc.splitTextToSize(x.ev, W - M * 2).forEach(l => { need(12); doc.text(l, M, y); y += 11; });
+      y += 6;
+    });
+
+    /* --- fortalezas y áreas a reforzar --- */
+    h2('Evidencia que sí respalda su firma (fortalezas ≥75)');
+    if (diag.fuertes.length) bullets(diag.fuertes.map(f => f.k + ' (' + f.v + '/100): ' + f.ev), C.green);
+    else bullets(['Sin fortaleza ≥75: la sesión no produjo evidencia suficiente en ninguna dimensión.'], C.dim);
+
+    h2('Áreas a reforzar (con la evidencia en que falló)');
+    if (diag.brechas.length) bullets(diag.brechas.map(gb => gb.k + ' (' + gb.v + '/100): ' + gb.ev), C.red);
+    else bullets(['Sin brechas bajo 65: todas las dimensiones evaluadas están dentro de rango operativo.'], C.green);
 
     /* --- estado de la unidad --- */
     h2('Estado de la unidad al salir del patio');

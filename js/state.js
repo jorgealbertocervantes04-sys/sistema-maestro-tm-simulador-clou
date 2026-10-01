@@ -107,7 +107,8 @@
 
     grade() {
       const d = State.diagnostico();
-      return d.nivel;
+      // Compatible con el generador de PDF: devuelve etiqueta y descripción.
+      return { l: d.nivel, d: d.accion, score: d.score, col: d.col };
     },
 
     /* ============================================================

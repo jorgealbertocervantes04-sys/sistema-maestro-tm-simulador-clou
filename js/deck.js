@@ -172,6 +172,9 @@
             <span>${l.label}</span>
             <b class="${l.delta < 0 ? 'c-red' : 'c-green'}">${money(l.delta)}</b>
           </div>`).join('') || '<div class="tl-item mid"><span>Sin movimientos registrados</span><b>$0</b></div>'}</div>
+        <div class="row" style="margin-top:1.4rem;gap:.7rem;flex-wrap:wrap">
+          <button class="btn" data-act="next"><span data-icon="right"></span> Ver dictamen individual completo</button>
+        </div>
       </div>`;
   }
 

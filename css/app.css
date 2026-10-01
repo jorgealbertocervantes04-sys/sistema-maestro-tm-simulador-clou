@@ -1381,3 +1381,45 @@ body.phase1 .rail-mid { flex: 0 1 auto; min-width: 0; }
   .ins-panel{display:none}
   #insp3d .f-hud.tr{right:18px}
 }
+
+/* ============================================================
+   DICTAMEN DEL INSTRUCTOR · tablero diagnóstico
+   ============================================================ */
+.boot-id { margin: 1.4rem auto 0; max-width: 420px; text-align: left; }
+.boot-id label { display: block; font-family: var(--f-title); font-size: .6rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: .45rem; }
+.boot-id input { width: 100%; padding: .7rem .9rem; border-radius: var(--r-md, 10px);
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.16); color: #fff;
+  font-size: .95rem; outline: none; transition: border-color .18s; }
+.boot-id input:focus { border-color: var(--cyan, #00E5FF); box-shadow: 0 0 0 3px rgba(0,229,255,.12); }
+
+.dims { display: flex; flex-direction: column; gap: .55rem; margin: 1.3rem 0; }
+.dim-row { display: grid; grid-template-columns: minmax(150px, 230px) 1fr 42px; align-items: center; gap: .8rem; }
+.dim-l { font-size: .78rem; color: var(--ink-2); line-height: 1.25; }
+.dim-bar { height: 8px; border-radius: 5px; background: rgba(255,255,255,.08); overflow: hidden; }
+.dim-bar > div { height: 100%; border-radius: 5px; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+.dim-row b { font-family: var(--f-title); font-size: .85rem; text-align: right; }
+
+.dg-score { font-family: var(--f-title); font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; line-height: 1; }
+.dg-score span { font-size: .9rem; font-weight: 600; opacity: .6; }
+.dg-nivel { display: inline-block; margin-top: .5rem; padding: .4rem .8rem; border: 1.5px solid;
+  border-radius: 8px; font-family: var(--f-title); font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; text-align: right; max-width: 260px; line-height: 1.35; }
+.dg-accion { margin: 1.3rem 0; padding: .9rem 1.1rem; background: rgba(255,255,255,.04);
+  border-radius: 10px; }
+.dg-accion p { margin: .35rem 0 0; font-size: .92rem; color: var(--ink-2); line-height: 1.55; }
+.dg-block { margin: 1.3rem 0; }
+.dg-list { margin-top: .6rem; }
+.dg-crit { color: var(--red, #ff5470); font-weight: 600; }
+.dg-perf { margin: .7rem 0; padding-left: .9rem; border-left: 2px solid var(--cyan, #00E5FF); }
+.dg-perf b { display: block; font-size: .92rem; color: #fff; }
+.dg-perf i { display: block; font-style: normal; font-size: .82rem; color: var(--ink-2);
+  line-height: 1.5; margin-top: .2rem; }
+.timeline { display: flex; flex-direction: column; gap: .35rem; margin-top: 1rem; max-height: 260px; overflow-y: auto; }
+.tl-item { display: flex; justify-content: space-between; gap: 1rem; font-size: .8rem;
+  color: var(--ink-2); padding: .35rem .55rem; border-radius: 7px; background: rgba(255,255,255,.03); }
+.tl-item.bad b, .tl-item.good b { font-family: var(--f-title); white-space: nowrap; }
+@media (max-width: 720px) {
+  .dim-row { grid-template-columns: 1fr 42px; }
+  .dim-bar { grid-column: 1 / -1; order: 3; }
+}
