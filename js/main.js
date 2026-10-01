@@ -22,27 +22,15 @@
 
     // ---- pantalla de arranque = desbloqueo de audio (los navegadores bloquean autoplay)
     const bootEl = document.getElementById('boot');
-    const snap = await w.State.load();
+    await w.State.load();
 
-    const resumeBox = document.getElementById('boot-resume');
-    if (snap) {
-      resumeBox.classList.remove('hidden');
-      document.getElementById('resume-info').textContent =
-        `Sesión previa detectada: ${snap.log.length} decisiones registradas, presupuesto en $${snap.budget.toLocaleString('en-US')}.`;
-      document.getElementById('btn-resume').addEventListener('click', () => start(snap));
-    }
-    document.getElementById('btn-start').addEventListener('click', () => start(null));
+    document.getElementById('btn-start').addEventListener('click', () => start());
 
-    function start(restoreSnap) {
+    function start() {
       w.Audio3D.unlock();
-      if (restoreSnap) { w.State.restore(restoreSnap); }
-      const nomEl = document.getElementById('in-nombre');
-      const nom = nomEl && nomEl.value.trim();
-      if (nom || !restoreSnap || !w.State.get().nombre) { if (nom) w.State.setNombre(nom); }
       bootEl.classList.add('gone');
       setTimeout(() => bootEl.remove(), 800);
       w.Deck.init();
-      if (restoreSnap) w.toast('Progreso restaurado', 'good');
       if (!w.State.backendAvailable()) {
         setTimeout(() => w.toast('Sin servidor: el progreso no se guardará y la votación por celular estará desactivada.', 'mid'), 1400);
       }

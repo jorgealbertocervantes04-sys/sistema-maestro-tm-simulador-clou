@@ -47,8 +47,6 @@
       id: 'portada', chapter: 'Apertura', cam: 'opening', mood: 'normal', speed: 0, anim: 'enter',
       html: () => `
         <div class="cover cover-bg" id="cover-bg-wrap">
-          <img class="cover-bg-img" src="portada (2).png" alt="Formando el Trayecto del Instructor"
-               onerror="this.closest('.cover-bg').classList.add('cover-bg-missing')">
           <div class="cover-bg-tint"></div>
           <div class="panel accent-cyan pad brackets c-cyan cover-txt">
             <div class="kicker">Sistema Maestro TM &middot; Mentores Operativos</div>

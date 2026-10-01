@@ -225,5 +225,55 @@
     return g;
   }
 
-  w.TMTruck = { buildTruck, buildGround };
+  /* ============================================================
+     TRAYECTO DEL INSTRUCTOR — fondo de portada sin vehículos.
+     Carreterna recta con líneas centrally punteadas, bordes
+     luminosos y marcas que avanzan (sensación de recorrido).
+     ============================================================ */
+  function buildRoute(neon) {
+    const g = new T.Group();
+
+    const grid = new T.GridHelper(220, 88, neon, 0x0C1C2A);
+    grid.material.transparent = true; grid.material.opacity = 0.13;
+    g.add(grid);
+
+    // carpeta de la carretera
+    const roadMat = new T.MeshStandardMaterial({ color: 0x0A1420, metalness: 0.2, roughness: 0.9 });
+    const road = new T.Mesh(new T.PlaneGeometry(11, 260), roadMat);
+    road.rotation.x = -Math.PI / 2;
+    road.position.y = 0.005;
+    g.add(road);
+
+    // líneas continuas de borde (ligeramente luminosas)
+    const edgeMat = new T.MeshBasicMaterial({ color: neon, transparent: true, opacity: 0.35 });
+    const edges = [];
+    [-5.2, 5.2].forEach(x => {
+      const e = new T.Mesh(new T.BoxGeometry(0.12, 0.02, 260), edgeMat.clone());
+      e.position.set(x, 0.012, 0);
+      g.add(e); edges.push(e);
+    });
+
+    // línea central punteada que avanza
+    const dashes = [];
+    const dashMat = new T.MeshBasicMaterial({ color: 0xF7F8F9, transparent: true, opacity: 0.5 });
+    for (let i = 0; i < 40; i++) {
+      const d = new T.Mesh(new T.BoxGeometry(0.2, 0.02, 3.4), dashMat.clone());
+      d.position.set(0, 0.015, -125 + i * 6.5);
+      g.add(d); dashes.push(d);
+    }
+
+    // hitos del trayecto (postes luminosos a los lados)
+    const glow = [];
+    const postMat = new T.MeshBasicMaterial({ color: neon, transparent: true, opacity: 0.2 });
+    for (let i = 0; i < 10; i++) {
+      const p = new T.Mesh(new T.BoxGeometry(0.1, 1.1, 0.1), postMat.clone());
+      p.position.set(i % 2 ? 6.6 : -6.6, 0.55, -110 + i * 24);
+      g.add(p); glow.push(p);
+    }
+
+    g.userData = { dashes, grid, glow, edges };
+    return g;
+  }
+
+  w.TMTruck = { buildTruck, buildGround, buildRoute };
 })(window);

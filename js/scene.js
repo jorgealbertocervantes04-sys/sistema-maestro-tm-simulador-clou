@@ -9,30 +9,32 @@
   let curveT = 0;
   let shake = 0, tilt = 0;
 
-  const PRESETS = {
-    opening: { p: [-23, 8.5, 27], l: [2.5, 5.6, -3] },
-    wide:    { p: [-33, 14, 18],   l: [1.5, 4.6, -9] },
-    follow:  { p: [-16, 5.6, 19],  l: [2.4, 4.2, 0] },
-    hood:    { p: [9.5, 3.2, 14],  l: [0.5, 2.6, 6.2] },
-    cabin:   { p: [-9.5, 4.4, 11], l: [1.2, 3.6, 4.2] },
-    axle:    { p: [5.6, 1.15, 4.6],l: [1.3, 0.9, 1.3] },
-    kingpin: { p: [4.4, 2.6, 3.6], l: [0, 1.45, 0.72] },
-    dolly:   { p: [5.8, 2.3, -10.6], l: [0, 1.35, -13.3] },
-    trailer: { p: [-15, 6.5, -1],  l: [1.5, 4.2, -9] },
-    rear:    { p: [-12, 5.5, -36], l: [1.5, 3.6, -26] },
-    crash:   { p: [5.5, 2.2, 13],  l: [0.4, 2.8, 4.5] },
-    top:     { p: [2, 30, -8.5],   l: [0, 0, -9] },
-    lowfront:{ p: [-6.5, 1.4, 15], l: [1.2, 3.0, 5] },
-    mirrors: { p: [-5.4, 4.0, 10.4], l: [1.5, 3.05, 5.2] },
-    stacks:  { p: [-5.8, 3.6, 7.6],  l: [1.42, 2.6, 2.9] },
-    tanks:   { p: [6.4, 1.7, 6.4],   l: [1.28, 0.95, 3.0] },
-    landing: { p: [5.4, 2.1, 2.2],   l: [0.85, 0.9, -1.6] },
-    hoses:   { p: [4.6, 2.5, -10.0], l: [0.42, 1.62, -12.8] },
-    taillamp:{ p: [-5.2, 3.0, -33.5],l: [0, 1.8, -25.9] },
-    mudflap: { p: [5.8, 1.5, -9.0],  l: [1.2, 0.4, -12.3] },
-    box2:    { p: [-14.5, 6.2, -13], l: [1.4, 3.5, -20.2] },
-    galibo:  { p: [-5.2, 5.4, 10],   l: [0, 3.9, 5.1] },
-    front:   { p: [0.5, 2.2, 16.5],  l: [0, 2.2, 6.6] }
+  // Sin camiones en escena: toda la narrativa se ve sobre el trayecto del instructor
+  const ROUTE_CAMS = {
+    route:      { p: [-9.5, 4.6, 20],  l: [0, 1.0, -8] },
+    opening:    { p: [-9.5, 4.6, 20],  l: [0, 1.0, -8] },
+    wide:       { p: [-12, 6.2, 15],   l: [0, 1.0, -10] },
+    follow:     { p: [-7, 3.4, 16],    l: [0, 1.0, -4] },
+    hood:       { p: [5.5, 2.6, 14],   l: [0, 0.9, 0] },
+    cabin:      { p: [-6.5, 3.0, 12],  l: [0, 1.0, -2] },
+    axle:       { p: [4.5, 1.6, 8],    l: [0, 0.5, 0] },
+    kingpin:    { p: [4.0, 1.8, 6],    l: [0, 0.6, -1] },
+    dolly:      { p: [-4.5, 1.8, -4],  l: [0, 0.5, -10] },
+    trailer:    { p: [-10, 5.0, 2],    l: [0, 1.0, -8] },
+    rear:       { p: [8, 3.0, -22],    l: [0, 0.9, -14] },
+    crash:      { p: [4.0, 1.5, 9],    l: [0, 0.6, 1] },
+    top:        { p: [0.5, 16, 4],     l: [0, 0, -6] },
+    lowfront:   { p: [-3.5, 1.3, 12],  l: [0, 0.7, 2] },
+    mirrors:    { p: [-5.0, 2.2, 9],   l: [0, 0.9, 1] },
+    stacks:     { p: [-4.0, 2.0, 7],   l: [0, 0.8, -1] },
+    tanks:      { p: [4.2, 1.4, 6],    l: [0, 0.5, -1] },
+    landing:    { p: [4.4, 1.6, 4],    l: [0, 0.5, -3] },
+    hoses:      { p: [-4.2, 1.7, -2],  l: [0, 0.5, -9] },
+    taillamp:   { p: [5.0, 2.0, -20],  l: [0, 0.7, -12] },
+    mudflap:    { p: [-4.6, 1.4, -6],  l: [0, 0.4, -12] },
+    box2:       { p: [-9, 4.2, -8],    l: [0, 0.8, -16] },
+    galibo:     { p: [-4.5, 2.6, 8],   l: [0, 1.0, 0] },
+    front:      { p: [0.5, 2.4, 14],   l: [0, 0.8, 2] }
   };
 
   const MOODS = {
@@ -70,11 +72,11 @@
     rimA = new T.PointLight(0xFB6500, 2.6, 40, 2); rimA.position.set(6, 3.4, 6); scene.add(rimA);
     rimB = new T.PointLight(0xFB6500, 2.2, 50, 2); rimB.position.set(-6, 3.2, -16); scene.add(rimB);
 
-    rig = w.TMTruck.buildTruck({ neon: 0xFB6500, detail: true });
+    // Portada sin camiones: el fondo muestra únicamente el trayecto del instructor
+    rig = { group: new T.Group(), wheels: [], neonMats: [], lightMats: [] };
     scene.add(rig.group);
-    ground = w.TMTruck.buildGround(0xFB6500);
-    scene.add(ground);
-    buildSmoke();
+    ground = w.TMTruck ? w.TMTruck.buildRoute(0xFB6500) : null;
+    if (ground) scene.add(ground);
 
     // post-proceso
     try {
@@ -95,7 +97,7 @@
   const camNow = { px: 0, py: 0, pz: 0, lx: 0, ly: 0, lz: 0 };
 
   function setPreset(name, dur) {
-    const p = PRESETS[name] || PRESETS.wide;
+    const p = ROUTE_CAMS[name] || ROUTE_CAMS.route;
     camGoal.px = p.p[0]; camGoal.py = p.p[1]; camGoal.pz = p.p[2];
     camGoal.lx = p.l[0]; camGoal.ly = p.l[1]; camGoal.lz = p.l[2];
     if (dur === 0 || !w.gsap) {
@@ -122,8 +124,9 @@
       const c = new T.Color(hex);
       w.gsap.to(col, { duration: dur, r: c.r, g: c.g, b: c.b });
     };
-    rig.neonMats.forEach(mt => apply(mt, m.neon));
-    ground.userData.grid.material.color.setHex(m.neon);
+    if (ground && ground.userData.grid) ground.userData.grid.material.color.setHex(m.neon);
+    if (ground && ground.userData.edges) ground.userData.edges.forEach(e => apply(e.material, m.neon));
+    if (ground && ground.userData.glow) ground.userData.glow.forEach(p => apply(p.material, m.neon));
     apply(rimA.color, m.rim); apply(rimB.color, m.rim);
     keyLight.color.setHex(m.key);
     if (w.gsap) {
@@ -144,46 +147,11 @@
   }
 
   function pulseLights(color) {
-    rig.lightMats.forEach(m => {
-      if (!w.gsap) return;
-      const c = new T.Color(color);
-      w.gsap.fromTo(m.color, { r: c.r, g: c.g, b: c.b }, { r: new T.Color(m.userData.base).r, g: new T.Color(m.userData.base).g, b: new T.Color(m.userData.base).b, duration: 1.1 });
-    });
-  }
-
-  /* ---- humo de escape: nubes procedurales en los dos tubos verticales ---- */
-  let smoke = [];
-  const STACKS = [[1.42, 4.35, 2.9], [-1.42, 4.35, 2.9]];
-  function buildSmoke() {
-    const geo = new T.SphereGeometry(0.22, 7, 6);
-    const N_PER_STACK = 9;
-    STACKS.forEach(([sx, sy, sz]) => {
-      for (let i = 0; i < N_PER_STACK; i++) {
-        const mat = new T.MeshBasicMaterial({ color: 0x9AA6B0, transparent: true, opacity: 0 });
-        const m = new T.Mesh(geo, mat);
-        const life = 1.4 + Math.random() * 0.9;
-        m.userData = { sx, sy, sz, age: (i / N_PER_STACK) * life, life, jx: (Math.random() - 0.5) * 0.3 };
-        m.position.set(sx, sy, sz);
-        rig.group.add(m);
-        smoke.push(m);
-      }
-    });
-  }
-  function updateSmoke(dt) {
-    const intensity = Math.min(speed, 1);
-    smoke.forEach(m => {
-      const u = m.userData;
-      u.age += dt;
-      if (u.age >= u.life) { u.age -= u.life; }
-      const t2 = u.age / u.life;
-      m.position.set(
-        u.sx + u.jx * t2,
-        u.sy + t2 * (0.7 + speed * 1.1),
-        u.sz - t2 * (0.35 + speed * 0.9)
-      );
-      const scale = 0.5 + t2 * 2.1;
-      m.scale.setScalar(scale);
-      m.material.opacity = (1 - t2) * (0.1 + intensity * 0.4);
+    // Sin faroles de camión: el destello se da en los bordes del trayecto
+    if (!ground || !ground.userData.edges || !w.gsap) return;
+    const c = new T.Color(color);
+    ground.userData.edges.forEach(e => {
+      w.gsap.fromTo(e.material.color, { r: c.r, g: c.g, b: c.b }, { r: new T.Color(0xFB6500).r, g: new T.Color(0xFB6500).g, b: new T.Color(0xFB6500).b, duration: 1.1 });
     });
   }
 
@@ -195,25 +163,21 @@
 
     speed += (targetSpeed - speed) * Math.min(dt * 1.6, 1);
 
-    rig.wheels.forEach(g => { g.rotation.x -= speed * dt * 2.3; });
-    ground.userData.dashes.forEach(d => {
-      d.position.z += speed * dt * 12;
-      if (d.position.z > 120) d.position.z -= 230;
-    });
+    // El trayecto avanza como si el instructor lo estuviera recorriendo
+    if (ground && ground.userData.dashes) {
+      ground.userData.dashes.forEach(d => {
+        d.position.z += (0.35 + speed * 12) * dt;
+        if (d.position.z > 120) d.position.z -= 230;
+      });
+    }
+    if (ground && ground.userData.glow) {
+      ground.userData.glow.forEach((gEl, i) => {
+        gEl.material.opacity = 0.14 + 0.08 * Math.sin(t * (1.3 + i * 0.4));
+      });
+    }
 
-    // vibración de motor y balanceo
-    const idle = 0.5 + speed * 0.5;
-    rig.group.position.y = Math.sin(t * 26) * 0.006 * idle + Math.sin(t * 1.7) * 0.02;
-
-    // toma de curvas: solo se nota cuando el camión va en movimiento (speed > 0);
-    // en las estaciones de inspección (speed = 0) el chasis queda perfectamente quieto.
+    // ligera sensación de conducción (sin vehículo: solo deriva sutil de cámara)
     curveT += dt * (0.12 + speed * 0.3);
-    const curve = Math.sin(curveT) * speed * 0.07;
-    rig.group.rotation.z = Math.sin(t * 0.9) * 0.0035 * idle + tilt + curve;
-    rig.group.rotation.y = Math.sin(t * 0.31) * 0.006 + Math.sin(curveT * 0.5) * speed * 0.02;
-    rig.group.position.x = Math.sin(curveT) * speed * 0.55;
-
-    updateSmoke(dt);
 
     // deriva sutil + sacudida de impacto
     let sx = 0, sy = 0;

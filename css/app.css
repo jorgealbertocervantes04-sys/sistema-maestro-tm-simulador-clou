@@ -734,11 +734,28 @@ body.phase1 .rail-mid { flex: 0 1 auto; min-width: 0; }
   position: relative; display: block; grid-template-columns: none; width: min(1200px, 100%);
   min-height: min(78vh, 720px); border-radius: var(--r-lg); overflow: hidden;
   border: 1px solid rgba(251, 101, 0,.25); box-shadow: 0 40px 90px rgba(0,0,0,.5);
+  /* Portada sin camiones: solo el trayecto del instructor (fondo 3D + carretera estilizada) */
+  background:
+    radial-gradient(1100px 420px at 78% 118%, rgba(251,101,0,.16), transparent 60%),
+    linear-gradient(180deg, #04070F 0%, #071224 55%, #0A1B31 100%);
+}
+.cover-bg::before {
+  content: ""; position: absolute; left: 50%; bottom: -6%; width: 46%; height: 78%;
+  transform: translateX(-50%) perspective(620px) rotateX(64deg);
+  background:
+    repeating-linear-gradient(180deg, rgba(247,248,249,.55) 0 26px, transparent 26px 74px) center/6px 100% no-repeat,
+    linear-gradient(90deg, rgba(251,101,0,.5) 0 3px, transparent 3px calc(100% - 3px), rgba(251,101,0,.5) calc(100% - 3px)),
+    rgba(10,20,32,.92);
+  border-radius: 4px; opacity: .85; pointer-events: none;
+}
+.cover-bg::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(4,7,15,.2), transparent 40%);
 }
 .cover-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .cover-bg-tint {
   position: absolute; inset: 0;
-  background: linear-gradient(100deg, rgba(11,35,65,.92) 0%, rgba(11,35,65,.72) 42%, rgba(11,35,65,.28) 78%, transparent 100%);
+  background: linear-gradient(100deg, rgba(6,10,20,.94) 0%, rgba(6,10,20,.78) 45%, rgba(6,10,20,.3) 80%, transparent 100%);
 }
 .cover-bg.cover-bg-missing .cover-bg-img { display: none; }
 .cover-bg.cover-bg-missing { background: radial-gradient(circle at 30% 30%, #17396a, var(--void)); }

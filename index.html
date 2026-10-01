@@ -17,20 +17,9 @@
 <!-- ============ ARRANQUE / DESBLOQUEO DE AUDIO ============ -->
 <div id="boot">
   <div class="boot-inner">
-    <p class="boot-kick">Direccion de tu trayecto -- Instructores TM</p>
-    <h1>Formando el Trayecto<br>del Instructor</h1>
-    <p class="kicker">Simulador forense de decisi&oacute;n &middot; Autotransporte federal de carga</p>
-    <div class="boot-id">
-      <label for="in-nombre">Nombre del instructor evaluado (aparece en el dictamen)</label>
-      <input type="text" id="in-nombre" maxlength="60" placeholder="Ej. Jorge A. Cervantes" autocomplete="off">
-    </div>
+    <h1>Formando el Trayecto del Instructor</h1>
     <div class="boot-load"><span></span></div>
-    <button class="btn" id="btn-start"><span data-icon="play"></span> Iniciar sesión de evaluación</button>
-    <div id="boot-resume" class="hidden">
-      <p class="kicker" id="resume-info"></p>
-      <button class="btn ghost" id="btn-resume"><span data-icon="refresh"></span> Retomar donde se quedó</button>
-    </div>
-    <p class="boot-note">Al iniciar se activa el audio del simulador. Recomendado en pantalla completa (F11).</p>
+    <button class="btn" id="btn-start"><span data-icon="play"></span> Iniciar sesi&oacute;n</button>
   </div>
 </div>
 
@@ -39,12 +28,7 @@
   <div class="rail-left">
     <span class="mark logo-slot">
       <img src="assets/logo.png" alt="Logo" onerror="this.closest('.logo-slot').classList.add('missing')">
-      <svg class="mark-fallback" viewBox="0 0 60 40" aria-label="TM" fill="none">
-        <path d="M4 28h22V13H4z" stroke="currentColor" stroke-width="2.6"/>
-        <path d="M29 28h12l7-9H29z" stroke="currentColor" stroke-width="2.6"/>
-        <circle cx="13" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
-        <circle cx="38" cy="32" r="3.4" stroke="currentColor" stroke-width="2.6"/>
-      </svg>
+
     </span>
     <div class="rail-ch"><span class="kicker" data-chapter></span></div>
   </div>
