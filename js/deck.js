@@ -146,39 +146,99 @@
 
   /* ---------------- tablero final ---------------- */
   function buildScoreboard(S) {
-    const g = w.State.grade();
-    const pct = Math.max(0, Math.round(S.budget / w.State.START_BUDGET * 100));
-    const items = S.log.filter(l => l.delta !== 0).map(l => `
-      <div class="tl-item ${l.kind}">
-        <span>${l.label}</span>
-        <b class="${l.delta < 0 ? 'c-red' : 'c-green'}">${money(l.delta)}</b>
+    const d = w.State.diagnostico();
+    const pct = Math.max(0, Math.round(S.budget / (S.presupuestoRef || w.State.START_BUDGET) * 100));
+    const colFor = v => v >= 75 ? 'var(--green)' : v >= 65 ? 'var(--cyan)' : v >= 45 ? 'var(--amber)' : 'var(--red)';
+    const items = d.dims.map(x => `
+      <div class="dim-row">
+        <span class="dim-l">${x.k}</span>
+        <div class="dim-bar"><div style="width:${x.v}%;background:${colFor(x.v)}"></div></div>
+        <b style="color:${colFor(x.v)}">${x.v}</b>
       </div>`).join('');
     return `
       <div class="panel pad w-lg mx">
-        <div class="kicker">Evaluación por competencias · CONOCER</div>
-        <h2 class="title" style="margin-top:.4rem">Tablero de Resultados</h2>
+        <div class="kicker">Evaluación determinante del instructor · evidencia observable</div>
+        <h2 class="title" style="margin-top:.4rem">Tablero de Resultados — ${S.nombre || 'Instructor sin nombre'}</h2>
         <div class="grid-4" style="margin:1.4rem 0">
+          <div class="stat"><h4>Índice de criterio</h4><div class="v num" style="color:${d.col}">${d.score}/100</div></div>
           <div class="stat"><h4>Presupuesto final</h4><div class="v num" style="color:${S.budget < 0 ? 'var(--red)' : S.budget < 40000 ? 'var(--amber)' : 'var(--green)'}">${money(S.budget)}</div></div>
           <div class="stat"><h4>Capital conservado</h4><div class="v num">${pct}%</div></div>
           <div class="stat"><h4>XP de criterio</h4><div class="v num c-cyan">${S.xp}</div></div>
-          <div class="stat"><h4>Índice de riesgo</h4><div class="v num" style="color:${w.State.risk() > 55 ? 'var(--red)' : w.State.risk() >= 35 ? 'var(--amber)' : 'var(--green)'}">${w.State.risk()}%</div></div>
         </div>
-        <div class="grade" style="border-color:${g.c};color:${g.c}">${g.l}</div>
-        <div class="timeline">${items || '<div class="tl-item mid"><span>Sin movimientos registrados</span><b>$0</b></div>'}</div>
+        <div class="grade" style="border-color:${d.col};color:${d.col}">${d.nivel}</div>
+        <div class="dims">${items}</div>
+        <div class="timeline">${S.log.filter(l => l.delta !== 0).map(l => `
+          <div class="tl-item ${l.kind}">
+            <span>${l.label}</span>
+            <b class="${l.delta < 0 ? 'c-red' : 'c-green'}">${money(l.delta)}</b>
+          </div>`).join('') || '<div class="tl-item mid"><span>Sin movimientos registrados</span><b>$0</b></div>'}</div>
       </div>`;
   }
 
   function buildDictamen(S) {
-    const gaps = w.State.gaps(), str = w.State.strengths();
+    const d = w.State.diagnostico();
+    const money8 = n => '$' + Math.abs(n).toLocaleString('en-US');
+    const critHtml = d.criticas.length
+      ? d.criticas.map(c => `<li class="dg-crit">${c}</li>`).join('')
+      : '<li style="color:var(--green)">Sin hallazgos críticos: ninguna decisión de esta sesión inhabilita su firma.</li>';
+    const perfilHtml = d.perfil.map(p => `<div class="dg-perf"><b>${p.t}</b><i>${p.d}</i></div>`).join('');
+    const refHtml = d.fuertes.length
+      ? d.fuertes.map(f => `<li><b>${f.k}</b> (${f.v}/100) — ${f.ev}</li>`).join('')
+      : '<li class="c-dim">Sin fortaleza ≥75: la sesión no produjo evidencia suficiente en ninguna dimensión.</li>';
+    const gapHtml = d.brechas.length
+      ? d.brechas.map(g => `<li><b>${g.k}</b> (${g.v}/100) — ${g.ev}</li>`).join('')
+      : '<li class="c-dim">Sin brechas bajo 65: todas las dimensiones evaluadas están dentro de rango operativo.</li>';
     return `
-      <div class="panel accent-cyan pad w-md mx brackets c-cyan">
-        <div class="kicker">Documento individual de cierre</div>
-        <h2 class="title" style="margin-top:.4rem">Dictamen del Instructor</h2>
-        <p class="lede">Se genera un PDF con las decisiones tomadas, el costo evitado frente al materializado, las competencias demostradas y las áreas de mejora derivadas de errores reales de esta sesión.</p>
-        <div class="grid-2" style="margin-top:1.4rem">
-          <div class="stat"><h4>Competencias demostradas</h4><ul class="mini">${str.slice(0, 4).map(x => `<li>${x}</li>`).join('')}</ul></div>
-          <div class="stat"><h4>Áreas de mejora</h4><ul class="mini">${gaps.slice(0, 3).map(x => `<li>${x}</li>`).join('')}</ul></div>
+      <div class="panel accent-cyan pad w-lg mx brackets c-cyan">
+        <div class="row" style="justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap">
+          <div>
+            <div class="kicker">Documento individual de evaluación · uso directivo</div>
+            <h2 class="title" style="margin-top:.4rem">Dictamen del Instructor ${S.nombre ? '— ' + S.nombre : ''}</h2>
+            <p class="lede" style="max-width:60ch">Generado de la evidencia observable de esta sesión: decisiones tomadas, instrumento construido, clase impartida y resultados contra el expediente 4471. No describe intención: describe conducta registrada.</p>
+          </div>
+          <div style="text-align:right">
+            <div class="kicker">Semáforo operativo</div>
+            <div class="dg-score" style="color:${d.col}">${d.score}<span>/100</span></div>
+            <div class="dg-nivel" style="border-color:${d.col};color:${d.col}">${d.nivel}</div>
+          </div>
         </div>
+
+        <div class="dg-accion" style="border-left:3px solid ${d.col}">
+          <div class="kicker">Acción institucional recomendada</div>
+          <p>${d.accion}</p>
+        </div>
+
+        <div class="dg-block">
+          <div class="kicker c-red">Hallazgos críticos que pesan sobre su firma</div>
+          <ul class="mini dg-list">${critHtml}</ul>
+        </div>
+
+        <div class="dg-block">
+          <div class="kicker c-cyan">Cómo piensa: perfil de decisión bajo presión</div>
+          ${perfilHtml}
+        </div>
+
+        <div class="grid-2" style="margin-top:1.2rem">
+          <div class="stat"><h4>Evidencia que sí respalda su firma</h4><ul class="mini">${refHtml}</ul></div>
+          <div class="stat"><h4>Áreas a reforzar (con la evidencia en que falló)</h4><ul class="mini">${gapHtml}</ul></div>
+        </div>
+
+        <div class="grid-2" style="margin-top:1.2rem">
+          <div class="stat"><h4>Utilidad materializada por sus decisiones</h4>
+            <div class="v num" style="color:${S.budget < 0 ? 'var(--red)' : 'var(--green)'}">${S.spent > 0 ? '-' + money8(S.spent) : money8(0)}</div>
+            <p class="lede" style="font-size:.85rem;margin:.4rem 0 0">Cada peso perdido aquí fue una cesión de criterio documentada. Un instructor que sostiene el estándar cuesta menos que el accidente que previene.</p>
+          </div>
+          <div class="stat"><h4>Evidencias generadas en la sesión</h4>
+            <ul class="mini">
+              <li>Instrumento de evaluación: ${w.State.has('instrumentoHecho') ? 'construido con ' + ((S.instrumento && S.instrumento.total) || 0) + ' criterios' : 'NO construido'}</li>
+              <li>Detección del Borras: ${w.State.has('evalAplicada') ? ((S.evaluados || []).find(o => o.id === 'ramiro') || {}).calif + '%' : 'no probada'}</li>
+              <li>Clase de onboarding: ${w.State.has('microclaseHecha') ? (S.flags.microclasePct + '% de transferencia') : 'no impartida'}</li>
+              <li>Curso PIEL de inducción: ${w.State.has('cursoHecho') ? ((S.flags.cursoPts || 0) + '/12 bloques transferibles') : 'no diseñado'}</li>
+              <li>Evaluación en campo a operador real: ${w.State.has('evalCampoHecha') ? (S.evalCampo ? S.evalCampo.nombre + ' · ' + S.evalCampo.pct + '%' : 'hecha') : 'no aplicada'}</li>
+            </ul>
+          </div>
+        </div>
+
         <div class="row" style="margin-top:1.5rem;gap:.7rem;flex-wrap:wrap">
           <button class="btn" data-act="pdf">${I('doc')} Descargar dictamen en PDF</button>
           <button class="btn ghost" data-act="restart">${I('refresh')} Reiniciar simulación</button>
@@ -191,7 +251,7 @@
     const S = w.State.get();
     const list = currentList();
     const s = list[Math.min(idx, list.length - 1)] || {};
-    const pct = Math.max(0, Math.min(100, S.budget / w.State.START_BUDGET * 100));
+    const pct = Math.max(0, Math.min(100, S.budget / (S.presupuestoRef || w.State.START_BUDGET) * 100));
     const fill = rail.querySelector('.budget-fill');
     fill.style.width = pct + '%';
     fill.classList.toggle('warn', pct < 60 && pct >= 28);

@@ -385,7 +385,8 @@
       const s = S.get();
       const log = s.log.filter(l => l.delta !== 0);
       const perdido = s.spent > 0 ? s.spent : 0;
-      const pct = Math.max(0, Math.round((s.budget / S.START_BUDGET) * 100));
+      const ref = s.presupuestoRef || S.START_BUDGET;
+      const pct = Math.max(0, Math.round((s.budget / ref) * 100));
       root.innerHTML = `
         <div class="kicker c-red">Cierre auditado · impacto financiero de la instrucción</div>
         <div class="title">El viaje terminó. Ahora se paga.</div>
@@ -394,7 +395,7 @@
           Ninguno es una multa aleatoria: todos son consecuencia de un criterio.
         </p>
         <div class="aud-top">
-          <div class="stat"><h4>Presupuesto inicial</h4><div class="v num">${money(S.START_BUDGET)}</div></div>
+          <div class="stat"><h4>Presupuesto inicial</h4><div class="v num">${money(ref)}</div></div>
           <div class="stat"><h4>Movimientos registrados</h4><div class="v num">${log.length}</div></div>
           <div class="stat"><h4>Desempeño formativo</h4><div class="v num c-cyan">${s.xp}<span style="font-size:.5em;color:var(--muted)">/700</span></div></div>
         </div>
@@ -412,7 +413,7 @@
           <div class="aud-total">
             <div>
               <div class="rv-s">Balance real de operación</div>
-              <div class="aud-big" style="color:${s.budget >= S.START_BUDGET * 0.88 ? 'var(--green)' : s.budget >= S.START_BUDGET * 0.6 ? 'var(--amber)' : 'var(--red)'}">${money(s.budget)}</div>
+              <div class="aud-big" style="color:${s.budget >= ref * 0.88 ? 'var(--green)' : s.budget >= ref * 0.6 ? 'var(--amber)' : 'var(--red)'}">${money(s.budget)}</div>
               <div class="rv-s" style="margin-top:.2rem">${pct}% del presupuesto conservado</div>
             </div>
             <div>
