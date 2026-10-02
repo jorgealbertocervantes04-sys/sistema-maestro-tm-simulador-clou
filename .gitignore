@@ -1,2 +1,2 @@
-.vercel
-.env*
+# Build/Output directories
+.vercel/output/
