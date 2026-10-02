@@ -175,6 +175,18 @@
         gEl.material.opacity = 0.14 + 0.08 * Math.sin(t * (1.3 + i * 0.4));
       });
     }
+    // El tráiler fantasma viaja en el trayecto: avanza con la narrativa y respira con los pulsos
+    if (ground && ground.userData.trailerGroup) {
+      const tg = ground.userData.trailerGroup;
+      tg.position.z += (0.25 + speed * 9) * dt;
+      if (tg.position.z > 60) tg.position.z = -170;
+      tg.position.y = Math.sin(t * 0.9) * 0.05;
+      if (ground.userData.trailer) {
+        ground.userData.trailer.forEach((p, i) => {
+          p.material.opacity = 0.35 + 0.3 * Math.abs(Math.sin(t * (1.6 + i * 0.5)));
+        });
+      }
+    }
 
     // ligera sensación de conducción (sin vehículo: solo deriva sutil de cámara)
     curveT += dt * (0.12 + speed * 0.3);

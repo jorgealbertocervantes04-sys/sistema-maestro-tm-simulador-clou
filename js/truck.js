@@ -230,6 +230,32 @@
      Carreterna recta con líneas centrally punteadas, bordes
      luminosos y marcas que avanzan (sensación de recorrido).
      ============================================================ */
+  function buildTrailer(neon) {
+    // Sombra volumétrica del tráiler que acompaña el trayecto (sin ruedas: silueta luminosa)
+    const grp = new T.Group();
+    const glowMat = new T.MeshBasicMaterial({ color: neon, transparent: true, opacity: 0.16, side: T.DoubleSide });
+    const boxGeo = new T.BoxGeometry(2.7, 1.5, 9.6);
+    const edgesGeo = new T.EdgesGeometry(boxGeo);
+
+    const shell = new T.Mesh(boxGeo, glowMat.clone());
+    shell.position.set(0, 0.95, 0);
+    grp.add(shell);
+
+    const wire = new T.LineSegments(edgesGeo, new T.LineBasicMaterial({ color: neon, transparent: true, opacity: 0.4 }));
+    wire.position.copy(shell.position);
+    grp.add(wire);
+
+    // púlsos de luz laterales
+    const pulses = [];
+    for (let i = 0; i < 4; i++) {
+      const p = new T.Mesh(new T.SphereGeometry(0.09, 8, 8), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 }));
+      p.position.set(-1.35 + (i % 2) * 2.7, 0.5, -3.2 + i * 2.1);
+      grp.add(p); pulses.push(p);
+    }
+
+    return { group: grp, pulses };
+  }
+
   function buildRoute(neon) {
     const g = new T.Group();
 
@@ -271,9 +297,14 @@
       g.add(p); glow.push(p);
     }
 
-    g.userData = { dashes, grid, glow, edges };
+    // sombra volumétrica del tráiler que viaja en el trayecto (decorativa, sin ruedas)
+    const trailer = buildTrailer(neon);
+    trailer.group.position.set(2.9, 0, -14);
+    g.add(trailer.group);
+
+    g.userData = { dashes, grid, glow, edges, trailer: trailer.pulses, trailerGroup: trailer.group };
     return g;
   }
 
-  w.TMTruck = { buildTruck, buildGround, buildRoute };
+  w.TMTruck = { buildTruck, buildGround, buildRoute, buildTrailer };
 })(window);

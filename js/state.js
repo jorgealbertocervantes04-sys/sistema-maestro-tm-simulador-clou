@@ -22,6 +22,7 @@
     km: 0,
     log: [],
     flags: {},
+    decisionLog: [],
     forensicDone: false,
     startedAt: Date.now()
   });
@@ -100,6 +101,17 @@
     },
     flag(k, v) { S.flags[k] = v === undefined ? true : v; emit(); },
     has(k) { return !!S.flags[k]; },
+    /* Registro íntegro de decisiones: alimenta el diagnóstico individual y grupal.
+       Cada entrada guarda slide, letra elegida, tono y costo — evidencia cruda auditable. */
+    recordDecision(entry) {
+      if (!Array.isArray(S.decisionLog)) S.decisionLog = [];
+      S.decisionLog.push(Object.assign({ t: Date.now() }, entry));
+      if (S.decisionLog.length > 80) S.decisionLog.splice(0, S.decisionLog.length - 80);
+      emit();
+    },
+    decisions(slideId) {
+      return (S.decisionLog || []).filter(d => !slideId || d.slide === slideId);
+    },
 
     /* ---- riesgo compuesto: alimenta el desenlace ---- */
     risk() {

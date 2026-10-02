@@ -57,6 +57,7 @@
     if (!s) return;
 
     const anim = s.anim === 'impact' ? 'impact' : (lastDir < 0 ? 'left' : (s.anim || 'enter'));
+    s._shownAt = Date.now(); // tiempo de reacción: evidencia conductual del diagnóstico
     stage.innerHTML = '';
     const wrap = document.createElement('section');
     wrap.className = 'slide ' + anim;
@@ -128,6 +129,13 @@
     const S = w.State.get();
     if (S.flags['choice:' + s.id]) return;
     w.State.flag('choice:' + s.id, c.key);
+    /* Evidencia cruda y auditable: cada decisión queda registrada con su tono,
+       costo y tiempo de reacción — el diagnóstico individual y grupal se construye aquí. */
+    w.State.recordDecision({
+      slide: s.id, chapter: s.chapter || '', question: s.question || s.title || s.id,
+      key: c.key, label: c.label, tone: c.tone, cost: c.cost || 0, flag: c.flag || null,
+      reactionMs: Date.now() - (s._shownAt || Date.now())
+    });
     if (c.cost) w.State.charge(c.cost, s.id.toUpperCase() + ' · ' + c.label, c.tone);
     else if (c.credit) w.State.credit(c.credit, c.label);
     else w.State.note(s.id.toUpperCase() + ' · ' + c.label, c.tone);
